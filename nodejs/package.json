@@ -1,0 +1,36 @@
+{
+  "name": "restaurant-ordering-pickup-management",
+  "version": "1.0.0",
+  "description": "Restaurant ordering and pickup management system,facilitating ",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevanoullio/cmpt315-final-project.git"
+  },
+  "keywords": [
+    "nodejs",
+    "react",
+    "mongodb",
+    "restaurant",
+    "ordering",
+    "pickup",
+    "management",
+    "app"
+  ],
+  "author": "Kevin Ulliac, Marlianne Sadoway, Zachary Swensrude, Ife Sunmola, Assad Siddique",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevanoullio/cmpt315-final-project/issues"
+  },
+  "homepage": "https://github.com/kevanoullio/cmpt315-final-project#readme",
+  "dependencies": {
+    "express": "^4.18.3",
+    "mongoose": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
