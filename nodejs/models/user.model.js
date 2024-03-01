@@ -3,6 +3,11 @@ import mongoose, { Types } from "mongoose";
 // Define the schema for the user model
 const userSchema = new mongoose.Schema(
     {
+        id: {
+            type: Number,
+            required: [true, "User ID is required"],
+            unique: true,
+        },
         username: {
             type: String,
             required: [true, "Username is required"],
@@ -23,7 +28,8 @@ const userSchema = new mongoose.Schema(
         },
         orders: [{
             type: Types.ObjectId,
-            ref: "Order"
+            ref: "Order",
+            required: false
         }]
     },
     {

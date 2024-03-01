@@ -3,13 +3,18 @@ import mongoose, { Types } from "mongoose";
 // Define the schema for the restaurant model
 const restaurantSchema = new mongoose.Schema(
     {
+        id: {
+            type: Number,
+            required: [true, "Restaurant ID is required"],
+            unique: true,
+        },
         name: {
             type: String,
             required: [true, "Name is required"],
         },
-        location: {
+        address: {
             type: String,
-            required: [true, "Location is required"],
+            required: [true, "Address is required"],
         },
         phone: {
             type: String,
@@ -21,7 +26,8 @@ const restaurantSchema = new mongoose.Schema(
         },
         menuItems: [{
             type: Types.ObjectId,
-            ref: "MenuItem"
+            ref: "MenuItem",
+            required: false
         }]
     },
     {

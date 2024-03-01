@@ -3,6 +3,11 @@ import mongoose, { Types } from "mongoose";
 // Define the schema for the menu item model
 const menuItemSchema = new mongoose.Schema(
     {
+        id: {
+            type: Number,
+            required: [true, "Menu item ID is required"],
+            unique: true,
+        },
         name: {
             type: String,
             required: [true, "Name is required"],
@@ -15,10 +20,11 @@ const menuItemSchema = new mongoose.Schema(
             type: Number,
             required: [true, "Price is required"],
         },
-        restaurant: {
+        restaurant: [{
             type: Types.ObjectId,
-            ref: "Restaurant"
-        }
+            ref: "Restaurant",
+            required: false
+        }]
     },
     {
         timestamps: true

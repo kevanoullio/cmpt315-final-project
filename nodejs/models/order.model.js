@@ -18,15 +18,18 @@ const orderSchema = new mongoose.Schema(
         },
         restaurant: {
             type: Types.ObjectId,
-            ref: "Restaurant"
+            ref: "Restaurant",
+            required: [true, "Restaurant is required"]
         },
         menuItems: [{
             type: Types.ObjectId,
-            ref: "MenuItem"
+            ref: "MenuItem",
+            required: [true, "Menu items are required"]
         }],
         user: {
             type: Types.ObjectId,
-            ref: "User"
+            ref: "User",
+            required: [true, "User is required"]
         }
     },
     {
