@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Restaurant ordering and pickup management system,facilitating ",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "npm run test"
   },
   "repository": {
@@ -27,8 +29,10 @@
   },
   "homepage": "https://github.com/kevanoullio/cmpt315-final-project#readme",
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "express": "^4.18.3",
-    "mongoose": "^8.2.0"
+    "mongoose": "^7.6.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
