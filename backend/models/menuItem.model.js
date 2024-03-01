@@ -11,6 +11,10 @@ const menuItemSchema = new mongoose.Schema(
         name: {
             type: String,
             required: [true, "Name is required"],
+        }, 
+        status: {
+            type: String,
+            required: [true, "Status is required"],
         },
         description: {
             type: String,

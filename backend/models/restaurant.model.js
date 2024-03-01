@@ -28,6 +28,11 @@ const restaurantSchema = new mongoose.Schema(
             type: Types.ObjectId,
             ref: "MenuItem",
             required: false
+        }],
+        inventory: [{
+            type: Types.ObjectId,
+            ref: "InventoryItem",
+            required: false
         }]
     },
     {

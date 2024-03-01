@@ -8,6 +8,10 @@ const orderSchema = new mongoose.Schema(
             required: [true, "Order ID is required"],
             unique: true,
         },
+        status: {
+            type: String,
+            required: [true, "Status is required"],
+        },
         date: {
             type: Date,
             required: [true, "Date is required"],
