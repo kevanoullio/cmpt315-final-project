@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "Pepperoni Pizza",
-        "status": "available",
+        "status": "5",
         "description": "Pepperoni slices and cheese",
         "price": 10,
         "restaurant": 1
@@ -10,7 +10,7 @@
     {
         "id": 2,
         "name": "Margherita Pizza",
-        "status": "available",
+        "status": "5",
         "description": "Fresh tomatoes, mozzarella, and basil",
         "price": 12,
         "restaurant": 1
@@ -18,7 +18,7 @@
     {
         "id": 3,
         "name": "Vegetarian Pizza",
-        "status": "available",
+        "status": "2",
         "description": "Assorted vegetables and cheese on a whole wheat crust",
         "price": 11,
         "restaurant": 1
@@ -26,7 +26,7 @@
     {
         "id": 4,
         "name": "Meat Lovers Pizza",
-        "status": "available",
+        "status": "2",
         "description": "Pepperoni, sausage, bacon, and ham",
         "price": 14,
         "restaurant": 1
@@ -34,7 +34,7 @@
     {
         "id": 5,
         "name": "Hawaiian Pizza",
-        "status": "available",
+        "status": "2",
         "description": "Ham, pineapple, and cheese",
         "price": 13,
         "restaurant": 1
@@ -42,7 +42,7 @@
     {
         "id": 6,
         "name": "BBQ Chicken Pizza",
-        "status": "available",
+        "status": "1",
         "description": "Grilled chicken, BBQ sauce, and red onions",
         "price": 15,
         "restaurant": 1
@@ -50,7 +50,7 @@
     {
         "id": 7,
         "name": "Cheeseburger",
-        "status": "available",
+        "status": "5",
         "description": "Beef patty, cheese, lettuce, and tomato",
         "price": 8,
         "restaurant": 2
@@ -58,7 +58,7 @@
     {
         "id": 8,
         "name": "French Fries",
-        "status": "available",
+        "status": "5",
         "description": "Side order of fries",
         "price": 10,
         "restaurant": 2
@@ -66,7 +66,7 @@
     {
         "id": 9,
         "name": "Veggie Burger",
-        "status": "available",
+        "status": "2",
         "description": "Vegetarian patty, Swiss cheese, avocado, and sprouts",
         "price": 9,
         "restaurant": 2
@@ -74,7 +74,7 @@
     {
         "id": 10,
         "name": "Spicy Chicken Sandwich",
-        "status": "available",
+        "status": "2",
         "description": "Spicy chicken breast, lettuce, and mayo",
         "price": 11,
         "restaurant": 2
@@ -82,7 +82,7 @@
     {
         "id": 11,
         "name": "Mushroom Swiss Burger",
-        "status": "available",
+        "status": "2",
         "description": "Beef patty, sautéed mushrooms, and swiss cheese",
         "price": 12,
         "restaurant": 2
@@ -90,7 +90,7 @@
     {
         "id": 12,
         "name": "Poutine",
-        "status": "available",
+        "status": "1",
         "description": "Fries topped with cheese curds and gravy",
         "price": 9,
         "restaurant": 2
@@ -98,7 +98,7 @@
     {
         "id": 13,
         "name": "Rainbow Roll",
-        "status": "available",
+        "status": "2",
         "description": "Assorted fish and avocado",
         "price": 16,
         "restaurant": 3
@@ -106,7 +106,7 @@
     {
         "id": 14,
         "name": "Tempura Udon",
-        "status": "available",
+        "status": "4",
         "description": "Udon noodles in a savory broth with vegetables",
         "price": 14,
         "restaurant": 3
@@ -114,7 +114,7 @@
     {
         "id": 15,
         "name": "Dragon Roll",
-        "status": "available",
+        "status": "3",
         "description": "Deep fried salmon and onion sushi",
         "price": 9,
         "restaurant": 3
@@ -122,7 +122,7 @@
     {
         "id": 16,
         "name": "Spicy Tuna Roll",
-        "status": "available",
+        "status": "3",
         "description": "Spicy tuna and cucumber",
         "price": 12,
         "restaurant": 3
@@ -130,7 +130,7 @@
     {
         "id": 17,
         "name": "Edamame",
-        "status": "available",
+        "status": "3",
         "description": "Steamed soybeans sprinkled with sea salt",
         "price": 5,
         "restaurant": 3
@@ -138,7 +138,7 @@
     {
         "id": 18,
         "name": "Sashimi Platter",
-        "status": "available",
+        "status": "2",
         "description": "Assorted sashimi slices served with ginger and wasabi",
         "price": 22,
         "restaurant": 3
@@ -146,7 +146,7 @@
     {
         "id": 19,
         "name": "Pesto Penne",
-        "status": "available",
+        "status": "5",
         "description": "Penne pasta in a basil pesto sauce",
         "price": 11,
         "restaurant": 4
@@ -154,7 +154,7 @@
     {
         "id": 20,
         "name": "Chicken Alfredo",
-        "status": "available",
+        "status": "5",
         "description": "Fettuccine pasta in a creamy Alfredo sauce with grilled chicken",
         "price": 16,
         "restaurant": 4
@@ -162,7 +162,7 @@
     {
         "id": 21,
         "name": "Spaghetti and Meatballs",
-        "status": "available",
+        "status": "5",
         "description": "Classic spaghetti with marinara sauce and meatballs",
         "price": 15,
         "restaurant": 4
@@ -170,7 +170,7 @@
     {
         "id": 22,
         "name": "Spaghetti Carbonara",
-        "status": "available",
+        "status": "5",
         "description": "Spaghetti, bacon, parmesan cheese, eggs, and garlic",
         "price": 12,
         "restaurant": 4
@@ -178,7 +178,7 @@
     {
         "id": 23,
         "name": "Bolognese Lasagna",
-        "status": "available",
+        "status": "5",
         "description": "Layered lasagna with bolognese meat sauce and cheese",
         "price": 14,
         "restaurant": 4
@@ -186,7 +186,7 @@
     {
         "id": 24,
         "name": "Macaroni and Cheese",
-        "status": "available",
+        "status": "5",
         "description": "Macaroni and cheddar cheese sauce",
         "price": 16,
         "restaurant": 4
