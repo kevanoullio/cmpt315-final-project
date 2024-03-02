@@ -15,15 +15,14 @@ restaurantRouter.get("/:restaurantID", getRestaurant);
   "address": "101 5th Ave Edmonton, AB",
   "phone": "7804445656",
   "email": "pizzapalace@email.com",
-  "menuItems": [],
-  "inventory": []
+  "menuItems": []
 }
 */ 
 restaurantRouter.post("/", createRestaurant);
 
 /* example patch: localhost:8080/restaurants/8 with body:
 {
-  "status": "in stock"
+  "phone": "7805556464"
 }
 */
 restaurantRouter.patch("/:restaurantID", updateRestaurant);

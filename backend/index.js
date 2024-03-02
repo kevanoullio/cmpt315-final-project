@@ -23,8 +23,8 @@ app.use(bodyParser.json());
 
 // set to use the applicable router
 app.use('/users', userRouter);
-app.use('/menuItem', menuItemRouter);
-app.use('/restaurant', restaurantRouter);
+app.use('/menuItems', menuItemRouter);
+app.use('/restaurants', restaurantRouter);
 
 // Not found
 app.use(function (req, res, next) {
