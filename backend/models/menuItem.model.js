@@ -23,12 +23,7 @@ const menuItemSchema = new mongoose.Schema(
         price: {
             type: Number,
             required: [true, "Price is required"],
-        },
-        restaurant: [{
-            type: Types.ObjectId,
-            ref: "Restaurant",
-            required: false
-        }]
+        }
     },
     {
         timestamps: true
