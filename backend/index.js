@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import userRouter from "./routes/user.route.js";
 import menuItemRouter from "./routes/menuItem.route.js";
+import restaurantRouter from "./routes/restaurant.route.js";
 
 // dotenv is for when we want to use environment variables (for deploying)
 //import dotenv from 'dotenv';
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 // set to use the applicable router
 app.use('/users', userRouter);
 app.use('/menuItem', menuItemRouter);
+app.use('/restaurant', restaurantRouter);
 
 // Not found
 app.use(function (req, res, next) {

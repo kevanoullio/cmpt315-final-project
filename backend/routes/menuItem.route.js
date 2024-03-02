@@ -1,13 +1,13 @@
 import Express from "express";
-import { createmenuItem, deletemenuItem, getmenuItem, getmenuItems, updatemenuItem } from "../controllers/menuItem.controller.js";
+import { createMenuItem, deleteMenuItem, getMenuItem, getMenuItems, updateMenuItem } from "../controllers/menuItem.controller.js";
 
 const menuItemRouter = Express.Router();
 
 // example get: http://localhost:8080/menuItems/
-menuItemRouter.get("/", getmenuItems);
+menuItemRouter.get("/", getMenuItems);
 
 // example get: http://localhost:8080/menuItems/3
-menuItemRouter.get("/:menuItemID", getmenuItem);
+menuItemRouter.get("/:menuItemID", getMenuItem);
 
 /* example: post with the following object in the body:
 {
@@ -18,16 +18,16 @@ menuItemRouter.get("/:menuItemID", getmenuItem);
   "restaurant": []
 }
 */ 
-menuItemRouter.post("/", createmenuItem);
+menuItemRouter.post("/", createMenuItem);
 
 /* example patch: localhost:8080/menuItems/8 with body:
 {
   "status": "in stock"
 }
 */
-menuItemRouter.patch("/:menuItemID", updatemenuItem);
+menuItemRouter.patch("/:menuItemID", updateMenuItem);
 
 // example delete: localhost:8080/menuItems/3
-menuItemRouter.delete("/:menuItemID", deletemenuItem);
+menuItemRouter.delete("/:menuItemID", deleteMenuItem);
 
 export default menuItemRouter;
