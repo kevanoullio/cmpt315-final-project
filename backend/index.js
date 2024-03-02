@@ -4,6 +4,7 @@ import connectDB from './database/database.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import userRouter from "./routes/user.route.js";
+import menuItemRouter from "./routes/menuItem.route.js";
 
 // dotenv is for when we want to use environment variables (for deploying)
 //import dotenv from 'dotenv';
@@ -19,8 +20,9 @@ const url = await connectDB();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// set to use the courses router if at /courses
+// set to use the applicable router
 app.use('/users', userRouter);
+app.use('/menuItem', menuItemRouter);
 
 // Not found
 app.use(function (req, res, next) {
