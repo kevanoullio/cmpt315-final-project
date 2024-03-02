@@ -1,10 +1,10 @@
 // Code adapted from https://github.com/mrchenliang/learning-node
 
-import { getmenuItemsFromRepository, updatemenuItemsInRepository, deletemenuItemFromRepository, createmenuItemInRepository } from "../repositories/menuItem.repository.js";
+import { getMenuItemsFromRepository, updateMenuItemsInRepository, deleteMenuItemFromRepository, createMenuItemInRepository } from "../repositories/menuItem.repository.js";
 
-export const getmenuItems = async (req, res) => {
+export const getMenuItems = async (req, res) => {
   try {
-    const menuItems = await getmenuItemsFromRepository();
+    const menuItems = await getMenuItemsFromRepository();
     res.status(200).send(menuItems);
   } catch (e) {
     console.log("Failed to get menuItems: ", e); 
@@ -12,10 +12,10 @@ export const getmenuItems = async (req, res) => {
   }
 }
 
-export const getmenuItem = async (req, res) => {
+export const getMenuItem = async (req, res) => {
   try {
     const { menuItemID } = req.params;
-    const menuItem = await getmenuItemsFromRepository({ id: menuItemID });
+    const menuItem = await getMenuItemsFromRepository({ id: menuItemID });
     res.status(200).send(menuItem);
   } catch (e) {
     console.log("Failed to get menuItem: ", e); 
@@ -23,9 +23,9 @@ export const getmenuItem = async (req, res) => {
   }
 }
 
-export const createmenuItem = async (req, res) => {
+export const createMenuItem = async (req, res) => {
   try {
-    const menuItem = await createmenuItemInRepository( req.body );
+    const menuItem = await createMenuItemInRepository( req.body );
     res.status(201).send(menuItem);
   } catch (e) {
     console.log("Failed to create menuItem: ", e); 
@@ -33,10 +33,10 @@ export const createmenuItem = async (req, res) => {
   }
 }
 
-export const updatemenuItem = async (req, res) => {
+export const updateMenuItem = async (req, res) => {
   try {
     const { menuItemID } = req.params;
-    const menuItem = await updatemenuItemsInRepository(menuItemID, req);
+    const menuItem = await updateMenuItemsInRepository(menuItemID, req);
     // returns -1 if it does not exist in database
     if (menuItem === -1) {
       res.status(400).send("The menuItem you are trying to update with menuItemID " + menuItemID + " likely does not exist.")
@@ -49,10 +49,10 @@ export const updatemenuItem = async (req, res) => {
   }
 }
 
-export const deletemenuItem = async (req, res) => {
+export const deleteMenuItem = async (req, res) => {
   const { menuItemID } = req.params;
   try {
-    const menuItem = await deletemenuItemFromRepository(menuItemID);
+    const menuItem = await deleteMenuItemFromRepository(menuItemID);
     if (menuItem) {
       res.status(200).send("The following menuItem was deleted: "+ menuItem);
     } else {
