@@ -1,4 +1,4 @@
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 
 // Define the schema for the menu item model
 const menuItemSchema = new mongoose.Schema(
