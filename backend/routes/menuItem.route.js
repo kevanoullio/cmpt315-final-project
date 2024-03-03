@@ -14,8 +14,7 @@ menuItemRouter.get("/:menuItemID", getMenuItem);
   "name": "pepperoni pizza",
   "status": "sold-out",
   "description": "pepperoni slices and cheese on a thin crust",
-  "price": 10,
-  "restaurant": []
+  "price": 10
 }
 */ 
 menuItemRouter.post("/", createMenuItem);
