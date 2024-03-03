@@ -21,6 +21,11 @@ const url = await connectDB();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// Welcome message
+app.get("/", (request, response) => {
+    response.send("Welcome to the Restaurant Ordering and Pickup Management System!");
+});
+
 // set to use the applicable router
 app.use('/users', userRouter);
 app.use('/menuItems', menuItemRouter);
