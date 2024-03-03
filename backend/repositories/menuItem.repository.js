@@ -1,10 +1,12 @@
 // Code adapted from https://github.com/mrchenliang/learning-node
 
-import menuItem from "../models/menuItem.model.js";
+import MenuItem from "../models/menuItem.model.js";
 
 export const getMenuItemsFromRepository = async (query) => {
   try {
-    const menuItems = await menuItem.find(query);
+    console.log('query param is ' + query);
+    const menuItems = await MenuItem.find(query);
+    console.log('menuItems returned from query: ' + menuItems);
     return menuItems;
   } catch (e) {
     throw Error("Error while fetching menuItems: ", e);
@@ -12,7 +14,7 @@ export const getMenuItemsFromRepository = async (query) => {
 }
 
 const menuItemExists = async (menuItemID) => {
-  const menuItem = await menuItem.findOne({ id: menuItemID });
+  const menuItem = await MenuItem.findOne({ id: menuItemID });
   return menuItem ? true : false;
 }
 
@@ -22,7 +24,7 @@ export const updateMenuItemsInRepository = async (menuItemID, query) => {
     return -1;
   }
   try {
-    const menuItem = await menuItem.findOneAndUpdate(
+    const menuItem = await MenuItem.findOneAndUpdate(
       { id: menuItemID },
       { $set: query.body },
       { new: true }
@@ -35,7 +37,7 @@ export const updateMenuItemsInRepository = async (menuItemID, query) => {
 
 export const deleteMenuItemFromRepository = async (menuItemID) => {
   try {
-    const menuItem = await menuItem.findOneAndDelete({ id: menuItemID });
+    const menuItem = await MenuItem.findOneAndDelete({ id: menuItemID });
     return menuItem;
   } catch (e) {
     throw Error("Error while deleting a menuItem: ", e);
@@ -45,7 +47,7 @@ export const deleteMenuItemFromRepository = async (menuItemID) => {
 
 // This func gets the highest id in the database and increments it by one so its always a unique id
 const getUniqueMenuItemID = async () => {
-  const maxIdDocument = await menuItem.findOne({}, { id: 1 }).sort({ id: -1 });
+  const maxIdDocument = await MenuItem.findOne({}, { id: 1 }).sort({ id: -1 });
   const maxId = maxIdDocument ? maxIdDocument.id : 0;
   return maxId + 1;
 }
@@ -59,7 +61,7 @@ export const createMenuItemInRepository = async (payload) => {
     // add it to the payload obj
     payload = {...payload, id: newId};
     // then add to db
-    const newMenuItem = new menuItem(payload);
+    const newMenuItem = new MenuItem(payload);
     const savedMenuItem = await newMenuItem.save();
     return savedMenuItem;
   } catch (e) {
