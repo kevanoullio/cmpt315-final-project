@@ -1,4 +1,4 @@
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 
 // Define the schema for the menu item model
 const menuItemSchema = new mongoose.Schema(
@@ -23,12 +23,7 @@ const menuItemSchema = new mongoose.Schema(
         price: {
             type: Number,
             required: [true, "Price is required"],
-        },
-        restaurant: [{
-            type: Types.ObjectId,
-            ref: "Restaurant",
-            required: false
-        }]
+        }
     },
     {
         timestamps: true

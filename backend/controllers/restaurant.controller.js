@@ -1,6 +1,6 @@
 // Code adapted from https://github.com/mrchenliang/learning-node
 
-import { getRestaurantsFromRepository, updateRestaurantsInRepository, deleteRestaurantFromRepository, createRestaurantInRepository } from "../repositories/Restaurant.repository.js";
+import { getRestaurantsFromRepository, updateRestaurantsInRepository, deleteRestaurantFromRepository, createRestaurantInRepository } from "../repositories/restaurant.repository.js";
 
 export const getRestaurants = async (req, res) => {
   try {
