@@ -4,9 +4,7 @@ import MenuItem from "../models/menuItem.model.js";
 
 export const getMenuItemsFromRepository = async (query) => {
   try {
-    console.log('query param is ' + query);
     const menuItems = await MenuItem.find(query);
-    console.log('menuItems returned from query: ' + menuItems);
     return menuItems;
   } catch (e) {
     throw Error("Error while fetching menuItems: ", e);
