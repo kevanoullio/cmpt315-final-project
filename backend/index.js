@@ -6,6 +6,7 @@ import cors from 'cors';
 import userRouter from "./routes/user.route.js";
 import menuItemRouter from "./routes/menuItem.route.js";
 import restaurantRouter from "./routes/restaurant.route.js";
+import orderRouter from "./routes/order.route.js";
 
 // dotenv is for when we want to use environment variables (for deploying)
 //import dotenv from 'dotenv';
@@ -30,6 +31,7 @@ app.get("/", (request, response) => {
 app.use('/users', userRouter);
 app.use('/menuItems', menuItemRouter);
 app.use('/restaurants', restaurantRouter);
+app.use('/orders', orderRouter)
 
 // Not found
 app.use(function (req, res, next) {

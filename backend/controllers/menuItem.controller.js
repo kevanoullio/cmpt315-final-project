@@ -29,7 +29,7 @@ export const createMenuItem = async (req, res) => {
     res.status(201).send(menuItem);
   } catch (e) {
     console.log("Failed to create menuItem: ", e); 
-    res.status(400).send('Create failed. You likely did not include all required fields: [id, name, status, description, price]');
+    res.status(400).send('Create failed. You likely did not include all required fields: [name, status, description, price]');
   }
 }
 
