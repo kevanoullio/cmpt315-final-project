@@ -1,6 +1,6 @@
 import mongoose, { Types } from "mongoose";
 
-// Define the schema for the order model
+// Schema for the order model
 const orderSchema = new mongoose.Schema(
     {
         id: {
@@ -12,16 +12,13 @@ const orderSchema = new mongoose.Schema(
             type: String,
             required: [true, "Status is required"],
         },
-        date: {
-            type: Date,
-            required: [true, "Date is required"],
-        },
-        time_of_day: {
-            type: String,
-            required: [true, "Time of day is required"],
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: [true, "User is required"]
         },
         restaurant: {
-            type: Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Restaurant",
             required: [true, "Restaurant is required"]
         },
@@ -30,10 +27,9 @@ const orderSchema = new mongoose.Schema(
             ref: "MenuItem",
             required: [true, "Menu items are required"]
         }],
-        user: {
-            type: Types.ObjectId,
-            ref: "User",
-            required: [true, "User is required"]
+        pickupTime: {
+            type: Date,
+            required: [false], // optional initially, can be updated later
         }
     },
     {
