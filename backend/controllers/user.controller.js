@@ -29,7 +29,7 @@ export const createUser = async (req, res) => {
     res.status(201).send(user);
   } catch (e) {
     console.log("Failed to create user: ", e); 
-    res.status(400).send('Create failed. You likely did not include all required fields: [id, name, email, address]');
+    res.status(400).send('Create failed. You likely did not include all required fields: [name, email, address]');
   }
 }
 
