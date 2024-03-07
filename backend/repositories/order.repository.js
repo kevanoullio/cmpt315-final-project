@@ -89,7 +89,7 @@ export const deleteOrder = async (orderId) => {
 
         // After successfully deleting the order, remove its reference from the user's orders array
         await User.findOneAndUpdate(
-            { id: deletedOrder.user },
+            { _id: deletedOrder.user._id },
             { $pull: { orders: deletedOrder._id } }, // Remove the order's _id from the user's orders array
             { new: true }
         );
