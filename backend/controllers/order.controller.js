@@ -46,10 +46,11 @@ export const fetchOrderById = async (req, res) => {
 
 
 export const updateOrderStatus = async (req, res) => {
-    const { orderId, newStatus } = req.body;
+    const { status } = req.body;
+    const { orderId } = req.params;
 
     try {
-        const updatedOrder = await updateOrderStatusRepo(orderId, newStatus);
+        const updatedOrder = await updateOrderStatusRepo(orderId, status);
         res.json(updatedOrder);
     } catch (error) {
         // Determine the type of error and respond accordingly
