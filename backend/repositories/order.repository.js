@@ -112,7 +112,6 @@ export const deleteOrder = async (orderId) => {
 // Function to find the latest order id and increment it by one for a new unique order id
 const getUniqueOrderId = async () => {
     const latestOrder = await Order.findOne().sort('-id').exec(); // Find the highest id
-    console.log(latestOrder);
     return latestOrder ? latestOrder.id + 1 : 1; // Start from 1 if no orders exist
 };
 
