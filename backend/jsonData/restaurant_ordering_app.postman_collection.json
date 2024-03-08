@@ -1,0 +1,895 @@
+{
+	"info": {
+		"_postman_id": "a9a2a95c-acd7-47a4-a4fb-81556491d018",
+		"name": "Restaurant Order Pickup API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32721575"
+	},
+	"item": [
+		{
+			"name": "Menu Item",
+			"item": [
+				{
+					"name": "Get Menu Items",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/menuitems",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"menuitems"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Menu Item",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/menuitems/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"menuitems",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Menu Item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Pepperoni Pizza\",\r\n    \"status\": \"5\",\r\n    \"description\": \"Pepperoni slices and cheese\",\r\n    \"price\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/menuitems",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"menuitems"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Default Menu Items",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "show dbs\r\nuse 315-final\r\nshow collections\r\ndb.menuitems.insertMany([\r\n    {\r\n        \"id\": 1,\r\n        \"name\": \"Pepperoni Pizza\",\r\n        \"inventory\": 6,\r\n        \"description\": \"Pepperoni slices and cheese\",\r\n        \"price\": 10\r\n    },\r\n    {\r\n        \"id\": 2,\r\n        \"name\": \"Margherita Pizza\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Fresh tomatoes, mozzarella, and basil\",\r\n        \"price\": 12\r\n    },\r\n    {\r\n        \"id\": 3,\r\n        \"name\": \"Vegetarian Pizza\",\r\n        \"inventory\": 2,\r\n        \"description\": \"Assorted vegetables and cheese on a whole wheat crust\",\r\n        \"price\": 11\r\n    },\r\n    {\r\n        \"id\": 4,\r\n        \"name\": \"Meat Lovers Pizza\",\r\n        \"inventory\": 2,\r\n        \"description\": \"Pepperoni, sausage, bacon, and ham\",\r\n        \"price\": 14\r\n    },\r\n    {\r\n        \"id\": 5,\r\n        \"name\": \"Hawaiian Pizza\",\r\n        \"inventory\": 2,\r\n        \"description\": \"Ham, pineapple, and cheese\",\r\n        \"price\": 13\r\n    },\r\n    {\r\n        \"id\": 6,\r\n        \"name\": \"BBQ Chicken Pizza\",\r\n        \"inventory\": 1,\r\n        \"description\": \"Grilled chicken, BBQ sauce, and red onions\",\r\n        \"price\": 15\r\n    },\r\n    {\r\n        \"id\": 7,\r\n        \"name\": \"Cheeseburger\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Beef patty, cheese, lettuce, and tomato\",\r\n        \"price\": 8\r\n    },\r\n    {\r\n        \"id\": 8,\r\n        \"name\": \"French Fries\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Side order of fries\",\r\n        \"price\": 10\r\n    },\r\n    {\r\n        \"id\": 9,\r\n        \"name\": \"Veggie Burger\",\r\n        \"inventory\": 2,\r\n        \"description\": \"Vegetarian patty, Swiss cheese, avocado, and sprouts\",\r\n        \"price\": 9\r\n    },\r\n    {\r\n        \"id\": 10,\r\n        \"name\": \"Spicy Chicken Sandwich\",\r\n        \"inventory\": 2,\r\n        \"description\": \"Spicy chicken breast, lettuce, and mayo\",\r\n        \"price\": 11\r\n    },\r\n    {\r\n        \"id\": 11,\r\n        \"name\": \"Mushroom Swiss Burger\",\r\n        \"inventory\": 2,\r\n        \"description\": \"Beef patty, sautéed mushrooms, and swiss cheese\",\r\n        \"price\": 12\r\n    },\r\n    {\r\n        \"id\": 12,\r\n        \"name\": \"Poutine\",\r\n        \"inventory\": 1,\r\n        \"description\": \"Fries topped with cheese curds and gravy\",\r\n        \"price\": 9\r\n    },\r\n    {\r\n        \"id\": 13,\r\n        \"name\": \"Rainbow Roll\",\r\n        \"inventory\": 2,\r\n        \"description\": \"Assorted fish and avocado\",\r\n        \"price\": 16\r\n    },\r\n    {\r\n        \"id\": 14,\r\n        \"name\": \"Tempura Udon\",\r\n        \"inventory\": 4,\r\n        \"description\": \"Udon noodles in a savory broth with vegetables\",\r\n        \"price\": 14\r\n    },\r\n    {\r\n        \"id\": 15,\r\n        \"name\": \"Dragon Roll\",\r\n        \"inventory\": 3,\r\n        \"description\": \"Deep fried salmon and onion sushi\",\r\n        \"price\": 9\r\n    },\r\n    {\r\n        \"id\": 16,\r\n        \"name\": \"Spicy Tuna Roll\",\r\n        \"inventory\": 3,\r\n        \"description\": \"Spicy tuna and cucumber\",\r\n        \"price\": 12\r\n    },\r\n    {\r\n        \"id\": 17,\r\n        \"name\": \"Edamame\",\r\n        \"inventory\": 3,\r\n        \"description\": \"Steamed soybeans sprinkled with sea salt\",\r\n        \"price\": 5\r\n    },\r\n    {\r\n        \"id\": 18,\r\n        \"name\": \"Sashimi Platter\",\r\n        \"inventory\": 2,\r\n        \"description\": \"Assorted sashimi slices served with ginger and wasabi\",\r\n        \"price\": 22\r\n    },\r\n    {\r\n        \"id\": 19,\r\n        \"name\": \"Pesto Penne\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Penne pasta in a basil pesto sauce\",\r\n        \"price\": 11\r\n    },\r\n    {\r\n        \"id\": 20,\r\n        \"name\": \"Chicken Alfredo\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Fettuccine pasta in a creamy Alfredo sauce with grilled chicken\",\r\n        \"price\": 16\r\n    },\r\n    {\r\n        \"id\": 21,\r\n        \"name\": \"Spaghetti and Meatballs\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Classic spaghetti with marinara sauce and meatballs\",\r\n        \"price\": 15\r\n    },\r\n    {\r\n        \"id\": 22,\r\n        \"name\": \"Spaghetti Carbonara\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Spaghetti, bacon, parmesan cheese, eggs, and garlic\",\r\n        \"price\": 12\r\n    },\r\n    {\r\n        \"id\": 23,\r\n        \"name\": \"Bolognese Lasagna\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Layered lasagna with bolognese meat sauce and cheese\",\r\n        \"price\": 14\r\n    },\r\n    {\r\n        \"id\": 24,\r\n        \"name\": \"Macaroni and Cheese\",\r\n        \"inventory\": 5,\r\n        \"description\": \"Macaroni and cheddar cheese sauce\",\r\n        \"price\": 16\r\n    }\r\n])\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/menuitems",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"menuitems"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Menu Item",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Pepperoni slices and mozzarella cheese\",\r\n    \"price\": 11\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/menuitems/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"menuitems",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Menu Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/menuitems/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"menuitems",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Restaurant",
+			"item": [
+				{
+					"name": "Get Restaurants",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/restaurants",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Restaurant",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/restaurants/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"restaurants",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Pizza Palace\",\r\n    \"address\": \"101 5th Ave Edmonton, AB\",\r\n    \"phone\": \"7804445656\",\r\n    \"email\": \"pizzapalace@email.com\",\r\n    \"menuItems\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/restaurants",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Default Restaurants",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "show dbs\r\nuse 315-final\r\nshow collections\r\ndb.restaurants.insertMany([\r\n    {\r\n        \"id\": 1,\r\n        \"name\": \"Pizza Palace\",\r\n        \"address\": \"101 5th Ave Edmonton, AB\",\r\n        \"phone\": \"7804445656\",\r\n        \"email\": \"pizzapalace@email.com\",\r\n        \"menuItems\": [1, 2, 3, 4, 5, 6]\r\n    },\r\n    {\r\n        \"id\": 2,\r\n        \"name\": \"Burger Parlor\",\r\n        \"address\": \"405 99 St Edmonton, AB\",\r\n        \"phone\": \"7804448989\",\r\n        \"email\": \"burgerparlor@email.com\",\r\n        \"menuItems\": [7, 8, 9, 10, 11, 12]\r\n    },\r\n    {\r\n        \"id\": 3,\r\n        \"name\": \"Sushi Haven\",\r\n        \"address\": \"701 10th St Edmonton, AB\",\r\n        \"phone\": \"7805551212\",\r\n        \"email\": \"sushihaven@email.com\",\r\n        \"menuItems\": [13, 14, 15, 16, 17, 18]\r\n    },\r\n    {\r\n        \"id\": 4,\r\n        \"name\": \"Pasta Paradise\",\r\n        \"address\": \"301 8th Ave Edmonton, AB\",\r\n        \"phone\": \"7803334545\",\r\n        \"email\": \"pastaparadise@email.com\",\r\n        \"menuItems\": [19, 20, 21, 22, 23, 24]\r\n    }\r\n])",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/restaurants",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Restaurant",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Super Pizza Palace\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/restaurants/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"restaurants",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Restaurant",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/restaurants/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"restaurants",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Manager",
+			"item": [
+				{
+					"name": "Get Managers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/managers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"managers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Manager",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/managers/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"managers",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Manager",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"name\": \"manager4\",\r\n    \"email\": \"manager4@example.com\",\r\n    \"address\": \"Unit A, 51 Street, Hamlet\",\r\n    \"restaurantId\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/managers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"managers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Default Managers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "show dbs\r\nuse 315-final\r\nshow collections\r\ndb.managers.insertMany([\r\n    {\r\n        \"id\": 1,\r\n        \"name\": \"manager1\",\r\n        \"email\": \"manager1@example.com\",\r\n        \"address\": \"123 Ave, City\",\r\n        \"restaurantId\": 1\r\n    },\r\n    {\r\n        \"id\": 2,\r\n        \"name\": \"manager2\",\r\n        \"email\": \"manager2@example.com\",\r\n        \"address\": \"456 Road, Town\",\r\n        \"restaurantId\": 2\r\n    },\r\n    {\r\n        \"id\": 3,\r\n        \"name\": \"manager3\",\r\n        \"email\": \"manager3@example.com\",\r\n        \"address\": \"789 Avenue, Village\",\r\n        \"restaurantId\": 3\r\n    },\r\n    {\r\n        \"id\": 4,\r\n        \"name\": \"manager4\",\r\n        \"email\": \"manager4@example.com\",\r\n        \"address\": \"Unit A, 51 Street, Hamlet\",\r\n        \"restaurantId\": 4\r\n    }\r\n])",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/managers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"managers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Manager",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"manager4@email.com\",\r\n    \"address\": \"Unit B, 1 Street, Ophelia\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/manager/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"manager",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Manager",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/managers/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"managers",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Get Customers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/customers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/customers/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"customers",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"name\": \"customer4\",\r\n    \"email\": \"customer4@example.com\",\r\n    \"address\": \"Unit B, 10100 100 Street, City\",\r\n    \"orders\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/customers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Default Customers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "show dbs\r\nuse 315-final\r\nshow collections\r\ndb.customers.insertMany([\r\n    {\r\n        \"id\": 1,\r\n        \"name\": \"customer1\",\r\n        \"email\": \"customer1@example.com\",\r\n        \"address\": \"1234 123 Street, City\",\r\n        \"orders\": []\r\n    },\r\n    {\r\n        \"id\": 2,\r\n        \"name\": \"customer2\",\r\n        \"email\": \"customer2@example.com\",\r\n        \"address\": \"456 Township Road, Town\",\r\n        \"orders\": []\r\n    },\r\n    {\r\n        \"id\": 3,\r\n        \"name\": \"customer3\",\r\n        \"email\": \"customer3@example.com\",\r\n        \"address\": \"5 Avenue, Village\",\r\n        \"orders\": []\r\n    },\r\n    {\r\n        \"id\": 4,\r\n        \"name\": \"customer4\",\r\n        \"email\": \"customer4@example.com\",\r\n        \"address\": \"Unit B, 10100 100 Street, City\",\r\n        \"orders\": []\r\n    }\r\n])",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/customers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"customer4@email.com\",\r\n    \"address\": \"Unit A, 10101 101 Street, City\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/customers/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"customers",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/customers/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"customers",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Get Orders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n    {\r\n        \"customerId\": 1,\r\n        \"restaurantId\": 1,\r\n        \"menuItems\": [3, 4],\r\n        \"pickupTime\": \"2024-03-15T12:30:00Z\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Default Orders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "show dbs\r\nuse 315-final\r\nshow collections\r\ndb.orders.insertMany([\r\n    {\r\n        \"customerId\": 1,\r\n        \"restaurantId\": 1,\r\n        \"menuItems\": [1, 2],\r\n        \"pickupTime\": \"2024-03-15T14:30:00Z\"\r\n    },\r\n    {\r\n        \"customerId\": 2,\r\n        \"restaurantId\": 2,\r\n        \"menuItems\": [7, 8],\r\n        \"pickupTime\": \"2024-03-16T14:30:00Z\"\r\n    },\r\n    {\r\n        \"customerId\": 3,\r\n        \"restaurantId\": 3,\r\n        \"menuItems\": [13, 14],\r\n        \"pickupTime\": \"2024-03-15T16:30:00Z\"\r\n    },\r\n    {\r\n        \"customerId\": 3,\r\n        \"restaurantId\": 4,\r\n        \"menuItems\": [19, 20],\r\n        \"pickupTime\": \"2024-03-17T10:30:00Z\"\r\n    },\r\n    {\r\n        \"customerId\": 4,\r\n        \"restaurantId\": 2,\r\n        \"menuItems\": [9, 10],\r\n        \"pickupTime\": \"2024-03-15T12:30:00Z\"\r\n    },\r\n    {\r\n        \"customerId\": 1,\r\n        \"restaurantId\": 1,\r\n        \"menuItems\": [3, 4],\r\n        \"pickupTime\": \"2024-03-15T12:30:00Z\"\r\n    }\r\n])",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 4,\r\n    \"user\": \"completed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders/6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Welcome Route",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bad Route",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/restaurant/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"restaurant",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
