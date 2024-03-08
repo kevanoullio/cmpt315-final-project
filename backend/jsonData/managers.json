@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "name": "manager1",
+        "email": "manager1@example.com",
+        "address": "123 Ave, City",
+        "restaurantId": 1
+    },
+    {
+        "id": 2,
+        "name": "manager2",
+        "email": "manager2@example.com",
+        "address": "456 Road, Town",
+        "restaurantId": 2
+    },
+    {
+        "id": 3,
+        "name": "manager3",
+        "email": "manager3@example.com",
+        "address": "789 Avenue, Village",
+        "restaurantId": 3
+    },
+    {
+        "id": 4,
+        "name": "manager4",
+        "email": "manager4@example.com",
+        "address": "Unit A, 51 Street, Hamlet",
+        "restaurantId": 4
+    }
+]

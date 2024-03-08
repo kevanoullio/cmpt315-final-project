@@ -3,9 +3,10 @@ import express from "express";
 import connectDB from './database/database.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import userRouter from "./routes/user.route.js";
 import menuItemRouter from "./routes/menuItem.route.js";
 import restaurantRouter from "./routes/restaurant.route.js";
+import managerRouter from "./routes/manager.route.js";
+import customerRouter from "./routes/customer.route.js";
 import orderRouter from "./routes/order.route.js";
 
 // dotenv is for when we want to use environment variables (for deploying)
@@ -28,9 +29,10 @@ app.get("/", (request, response) => {
 });
 
 // set to use the applicable router
-app.use('/users', userRouter);
 app.use('/menuItems', menuItemRouter);
 app.use('/restaurants', restaurantRouter);
+app.use('/managers', managerRouter);
+app.use('/customers', customerRouter);
 app.use('/orders', orderRouter)
 
 // Not found

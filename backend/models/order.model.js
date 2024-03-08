@@ -12,12 +12,12 @@ const orderSchema = new mongoose.Schema(
             type: String,
             required: [true, "Status is required"],
         },
-        user: {
+        customerId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: [true, "User is required"]
+            ref: "Customer",
+            required: [true, "Customer is required"]
         },
-        restaurant: {
+        restaurantId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Restaurant",
             required: [true, "Restaurant is required"]

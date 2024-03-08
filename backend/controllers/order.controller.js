@@ -5,8 +5,8 @@ import { deleteOrder as deleteOrderRepo, getOrderById } from '../repositories/or
 // creating a new order
 export const createOrder = async (req, res) => {
     try {
-        const { restaurantId, menuItems, userId, pickupTime } = req.body;
-        const newOrder = await createOrderRepo({ restaurantId, menuItems, userId, pickupTime });
+        const { restaurantId, menuItems, customerId, pickupTime } = req.body;
+        const newOrder = await createOrderRepo({ restaurantId, menuItems, customerId, pickupTime });
         res.status(201).json(newOrder);
     } catch (error) {
         // Determine the type of error and respond accordingly
