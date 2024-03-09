@@ -8,7 +8,7 @@ export const createOrder = async ({ customerId, restaurantId, menuItems, pickupT
         // input validation
         const restaurantObjectId = await validateRestaurant(restaurantId);
         const customerObjectId = await validateCustomer(customerId);
-        const menuItemObjectIds = await validateAndDeductMenuItemInventory(menuItems);
+        const menuItemObjectIds = await validateMenuItem(menuItems);
 
         // Generate a unique ID for the new order
         const newOrderId = await getUniqueOrderId();
@@ -130,23 +130,18 @@ async function validateCustomer(customerId) {
 }
 
 
-// Validates menu items existence and inventory, then decrements inventory for each item ordered.
-async function validateAndDeductMenuItemInventory(menuItems) {
+// Validates menu items existence and status.
+async function validateMenuItem(menuItems) {
     const itemsToOrder = await MenuItem.find({ 'id': { $in: menuItems } });
     
-    // Verify all requested items are found and have sufficient inventory
+    // Verify all requested items are found 
     if (itemsToOrder.length !== menuItems.length) {
         throw new Error("One or more menu items are not found.");
     }
-    if (itemsToOrder.some(item => item.inventory <= 0)) {
-        throw new Error("One or more menu items are out of stock.");
+    // Verify all requested items have sufficient status (available)
+    if (itemsToOrder.some(item => item.status !== 'available')) {
+        throw new Error("One or more menu items are sold out or not available."); 
     }
-
-    // Deduct inventory for each item ordered
-    await Promise.all(itemsToOrder.map(item => {
-        if (item.inventory > 0) item.inventory -= 1;
-        return item.save();
-    }));
 
     return itemsToOrder.map(item => item._id);
 }

@@ -12,10 +12,9 @@ const menuItemSchema = new mongoose.Schema(
             type: String,
             required: [true, "Name is required"],
         },
-        inventory: { // The number of items in stock, replacing 'status'
-            type: Number,
-            required: [true, "Inventory is required"],
-            min: [0, "Inventory cannot be negative"], // Ensures inventory is not negative
+        status: { 
+            type: String,
+            required: [true, "Status is required"] // sold out or available 
         },
         description: {
             type: String,
