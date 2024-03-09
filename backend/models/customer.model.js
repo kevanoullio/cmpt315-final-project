@@ -1,11 +1,11 @@
 import mongoose, { Types } from "mongoose";
 
-// Define the schema for the user model
-const userSchema = new mongoose.Schema(
+// Define the schema for the customer model
+const customerSchema = new mongoose.Schema(
     {
         id: {
             type: Number,
-            required: [true, "User ID is required"],
+            required: [true, "Customer ID is required"],
             unique: true,
         },
         name: {
@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-const User = mongoose.model("User", userSchema);
+const Customer = mongoose.model("Customer", customerSchema);
 
-export default User;
+export default Customer;
+

@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "name": "customer1",
+        "email": "customer1@example.com",
+        "address": "1234 123 Street, City",
+        "orders": []
+    },
+    {
+        "id": 2,
+        "name": "customer2",
+        "email": "customer2@example.com",
+        "address": "456 Township Road, Town",
+        "orders": []
+    },
+    {
+        "id": 3,
+        "name": "customer3",
+        "email": "customer3@example.com",
+        "address": "5 Avenue, Village",
+        "orders": []
+    },
+    {
+        "id": 4,
+        "name": "customer4",
+        "email": "customer4@example.com",
+        "address": "Unit B, 10100 100 Street, City",
+        "orders": []
+    }
+]

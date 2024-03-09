@@ -1,13 +1,13 @@
 import Order from '../models/order.model.js';
 import MenuItem from '../models/menuItem.model.js';
 import Restaurant from '../models/restaurant.model.js';
-import User from '../models/user.model.js';
+import Customer from '../models/customer.model.js';
 
-export const createOrder = async ({ userId, restaurantId, menuItems, pickupTime }) => {
+export const createOrder = async ({ customerId, restaurantId, menuItems, pickupTime }) => {
     try {
         // input validation
         const restaurantObjectId = await validateRestaurant(restaurantId);
-        const userObjectId = await validateUser(userId);
+        const customerObjectId = await validateCustomer(customerId);
         const menuItemObjectIds = await validateAndDeductMenuItemInventory(menuItems);
 
         // Generate a unique ID for the new order
@@ -16,17 +16,17 @@ export const createOrder = async ({ userId, restaurantId, menuItems, pickupTime 
         // Create and save the new order
         const newOrder = await new Order({
             id: newOrderId,
-            user: userObjectId,
-            restaurant: restaurantObjectId,
+            customerId: customerObjectId,
+            restaurantId: restaurantObjectId,
             menuItems: menuItemObjectIds,
             status: 'ordered',
             pickupTime: pickupTime ? new Date(pickupTime) : null,
         }).save();
 
-        // Update the user with the new order reference
-        await User.findOneAndUpdate(
-            { _id: userObjectId },
-            { $push: { orders: newOrder._id } }, // Push the new order's MongoDB _id to the user's orders array
+        // Update the customer with the new order reference
+        await Customer.findOneAndUpdate(
+            { _id: customerObjectId },
+            { $push: { orders: newOrder._id } }, // Push the new order's MongoDB _id to the customer's orders array
             { new: true }
         );
 
@@ -39,7 +39,7 @@ export const createOrder = async ({ userId, restaurantId, menuItems, pickupTime 
 
 export const getAllOrders = async () => {
     try {
-        const orders = await Order.find({}).populate('user').populate('restaurant').populate('menuItems');
+        const orders = await Order.find({}).populate('customerId').populate('restaurantId').populate('menuItems');
         return orders;
     } catch (error) {
         throw new Error("Error fetching orders: " + error.message);
@@ -49,7 +49,7 @@ export const getAllOrders = async () => {
 
 export const getOrderById = async (orderId) => {
     try {
-        const order = await Order.findOne({ id: orderId }).populate('user').populate('restaurant').populate('menuItems');
+        const order = await Order.findOne({ id: orderId }).populate('customerId').populate('restaurantId').populate('menuItems');
         if (!order) {
             throw new Error("Order not found.");
         }
@@ -87,10 +87,10 @@ export const deleteOrder = async (orderId) => {
             throw new Error("Order not found");
         }
 
-        // After successfully deleting the order, remove its reference from the user's orders array
-        await User.findOneAndUpdate(
-            { _id: deletedOrder.user._id },
-            { $pull: { orders: deletedOrder._id } }, // Remove the order's _id from the user's orders array
+        // After successfully deleting the order, remove its reference from the customer's orders array
+        await Customer.findOneAndUpdate(
+            { _id: deletedOrder.customer._id },
+            { $pull: { orders: deletedOrder._id } }, // Remove the order's _id from the customer's orders array
             { new: true }
         );
 
@@ -100,7 +100,7 @@ export const deleteOrder = async (orderId) => {
     }
 };
 
-// TODO: fetchOrdersByUser
+// TODO: fetchOrdersByCustomer
 
 // TODO: fetchOrdersByRestaurant
 
@@ -123,10 +123,10 @@ async function validateRestaurant(restaurantId) {
 }
 
 
-async function validateUser(userId) {
-    const user = await User.findOne({ id: userId });
-    if (!user) throw new Error("Invalid User");
-    return user._id;
+async function validateCustomer(customerId) {
+    const customer = await Customer.findOne({ id: customerId });
+    if (!customer) throw new Error("Invalid Customer");
+    return customer._id;
 }
 
 
