@@ -1,7 +1,7 @@
 import Order from '../models/order.model.js';
-import MenuItem from '../models/menuItem.model.js';
-import Restaurant from '../models/restaurant.model.js';
-import Customer from '../models/customer.model.js';
+import { validateMenuItem } from './menuItem.repository.js';
+import { validateRestaurant } from './restaurant.repository.js';
+import { validateCustomer } from './customer.repository.js';
 
 export const createOrder = async ({ customerId, restaurantId, menuItems, pickupTime }) => {
     try {
@@ -115,33 +115,15 @@ const getUniqueOrderId = async () => {
     return latestOrder ? latestOrder.id + 1 : 1; // Start from 1 if no orders exist
 };
 
-
-async function validateRestaurant(restaurantId) {
-    const restaurant = await Restaurant.findOne({ id: restaurantId });
-    if (!restaurant) throw new Error("Invalid Restaurant");
-    return restaurant._id;
+// Function to check if an order exists
+const orderExists = async (orderId) => {
+    const order = await Order.findOne({ id: orderId });
+    return order ? true : false;
 }
 
-
-async function validateCustomer(customerId) {
-    const customer = await Customer.findOne({ id: customerId });
-    if (!customer) throw new Error("Invalid Customer");
-    return customer._id;
-}
-
-
-// Validates menu items existence and status.
-async function validateMenuItem(menuItems) {
-    const itemsToOrder = await MenuItem.find({ 'id': { $in: menuItems } });
-    
-    // Verify all requested items are found 
-    if (itemsToOrder.length !== menuItems.length) {
-        throw new Error("One or more menu items are not found.");
-    }
-    // Verify all requested items have sufficient status (available)
-    if (itemsToOrder.some(item => item.status !== 'available')) {
-        throw new Error("One or more menu items are sold out or not available."); 
-    }
-
-    return itemsToOrder.map(item => item._id);
+// Function to validate an order
+export const validateOrder = async (orderId) => {
+    const order = await Order.findOne({ id: orderId });
+    if (!order) throw Error("Order does not exist");
+    return order._id;
 }

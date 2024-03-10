@@ -22,15 +22,10 @@ const managerSchema = new mongoose.Schema(
             type: String,
             required: [true, "Address is required"],
         },
-        orders: [{
-            type: Types.ObjectId,
-            ref: "Order",
-            required: false
-        }],
         restaurantId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Types.ObjectId,
             ref: "Restaurant",
-            required: [true, "Restaurant is required"]
+            required: [true, "Restaurant ID is required"]
         }
     },
     {
