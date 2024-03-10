@@ -9,13 +9,13 @@ import axios from "axios";
 
 import RestaurantCard from "./components/restaurantCard/restaurantCard.component";
 import MenuItemsTable from "./components/menuItemTable/menuItemTable.component";
+import CurrentOrderCartTable from "./components/currentOrderCartTable/currentOrderCartTable.component";
 
 import DropDown from "./components/dropDown/dropDown.component";
 import SearchBar from "./components/searchBar/searchBar.component";
 import menuItemTable from "./components/menuItemTable/menuItemTable.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import CurrentOrderCartTable from "./components/currentOrderCartTable/currentOrderCartTable.component";
 
 /**
  * Main App component
