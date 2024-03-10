@@ -1,0 +1,12 @@
+.search-bar {
+    width: 100%;
+    min-width: 200px;
+    height: 45px;
+    padding: 10px;
+
+    /* make the search bar with rounded edges */
+    border-radius: 12px;
+    border: none;
+    outline: 3px solid #606a6a;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
