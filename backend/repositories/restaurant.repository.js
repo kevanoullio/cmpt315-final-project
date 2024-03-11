@@ -1,6 +1,7 @@
 // Code adapted from https://github.com/mrchenliang/learning-node
 
 import Restaurant from "../models/restaurant.model.js";
+import MenuItem from "../models/menuItem.model.js";
 
 export const getRestaurantsFromRepository = async (query) => {
     try {
@@ -45,6 +46,16 @@ export const deleteAllRestaurants = async () => {
     }
 }
 
+export const getAllMenuItems = async (restaurantId) => {
+    try {
+        const newVar = await Restaurant.findOne({id: restaurantId}, {menuItems: 1});
+        // get their actual names
+        const menuItems = await MenuItem.find({id: {$in: newVar.menuItems}});
+        return menuItems;
+    } catch (e) {
+        throw Error(`Error while fetching menu items: ${e}`);
+    }
+}
 
 export const createRestaurantInRepository = async (payload) => {
     try {
