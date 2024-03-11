@@ -28,7 +28,7 @@ const MenuItemTable = ({ menuItems, currentRestaurant, availableMenuItems, onAdd
                 {menuItems && menuItems.map((item, index) => (
                     <MenuItem 
                         key={index} 
-                        menuItem={item} 
+                        menuItem={item}
                         currentRestaurant={currentRestaurant} 
                         availableMenuItems={availableMenuItems}
                         onAddToCart={onAddToCart} 
