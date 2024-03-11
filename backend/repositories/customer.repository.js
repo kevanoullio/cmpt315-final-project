@@ -37,17 +37,22 @@ export const deleteCustomerFromRepository = async (customerID) => {
     }
 }
 
+export const deleteAllCustomers = async () => {
+    try {
+        return await Customer.deleteMany({});
+    } catch (e) {
+        throw Error(`Error while deleting all customers: ${e}`);
+    }
+}
+
 export const createCustomerInRepository = async (payload) => {
     try {
-        // get a new id
         const newId = await getUniqueCustomerID();
-        console.log("newId", newId)
         // add it to the payload obj
         payload = {...payload, id: newId};
         // then add to db
         const newCustomer = new Customer(payload);
-        const savedCustomer = await newCustomer.save();
-        return savedCustomer;
+        return await newCustomer.save();
     } catch (e) {
         throw Error(`Error while creating a customer: ${e}`);
     }

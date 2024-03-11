@@ -38,6 +38,14 @@ export const deleteManagerFromRepository = async (managerID) => {
     }
 }
 
+export const deleteAllManagers = async () => {
+    try {
+        await Manager.deleteMany({});
+    } catch (e) {
+        throw Error(`Error while deleting all managers: ${e}`);
+    }
+}
+
 export const createManagerInRepository = async ({name, email, address, restaurantId}) => {
     try {
         // input validation

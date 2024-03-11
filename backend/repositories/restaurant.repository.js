@@ -37,12 +37,19 @@ export const deleteRestaurantFromRepository = async (restaurantID) => {
     }
 }
 
+export const deleteAllRestaurants = async () => {
+    try {
+        return await Restaurant.deleteMany({});
+    } catch (e) {
+        throw Error(`Error while deleting all restaurants: ${e}`);
+    }
+}
+
 
 export const createRestaurantInRepository = async (payload) => {
     try {
         // get a new id
         const newId = await getUniqueRestaurantID();
-        console.log("newId", newId)
         // add it to the payload obj
         payload = {...payload, id: newId};
         // then add to db
@@ -72,7 +79,7 @@ const restaurantExists = async (restaurantID) => {
 
 // Function to validate a restaurant
 export const validateRestaurant = async (restaurantId) => {
-    const restaurant = await Restaurant.findOne({id: restaurantId});
+    const restaurant = await Restaurant.findOne({id: restaurantId})
     if (!restaurant) throw new Error("Invalid Restaurant");
     return restaurant._id;
 }
