@@ -11,10 +11,6 @@ export const getMenuItemsFromRepository = async (query) => {
   }
 }
 
-const menuItemExists = async (menuItemID) => {
-  const menuItem = await MenuItem.findOne({ id: menuItemID });
-  return menuItem ? true : false;
-}
 
 export const updateMenuItemsInRepository = async (menuItemID, query) => {
   let exists = await menuItemExists(menuItemID);
@@ -42,15 +38,6 @@ export const deleteMenuItemFromRepository = async (menuItemID) => {
   }
 }
 
-
-// This func gets the highest id in the database and increments it by one so its always a unique id
-const getUniqueMenuItemID = async () => {
-  const maxIdDocument = await MenuItem.findOne({}, { id: 1 }).sort({ id: -1 });
-  const maxId = maxIdDocument ? maxIdDocument.id : 0;
-  return maxId + 1;
-}
-
-
 export const createMenuItemInRepository = async (payload) => {
   try {
     // get a new id
@@ -65,4 +52,36 @@ export const createMenuItemInRepository = async (payload) => {
   } catch (e) {
     throw Error("Error while creating a menuItem: ", e);
   }
+}
+
+
+// ------------- Helper functions ------------- //
+
+// This func gets the highest id in the database and increments it by one so its always a unique id
+const getUniqueMenuItemID = async () => {
+  const maxIdDocument = await MenuItem.findOne({}, { id: 1 }).sort({ id: -1 });
+  const maxId = maxIdDocument ? maxIdDocument.id : 0;
+  return maxId + 1;
+}
+
+// Function to check if a menuItem exists
+const menuItemExists = async (menuItemID) => {
+  const menuItem = await MenuItem.findOne({ id: menuItemID });
+  return menuItem ? true : false;
+}
+
+// Validates menu items existence and status.
+export const validateMenuItem = async (menuItems) => {
+    const itemsToOrder = await MenuItem.find({ 'id': { $in: menuItems } });
+    
+    // Verify all requested items are found 
+    if (itemsToOrder.length !== menuItems.length) {
+        throw new Error("One or more menu items are not found.");
+    }
+    // Verify all requested items have sufficient status (available)
+    if (itemsToOrder.some(item => item.status !== 'available')) {
+        throw new Error("One or more menu items are sold out or not available."); 
+    }
+
+    return itemsToOrder.map(item => item._id);
 }

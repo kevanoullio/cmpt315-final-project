@@ -11,11 +11,6 @@ export const getCustomersFromRepository = async (query) => {
   }
 }
 
-const customerExists = async (customerID) => {
-  const customer = await Customer.findOne({ id: customerID });
-  return customer ? true : false;
-}
-
 export const updateCustomersInRepository = async (customerID, query) => {
   let exists = await customerExists(customerID);
   if (!exists) {
@@ -42,15 +37,6 @@ export const deleteCustomerFromRepository = async (customerID) => {
   }
 }
 
-
-// This func gets the highest id in the database and increments it by one so its always a unique id
-const getUniqueCustomerID = async () => {
-  const maxIdDocument = await Customer.findOne({}, { id: 1 }).sort({ id: -1 });
-  const maxId = maxIdDocument ? maxIdDocument.id : 0;
-  return maxId + 1;
-}
-
-
 export const createCustomerInRepository = async (payload) => {
   try {
     // get a new id
@@ -65,4 +51,27 @@ export const createCustomerInRepository = async (payload) => {
   } catch (e) {
     throw Error("Error while creating a customer: ", e);
   }
+}
+
+
+// ------------- Helper functions ------------- //
+    
+// This func gets the highest id in the database and increments it by one so its always a unique id
+const getUniqueCustomerID = async () => {
+  const maxIdDocument = await Customer.findOne({}, { id: 1 }).sort({ id: -1 });
+  const maxId = maxIdDocument ? maxIdDocument.id : 0;
+  return maxId + 1;
+}
+
+// Function to check if a customer exists
+const customerExists = async (customerID) => {
+  const customer = await Customer.findOne({ id: customerID });
+  return customer ? true : false;
+}
+
+// Function to validate a customer
+export const validateCustomer = async (customerId) => {
+    const customer = await Customer.findOne({ id: customerId });
+    if (!customer) throw new Error("Invalid Customer");
+    return customer._id;
 }

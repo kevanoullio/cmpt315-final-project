@@ -29,7 +29,7 @@ export const createManager = async (req, res) => {
     res.status(201).send(manager);
   } catch (e) {
     console.log("Failed to create manager: ", e); 
-    res.status(400).send('Create failed. You likely did not include all required fields: [name, email, address]');
+    res.status(400).send('Create failed. You likely did not include all required fields: [name, email, address, restaurantId]');
   }
 }
 
