@@ -1,5 +1,11 @@
 import Express from "express";
-import { createRestaurant, deleteRestaurant, getRestaurant, getRestaurants, updateRestaurant } from "../controllers/restaurant.controller.js";
+import {
+    createRestaurant,
+    deleteRestaurant, getMenuItems,
+    getRestaurant,
+    getRestaurants,
+    updateRestaurant
+} from "../controllers/restaurant.controller.js";
 
 const restaurantRouter = Express.Router();
 
@@ -17,7 +23,7 @@ restaurantRouter.get("/:restaurantID", getRestaurant);
   "email": "pizzapalace@email.com",
   "menuItems": []
 }
-*/ 
+*/
 restaurantRouter.post("/", createRestaurant);
 
 /* example patch: localhost:8080/restaurants/8 with body:
@@ -30,4 +36,6 @@ restaurantRouter.patch("/:restaurantID", updateRestaurant);
 // example delete: localhost:8080/restaurants/3
 restaurantRouter.delete("/:restaurantID", deleteRestaurant);
 
+// 8080/restaurants/menuItems
+restaurantRouter.get("/menuItems/:restaurantId", getMenuItems);
 export default restaurantRouter;

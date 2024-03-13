@@ -1,9 +1,10 @@
 import Order from '../models/order.model.js';
-import { validateMenuItem } from './menuItem.repository.js';
-import { validateRestaurant } from './restaurant.repository.js';
-import { validateCustomer } from './customer.repository.js';
+import {validateMenuItem} from './menuItem.repository.js';
+import {validateRestaurant} from './restaurant.repository.js';
+import {validateCustomer} from './customer.repository.js';
+import Customer from "../models/customer.model.js";
 
-export const createOrder = async ({ customerId, restaurantId, menuItems, pickupTime }) => {
+export const createOrder = async ({customerId, restaurantId, menuItems, pickupTime}) => {
     try {
         // input validation
         const restaurantObjectId = await validateRestaurant(restaurantId);
@@ -25,9 +26,9 @@ export const createOrder = async ({ customerId, restaurantId, menuItems, pickupT
 
         // Update the customer with the new order reference
         await Customer.findOneAndUpdate(
-            { _id: customerObjectId },
-            { $push: { orders: newOrder._id } }, // Push the new order's MongoDB _id to the customer's orders array
-            { new: true }
+          {_id: customerObjectId},
+          {$push: {orders: newOrder._id}}, // Push the new order's MongoDB _id to the customer's orders array
+          {new: true}
         );
 
         return newOrder;
@@ -49,7 +50,7 @@ export const getAllOrders = async () => {
 
 export const getOrderById = async (orderId) => {
     try {
-        const order = await Order.findOne({ id: orderId }).populate('customerId').populate('restaurantId').populate('menuItems');
+        const order = await Order.findOne({id: orderId}).populate('customerId').populate('restaurantId').populate('menuItems');
         if (!order) {
             throw new Error("Order not found.");
         }
@@ -63,9 +64,9 @@ export const getOrderById = async (orderId) => {
 export const updateOrderStatus = async (orderId, newStatus) => {
     try {
         const updatedOrder = await Order.findOneAndUpdate(
-            { id: orderId },
-            { status: newStatus },
-            { new: true }
+          {id: orderId},
+          {status: newStatus},
+          {new: true}
         );
 
         if (!updatedOrder) {
@@ -81,17 +82,16 @@ export const updateOrderStatus = async (orderId, newStatus) => {
 
 export const deleteOrder = async (orderId) => {
     try {
-        const deletedOrder = await Order.findOneAndDelete({ id: orderId });
-
+        const deletedOrder = await Order.findOneAndDelete({id: orderId});
         if (!deletedOrder) {
             throw new Error("Order not found");
         }
 
         // After successfully deleting the order, remove its reference from the customer's orders array
         await Customer.findOneAndUpdate(
-            { _id: deletedOrder.customer._id },
-            { $pull: { orders: deletedOrder._id } }, // Remove the order's _id from the customer's orders array
-            { new: true }
+          {_id: deletedOrder.customerId},
+          {$pull: {orders: deletedOrder._id}}, // Remove the order's _id from the customer's orders array
+          {new: true}
         );
 
         return deletedOrder;
@@ -99,6 +99,19 @@ export const deleteOrder = async (orderId) => {
         throw new Error("Error deleting order: " + error.message);
     }
 };
+
+export const deleteAllOrders = async () => {
+    try {
+        await getAllOrders().then(async orders => {
+            for (const order of orders) {
+                await deleteOrder(order.id);
+            }
+        })
+    } catch (error) {
+        throw new Error("Error deleting orders: " + error.message);
+    }
+
+}
 
 // TODO: fetchOrdersByCustomer
 
@@ -117,13 +130,13 @@ const getUniqueOrderId = async () => {
 
 // Function to check if an order exists
 const orderExists = async (orderId) => {
-    const order = await Order.findOne({ id: orderId });
+    const order = await Order.findOne({id: orderId});
     return order ? true : false;
 }
 
 // Function to validate an order
 export const validateOrder = async (orderId) => {
-    const order = await Order.findOne({ id: orderId });
+    const order = await Order.findOne({id: orderId});
     if (!order) throw Error("Order does not exist");
     return order._id;
 }

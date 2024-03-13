@@ -25,7 +25,7 @@ const restaurantSchema = new mongoose.Schema(
             required: [true, "Email is required"],
         },
         menuItems: [{
-            type: Types.ObjectId,
+            type: Number,
             ref: "MenuItem",
             required: false
         }]
