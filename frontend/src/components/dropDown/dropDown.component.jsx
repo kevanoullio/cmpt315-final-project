@@ -38,7 +38,7 @@ const DropDown = ({ placeholder, options, currentOption, handleSelect }) => {
             <Dropdown.Menu className="dropdown-menu">
                 {options.map((option, index) => (
                     <Dropdown.Item key={index} eventKey={option.id}>
-                        {option.first_name + " " + option.last_name}
+                        {option.name || (option.first_name && option.last_name) || 'Unknown'}
                     </Dropdown.Item>
                 ))}
             </Dropdown.Menu>
