@@ -131,22 +131,24 @@ function App() {
                 if (currentRestaurant.name === "Select a restaurant") {
                     return;
                 }
-                await axiosClient.get(`/restaurants/menuItems/${currentRestaurant.id}`).then((res) => {
+                if (currentRestaurant.id) {
+                    await axiosClient.get(`/restaurants/menuItems/${currentRestaurant.id}`).then((res) => {
 
-                    const allMenuItems = res.data;
-                    // extract id, name, status, description, price
-                    const extractedMenuItems = allMenuItems.map(menuItem => {
-                        return {
-                            id: menuItem.id,
-                            name: menuItem.name,
-                            status: menuItem.status,
-                            description: menuItem.description,
-                            price: menuItem.price
-                        };
+                        const allMenuItems = res.data;
+                        // extract id, name, status, description, price
+                        const extractedMenuItems = allMenuItems.map(menuItem => {
+                            return {
+                                id: menuItem.id,
+                                name: menuItem.name,
+                                status: menuItem.status,
+                                description: menuItem.description,
+                                price: menuItem.price
+                            };
+                        })
+                        console.log(extractedMenuItems);
+                        setMenuItems(extractedMenuItems);
                     })
-                    console.log(extractedMenuItems);
-                    setMenuItems(extractedMenuItems);
-                })
+                }
             } catch (error) {
                 console.error(error);
             }
