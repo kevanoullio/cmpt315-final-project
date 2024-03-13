@@ -10,6 +10,8 @@ import MenuItemsTable from "./components/menuItemTable/menuItemTable.component";
 import CurrentOrderCartTable
     from "./components/currentOrderCartTable/currentOrderCartTable.component";
 import SearchBar from "./components/searchBar/searchBar.component";
+import ManagerTable from "./components/managerTable/managerOrdersTable.component";
+import DropDown from "./components/dropDown/dropDown.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import axiosClient from "./axios";
@@ -34,6 +36,7 @@ function App() {
     const [currentRestaurant, setCurrentRestaurant] = useState({name: "Select a restaurant"});
     const [currentManager, setCurrentManager] = useState([]);
     const [currentCustomer, setCurrentCustomer] = useState([]);
+    const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
     const [menuItemsInCart, setMenuItemsInCart] = useState([]);
 
@@ -44,7 +47,48 @@ function App() {
      */
     const onViewButtonClick = (view) => {
         setView(view);
+
+        // reset the restaurant back to empty because restaurant will depend on view 
+        setCurrentRestaurant([]);
     }
+
+    /**
+     * Sets the orders for a single specified restaurant. 
+     * @param {*} orders a list of all the orders for all restaurants 
+     * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for 
+     */
+    const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
+      setCurrentRestaurantOrders(orders.filter(order => order.restaurantId === currentRestaurantId));
+    };    
+
+    /**
+     * Function to handle the selected manager from the dropdown
+     * @param {*} manager - the selected manager's ID
+     */
+    const handleManagerSelection = (selectedManagerId) => {
+      // Find the manager with the given ID
+      const selectedManager = managers.find(manager => manager.id === Number(selectedManagerId));
+
+      // Set the current manager 
+      setCurrentManager(selectedManager);
+    };
+
+    /**
+     * Fetch managers from the API/Database
+     */ 
+    useEffect(() => {
+      const fetchManagerList = async () => {
+        try {
+          await axiosClient.get("/managers").then((res) => {
+            const allManagers = res.data;
+            setManagers(allManagers);
+        })} catch (error) {
+          console.error(error);
+        }
+        
+      };
+      fetchManagerList();
+    }, []); 
 
     /**
      * Function to handle adding a menuItem to the cart
@@ -181,6 +225,14 @@ function App() {
               <h1 className="h1">Restaurant Order Pickup Management System</h1>
           </header>
           <main>
+            <section  className="App-view-buttons-container">
+              <div className="App-view-buttons">
+                <button onClick={() => onViewButtonClick("manager")}>Manager View</button>
+              </div>
+              <div className="App-view-buttons">
+                <button onClick={() => onViewButtonClick("customer")}>Customer View</button>
+              </div>
+            </section>
               {view === "customer" && (
                 <>
                     <section className="App-restaurant-list">
@@ -229,6 +281,25 @@ function App() {
                           onRemoveFromCart={onRemoveFromCart}
                         />
                     </section>
+                </>
+              )}
+              {view === "manager" && (
+                <>
+                  <section className="App-select-manager">
+                  <DropDown 
+                    placeholder="Select Manager" 
+                    options={managers}
+                    currentOption={currentManager}
+                    onManagerSelection={handleManagerSelection} />
+                  </section>
+                  <section>
+                    <h3 className="h2">{currentRestaurant.name}</h3>
+                  </section>
+                  <section>
+                    {/* <ManagerTable 
+                      orders={getOrdersForCurrentRestaurant(orders, currentRestaurant.id)} 
+                      onOrderSelection={handleOrderSelection}/> */}
+                  </section>
                 </>
               )}
           </main>
