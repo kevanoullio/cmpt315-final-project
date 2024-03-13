@@ -36,3 +36,14 @@ main {
 .App-menu-items {
   flex: 2;
 }
+
+.App-view-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+button {
+  border-radius: 10px;
+}
