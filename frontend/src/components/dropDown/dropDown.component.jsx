@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import "./dropDown.styles.css";
 
@@ -10,34 +10,31 @@ import "./dropDown.styles.css";
  * @param {Function} setFunction - Function to set the current option
  * @returns {JSX.Element} - The DropDown component
  */
-const DropDown = ({ placeholder, options, currentOption, handleSelect }) => {
-    // Variable to hold the display text
-    let displayText;
+const DropDown = ({ options, currentOption, onManagerSelection }) => {
+    // change selected manager to state var so it re
+    const [selected, setSelected] = useState(currentOption.name ?? "");
 
-    // If the currentOption is not null, set the displayText to the currentOption's name
-    if (currentOption) {
-        if (currentOption.name) {
-            displayText = currentOption.name;
-        } else if (currentOption.first_name && currentOption.last_name) {
-            displayText = `${currentOption.first_name} ${currentOption.last_name}`;
-        } else {
-            displayText = placeholder;
-        }
-    } else {
-        displayText = placeholder;
-    }
+    // set selected manager in this componenet, as well as outside the component
+    const onSelect = (manager) => {
+        setSelected(manager.name);
+        onManagerSelection(manager.id);
+    } 
 
     // Render the DropDown component
     return (
-        <Dropdown className="dropdown" onSelect={handleSelect}>
+        <Dropdown className="dropdown" >
 
             <Dropdown.Toggle className="dropdown-toggle" variant="success" id="dropdown-basic">
-                {displayText}
+                {selected !== "" ? selected : "Select Manager"} 
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="dropdown-menu">
                 {options.map((option, index) => (
-                    <Dropdown.Item key={index} eventKey={option.id}>
+                    <Dropdown.Item 
+                        key={index} eventKey={option.id}
+                        onClick={() => onSelect(option)} 
+                        active={option.name === selected}
+                    >
                         {option.name || (option.first_name && option.last_name) || 'Unknown'}
                     </Dropdown.Item>
                 ))}
