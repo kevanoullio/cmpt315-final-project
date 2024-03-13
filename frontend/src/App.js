@@ -73,6 +73,11 @@ function App() {
       setCurrentManager(selectedManager);
     };
 
+    // TODO: remove later, just to show manager gets selected
+    useEffect( () => {
+        console.log("currentManager", currentManager);
+    }, [currentManager]);
+
     /**
      * Fetch managers from the API/Database
      */ 
@@ -289,7 +294,6 @@ function App() {
                 <>
                   <section className="App-select-manager">
                   <DropDown 
-                    placeholder="Select Manager" 
                     options={managers}
                     currentOption={currentManager}
                     onManagerSelection={handleManagerSelection} />
