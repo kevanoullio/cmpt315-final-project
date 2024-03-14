@@ -20,6 +20,8 @@ import DropDown from "./components/dropDown/dropDown.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
+import axios from "axios";
+
 /**
  * Main App component
  * @returns {JSX.Element} App component
@@ -148,6 +150,40 @@ function App() {
       const newCart = menuItemsInCart.filter(item => item !== menuItem);
       setMenuItemsInCart(newCart);
   }
+
+
+  /**
+   * Function to handle the checkout process
+   * @returns {void} - The function does not return a value
+   */
+  const onCheckout = () => {
+    checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
+        console.log(response);
+        setMenuItemsInCart([]);
+    });
+  }
+
+
+	/**
+	 * Function to checkout the cart
+	 * @param {String} currentRestaurant
+   * @param {String} currentCustomer
+   * @param {Array} menuItemsInCart
+	 * @returns {Void} - The function does not return a value
+	 */
+	const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
+		try {
+			const url = `http://localhost:8080/orders/`;
+			const response = await axios.post(url, {
+                customerId: currentCustomer.id,
+                restaurantId: currentRestaurant.id,
+                menuItems: menuItemsInCart.map(menuItem => menuItem.id),
+                pickupTime: "2024-03-15T14:30:00Z"});
+			return response.data;
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 
   /**
@@ -369,7 +405,7 @@ function App() {
         {view === "customer" && (
           <>
             <section className="App-restaurant-list">
-              <h3 className="h2">Restaurants</h3>
+              <h2 className="h2">Restaurants</h2>
               <SearchBar
                 className="App-restaurant-search-bar"
                 placeholder="Search for restaurants"
@@ -388,7 +424,7 @@ function App() {
               </div>
             </section>
             <section className="App-menu-items">
-              <h3 className="h3">{currentRestaurant.name}</h3>
+              <h2 className="h2">{currentRestaurant.name}</h2>
               <SearchBar
                 className="App-menu-item-search-bar"
                 placeholder="Search for menu items"
@@ -403,11 +439,12 @@ function App() {
               />
             </section>
             <section className="App-current-order">
-              <h3 className="h2">Your Order</h3>
+              <h2 className="h2">Your Order</h2>
               <CurrentOrderCartTable
                 className="App-current-order-cart-table"
                 menuItemsInCart={menuItemsInCart}
                 onRemoveFromCart={onRemoveFromCart}
+                onCheckout={onCheckout}
               />
             </section>
           </>
