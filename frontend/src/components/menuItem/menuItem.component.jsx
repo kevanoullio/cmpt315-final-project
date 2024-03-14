@@ -1,20 +1,49 @@
 import React from "react";
+import AddToCartButton from "../addToCartButton/addToCartButton.component";
+import RemoveFromCartButton from "../removeFromCartButton/removeFromCartButton.component";
+import "./menuItem.styles.css";
 
 /**
  * Function to render the MenuItem component
- * @param {Object} menuItems - Object representing the menuItems
+ * @param {Object} menuItem - Object representing the menuItems
+ * @param {Object} currentRestaurant - The current restaurant
+ * @param {Object} currentCustomer - The current customer
+ * @param {Function} onAddToCart - The function to add a menuItem to the cart
+ * @param {Function} onRemoveFromCart - The function to remove a menuItem from the cart
  * @returns {JSX.Element} - The menuItems component
  */
-const menuItems = ({menuItem}) => {
-      return (
-        <tr>
-              <td>{menuItem.id}</td>
-              <td>{menuItem.name}</td>
-              <td>{menuItem.status}</td>
-              <td>{menuItem.description}</td>
-              <td>{menuItem.price}</td>
-        </tr>
-      );
+const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, onRemoveFromCart}) => {
+	return (
+		onAddToCart !== undefined && onRemoveFromCart === undefined ?
+			<tr>
+				<td>{menuItem.name}</td>
+				<td>{menuItem.description}</td>
+				<td>{menuItem.price}</td>
+				<td className="button-cell">
+					<AddToCartButton
+						menuItem={menuItem}
+						currentRestaurant={currentRestaurant}
+						currentCustomer={currentCustomer}
+						onAddToCart={onAddToCart}
+					/>
+				</td>
+			</tr>
+		: onAddToCart === undefined && onRemoveFromCart !== undefined ?
+			<tr>
+				<td>{menuItem.name}</td>
+				<td>{menuItem.price}</td>
+				<td>#</td>
+				<td className="button-cell">
+					<RemoveFromCartButton
+						menuItem={menuItem}
+						currentRestaurant={currentRestaurant}
+						currentCustomer={currentCustomer}
+						onRemoveFromCart={onRemoveFromCart}
+					/>
+				</td>
+			</tr>
+		: null
+	)	
 };
 
-export default menuItems;
+export default menuItem;
