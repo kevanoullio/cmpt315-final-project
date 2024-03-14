@@ -10,7 +10,7 @@ function TableOfOrders({orders, onOrderSelection}) {
   };
 
   // if there are no rows in the table, just show the column headers 
-  if (orders.length === 0) {
+  if (!orders || orders.length === 0) {
     return (
       <Table striped bordered hover>
         <thead>

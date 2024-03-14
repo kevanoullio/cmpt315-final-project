@@ -48,8 +48,9 @@ function App() {
     const onViewButtonClick = (view) => {
         setView(view);
 
-        // reset the restaurant back to empty because restaurant will depend on view 
-        setCurrentRestaurant([]);
+        // reset the restaurant and restaurant orders back to empty because restaurant will depend on view 
+        setCurrentRestaurant({name: "Select a restaurant"});
+        setCurrentRestaurantOrders([]);
     }
 
     /**
@@ -58,7 +59,10 @@ function App() {
      * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for 
      */
     const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
-      setCurrentRestaurantOrders(orders.filter(order => order.restaurantId === currentRestaurantId));
+      // Filter to get a list of orders for the specified restaurant 
+      const restaurantOrders = orders.filter(order => order.restaurantId === currentRestaurantId);
+      // set the array to empty if there are no orders for the specified restaurant 
+      setCurrentRestaurantOrders(restaurantOrders.length > 0 ? restaurantOrders : []);
     };    
 
     /**
@@ -71,6 +75,15 @@ function App() {
 
       // Set the current manager 
       setCurrentManager(selectedManager);
+      console.log(selectedManager);
+      console.log(selectedManager.restaurantId);
+      // Get the orders for the restaurant that the manager manages 
+      setCurrentRestaurantOrders(getOrdersForCurrentRestaurant(orders, selectedManager.restaurantId)); // maybe change to UseEffect so that it updates when order status changes ?????
+    };
+
+
+    const handleManagersOrderSelection = () => {
+      // TODO - send status update to backend to update status of order and change order status here and update button color and text in table 
     };
 
     // TODO: remove later, just to show manager gets selected
@@ -298,13 +311,15 @@ function App() {
                     currentOption={currentManager}
                     onManagerSelection={handleManagerSelection} />
                   </section>
+                  {currentRestaurant.name === "Select a restaurant" ? null : (
+                    <section>
+                      <h3 className="h2">{currentRestaurant.name}</h3>
+                    </section>
+                  )}
                   <section>
-                    <h3 className="h2">{currentRestaurant.name}</h3>
-                  </section>
-                  <section>
-                    {/* <ManagerTable 
-                      orders={getOrdersForCurrentRestaurant(orders, currentRestaurant.id)} 
-                      onOrderSelection={handleOrderSelection}/> */}
+                    <ManagerTable 
+                      orders={currentRestaurantOrders} 
+                      onOrderSelection={handleManagersOrderSelection}/>
                   </section>
                 </>
               )}
