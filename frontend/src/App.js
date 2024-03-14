@@ -11,6 +11,7 @@ import CurrentOrderCartTable
     from "./components/currentOrderCartTable/currentOrderCartTable.component";
 import SearchBar from "./components/searchBar/searchBar.component";
 import ManagerOrderTable from "./components/managerTable/managerOrdersTable.component";
+import ManagerMenuItemsTable from "./components/managerTable/managerMenuItemsTable.component";
 import DropDown from "./components/dropDown/dropDown.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -39,7 +40,7 @@ function App() {
     const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
     const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
-    const [showMenuItemsTable, setShowMenuItemsTable] = useState(false);
+    const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
 
     const [menuItemsInCart, setMenuItemsInCart] = useState([]);
 
@@ -250,12 +251,12 @@ function App() {
 
     const handleManagerOrderTable = () => {
       setShowManagerOrderTable(true);
-      setShowMenuItemsTable(false);
+      setShowManagerMenuItemsTable(false);
     };
   
     const handleManagerMenuItems = () => {
       setShowManagerOrderTable(false);
-      setShowMenuItemsTable(true);
+      setShowManagerMenuItemsTable(true);
     };
 
     return (
@@ -345,7 +346,7 @@ function App() {
                         onOrderSelection={handleManagersOrderSelection}/>
                     </section>
                     )}
-                    {showMenuItemsTable && <MenuItemsTable />}
+                    {showManagerMenuItemsTable && <ManagerMenuItemsTable />}
                   </div>
                 </>
               )}
