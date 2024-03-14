@@ -36,7 +36,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart }) => {
                 </tbody>
             </BootstrapTable>
             <div className="subtotal-checkout-container">
-                <h3>Subtotal: ${menuItemsInCart.reduce((acc, menuItem) => acc + menuItem.price, 0).toFixed(2)}</h3>
+                <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + menuItem.price, 0).toFixed(2)}</h3>
                 <Button variant="success" size="lg" block>
                     Checkout
                 </Button>

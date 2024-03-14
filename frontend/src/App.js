@@ -403,7 +403,7 @@ function App() {
               />
             </section>
             <section className="App-current-order">
-              {/* <h3 className="h3">Your Order</h3> */}
+              {/* <h2 className="h2">Your Order</h2> */}
               <CurrentOrderCartTable
                 className="App-current-order-cart-table"
                 menuItemsInCart={menuItemsInCart}
