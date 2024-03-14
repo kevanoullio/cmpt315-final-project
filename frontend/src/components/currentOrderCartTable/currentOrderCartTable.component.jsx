@@ -15,13 +15,13 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart }) => {
     // Render the menuItem table
     return (
         <div className="current-order-cart-table">
-            <h2 className="h2">Current Order</h2>
+            {/* <h2 className="h2">Your Order</h2> */}
             <BootstrapTable className="bootstrap-table" striped bordered hover>
                 <thead className="custom-header">
                     <tr>
                         <th>Menu Item</th>
                         <th>Price</th>
-                        <th>#</th>
+                        {/* <th>#</th> >>> can add later if decide to have items stack up */}
                         <th>Cart</th>
                     </tr>
                 </thead>
@@ -39,6 +39,9 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart }) => {
                 <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + menuItem.price, 0).toFixed(2)}</h3>
                 <Button variant="success" size="lg" block>
                     Checkout
+                </Button>
+                <Button className="previous-orders-button" variant="secondary" size="md" block>
+                    Previous Orders
                 </Button>
             </div>
         </div>

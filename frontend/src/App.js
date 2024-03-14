@@ -20,6 +20,7 @@ import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { Button } from "react-bootstrap";
 
 /**
  * Main App component
@@ -403,7 +404,7 @@ function App() {
               />
             </section>
             <section className="App-current-order">
-              {/* <h2 className="h2">Your Order</h2> */}
+              <h2 className="h2">Your Order</h2>
               <CurrentOrderCartTable
                 className="App-current-order-cart-table"
                 menuItemsInCart={menuItemsInCart}

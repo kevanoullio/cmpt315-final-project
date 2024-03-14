@@ -19,7 +19,7 @@ const AddToCartButton = ({ menuItem, currentRestaurant, currentCustomer, onAddTo
         return <Button variant="danger" disabled>Sold Out</Button>;
     // } else if (menuItem.status === "In Stock") {
     } else {
-        return <Button variant="primary" onClick={() => onAddToCart(menuItem.id)}>Add Item</Button>;
+        return <Button variant="primary" onClick={() => onAddToCart(menuItem)}>Add Item</Button>;
     }
 };
 
