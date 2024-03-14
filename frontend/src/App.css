@@ -33,7 +33,6 @@ main {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* padding: 20px; */
 }
 
 .App-restaurant-list,
@@ -56,11 +55,11 @@ main {
 .App-view-buttons button {
   border-radius: 10px;
 }
-/* 
+
 .App-select-manager,
 .App-restaurant-name, 
 .App-manager-order-table {
   display: flex;
   flex-direction: column;
   justify-content: center;
-} */
+}

@@ -36,8 +36,8 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
 				<td className="button-cell">
 					<RemoveFromCartButton
 						menuItem={menuItem}
-						currentRestaurant={currentRestaurant}
-						currentCustomer={currentCustomer}
+						// currentRestaurant={currentRestaurant}
+						// currentCustomer={currentCustomer}
 						onRemoveFromCart={onRemoveFromCart}
 					/>
 				</td>
