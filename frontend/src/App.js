@@ -369,7 +369,7 @@ function App() {
         {view === "customer" && (
           <>
             <section className="App-restaurant-list">
-              <h3 className="h2">Restaurants</h3>
+              <h2 className="h2">Restaurants</h2>
               <SearchBar
                 className="App-restaurant-search-bar"
                 placeholder="Search for restaurants"
@@ -388,7 +388,7 @@ function App() {
               </div>
             </section>
             <section className="App-menu-items">
-              <h3 className="h3">{currentRestaurant.name}</h3>
+              <h2 className="h2">{currentRestaurant.name}</h2>
               <SearchBar
                 className="App-menu-item-search-bar"
                 placeholder="Search for menu items"
@@ -403,7 +403,7 @@ function App() {
               />
             </section>
             <section className="App-current-order">
-              <h3 className="h2">Your Order</h3>
+              {/* <h3 className="h3">Your Order</h3> */}
               <CurrentOrderCartTable
                 className="App-current-order-cart-table"
                 menuItemsInCart={menuItemsInCart}

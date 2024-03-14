@@ -1,4 +1,15 @@
-.bootstrap-table .custom-header th {
-    background-color: rgb(108, 108, 108);
-    color: white;
+.current-order-cart-table h2,
+.current-order-cart-table .bootstrap-table,
+.subtotal-checkout-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.subtotal-checkout-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

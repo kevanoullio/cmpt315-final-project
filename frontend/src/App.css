@@ -63,3 +63,8 @@ main {
   flex-direction: column;
   justify-content: center;
 }
+
+.bootstrap-table .custom-header th {
+    background-color: rgb(108, 108, 108);
+    color: white;
+}
