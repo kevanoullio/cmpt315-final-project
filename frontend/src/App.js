@@ -10,7 +10,7 @@ import MenuItemsTable from "./components/menuItemTable/menuItemTable.component";
 import CurrentOrderCartTable
     from "./components/currentOrderCartTable/currentOrderCartTable.component";
 import SearchBar from "./components/searchBar/searchBar.component";
-import ManagerTable from "./components/managerTable/managerOrdersTable.component";
+import ManagerOrderTable from "./components/managerTable/managerOrdersTable.component";
 import DropDown from "./components/dropDown/dropDown.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -37,6 +37,9 @@ function App() {
     const [currentManager, setCurrentManager] = useState([]);
     const [currentCustomer, setCurrentCustomer] = useState([]);
     const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
+
+    const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
+    const [showMenuItemsTable, setShowMenuItemsTable] = useState(false);
 
     const [menuItemsInCart, setMenuItemsInCart] = useState([]);
 
@@ -245,6 +248,16 @@ function App() {
         setSearchText(event.target.value);
     };
 
+    const handleManagerOrderTable = () => {
+      setShowManagerOrderTable(true);
+      setShowMenuItemsTable(false);
+    };
+  
+    const handleManagerMenuItems = () => {
+      setShowManagerOrderTable(false);
+      setShowMenuItemsTable(true);
+    };
+
     return (
       <div className="App-wrapper">
           <header>
@@ -322,11 +335,18 @@ function App() {
                       <h3 className="h2">{currentRestaurant.name}</h3>
                     </section>
                   )}
-                  <section className="App-manager-order-table">
-                    <ManagerTable 
-                      orders={currentRestaurantOrders} 
-                      onOrderSelection={handleManagersOrderSelection}/>
-                  </section>
+                  <div>
+                    <button onClick={handleManagerOrderTable}>Orders</button>
+                    <button onClick={handleManagerMenuItems}>Menu Items</button>
+                    {showManagerOrderTable && (
+                      <section className="App-manager-order-table">
+                      <ManagerOrderTable 
+                        orders={currentRestaurantOrders} 
+                        onOrderSelection={handleManagersOrderSelection}/>
+                    </section>
+                    )}
+                    {showMenuItemsTable && <MenuItemsTable />}
+                  </div>
                 </>
               )}
           </main>
