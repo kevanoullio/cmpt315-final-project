@@ -9,7 +9,6 @@ import axiosClient from "./axios";
 
 import RestaurantCard from "./components/restaurantCard/restaurantCard.component";
 import MenuItemsTable from "./components/menuItemsTable/menuItemsTable.component";
-import ManagerTable from "./components/managerTable/managerOrdersTable.component";
 import CurrentOrderCartTable
     from "./components/currentOrderCartTable/currentOrderCartTable.component";
 
@@ -40,9 +39,9 @@ function App() {
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
-
+  
+  const [currentManager, setCurrentManager] = useState({});
   const [currentRestaurant, setCurrentRestaurant] = useState({name: "Select a restaurant"});
-  const [currentManager, setCurrentManager] = useState([]);
   const [currentCustomer, setCurrentCustomer] = useState([]);
   const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
@@ -51,6 +50,9 @@ function App() {
 
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
 
+  useEffect(()=> {
+    setCurrentRestaurant(currentManager.restaurantId || {name: "Select a restaurant"});
+  }, [currentManager])
 
   /**
     * Function to handle view button click
@@ -63,6 +65,9 @@ function App() {
     // reset the restaurant and restaurant orders back to empty because restaurant will depend on view 
     setCurrentRestaurant({name: "Select a restaurant"});
     setCurrentRestaurantOrders([]);
+    setMenuItems([]);
+    setCurrentCustomer([]);
+    setCurrentManager([]);
   };
 
 
@@ -90,8 +95,6 @@ function App() {
 
     // Set the current manager 
     setCurrentManager(selectedManager);
-    console.log(selectedManager);
-    console.log(selectedManager.restaurantId);
 
     // Get the orders for the restaurant that the manager manages 
     setCurrentRestaurantOrders(getOrdersForCurrentRestaurant(orders, selectedManager.restaurantId)); // maybe change to UseEffect so that it updates when order status changes ?????
@@ -102,6 +105,13 @@ function App() {
     // TODO - send status update to backend to update status of order and change order status here and update button color and text in table 
     // go from go from ordered to in-progress then from in-progress to awaiting-pickup then to completed 
 
+
+
+
+  };
+
+  const handleManagersMenuItemSelection = () => {
+    // TODO - change status of menu item to sold-out or in-stock
 
 
 
@@ -120,15 +130,6 @@ function App() {
     // Set the current customer
     setCurrentCustomer(selectedCustomer);
   }
-
-
-  // TODO: remove later, just to show manager gets selected
-  useEffect( () => {
-      console.log("currentManager", currentManager);
-  }, [currentManager]);
-
-
-
 
   /**
     * Function to handle adding a menuItem to the cart
@@ -208,7 +209,6 @@ function App() {
                               price: menuItem.price
                           };
                       })
-                      console.log(extractedMenuItems);
                       setMenuItems(extractedMenuItems);
                   })
               }
@@ -464,7 +464,13 @@ function App() {
                     onOrderSelection={handleManagersOrderSelection}/>
                 </section>
               )}
-              {showManagerMenuItemsTable && <ManagerMenuItemsTable />}
+              {showManagerMenuItemsTable && (
+                <section className="App-manager-menuItems-table">
+                  <ManagerMenuItemsTable 
+                    menuItems={menuItems} 
+                    onItemSelection={handleManagersMenuItemSelection}/>
+                </section>
+              )}
             </div>
           </>
         )}
