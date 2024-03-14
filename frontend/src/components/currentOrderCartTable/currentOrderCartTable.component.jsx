@@ -5,32 +5,28 @@ import "./currentOrderCartTable.styles.css";
 
 /**
  * Function to render the menuItem table component
- * @param {Array<Object>} menuItems - The list of menuItems
- * @param {Object} currentRestaurant - The current restaurant
- * @param {Array<Object>} availableMenuItems - The list of available menuItems
- * @param {Function} onAddToCart - The function to add a menuItem to the cart
+ * @param {Array<Object>} menuItemsInCart - The list of menuItems in the cart
  * @param {Function} onRemoveFromCart - The function to remove a menuItem from the cart
  * @returns {JSX.Element} - The menuItem table component
  */
-const CurrentOrderCartTable = ({ menuItems, currentRestaurant, availableMenuItems, onAddToCart, onRemoveFromCart }) => {
+const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart }) => {
+    console.log("menuItemsInCart: ", menuItemsInCart);
     // Render the menuItem table
     return (
         <BootstrapTable className="bootstrap-table" striped bordered hover>
             <thead className="custom-header">
                 <tr>
-                <th>Item</th>
-                <th>Price</th>
-                <th>#</th>
+                    <th>Menu Item</th>
+                    <th>Price</th>
+                    <th>#</th>
+                    <th>Cart</th>
                 </tr>
             </thead>
             <tbody>
-                {menuItems && menuItems.map((item, index) => (
-                    <MenuItem 
+                {menuItemsInCart && menuItemsInCart.map((menuItem, index) => (
+                    <MenuItem
                         key={index} 
-                        menuItem={item} 
-                        currentRestaurant={currentRestaurant} 
-                        availableMenuItems={availableMenuItems}
-                        onAddToCart={onAddToCart} 
+                        menuItem={menuItem}
                         onRemoveFromCart={onRemoveFromCart} 
                     />
                 ))}
