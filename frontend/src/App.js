@@ -42,6 +42,7 @@ function App() {
   const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
 
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
+  const [menuItemIdCounter, setMenuItemIdCounter] = useState(0);
 
   useEffect(()=> {
     setCurrentRestaurant(currentManager.restaurantId || {name: "Select a restaurant"});
@@ -131,7 +132,14 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   const onAddToCart = (menuItem) => {
-      setMenuItemsInCart([...menuItemsInCart, menuItem]);
+    // Assign a new unique ID to the item
+    const itemWithId = {...menuItem, id: menuItemIdCounter};
+
+    // Add the item to the cart
+    setMenuItemsInCart(prevItems => [...prevItems, itemWithId]);
+
+    // Increment the menu item ID counter
+    setMenuItemIdCounter(menuItemIdCounter + 1);
   }
 
 
@@ -141,8 +149,8 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   const onRemoveFromCart = (menuItem) => {
-      const newCart = menuItemsInCart.filter(item => item !== menuItem);
-      setMenuItemsInCart(newCart);
+    // Remove only the item with the matching ID
+    setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
   }
 
 
