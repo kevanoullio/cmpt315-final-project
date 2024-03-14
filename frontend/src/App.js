@@ -71,12 +71,13 @@ function App() {
      */
     const handleManagerSelection = (selectedManagerId) => {
       // Find the manager with the given ID
-      const selectedManager = managers.find(manager => manager.id === Number(selectedManagerId));
+      const selectedManager = managers.find(manager => manager.id === selectedManagerId);
 
       // Set the current manager 
       setCurrentManager(selectedManager);
       console.log(selectedManager);
       console.log(selectedManager.restaurantId);
+
       // Get the orders for the restaurant that the manager manages 
       setCurrentRestaurantOrders(getOrdersForCurrentRestaurant(orders, selectedManager.restaurantId)); // maybe change to UseEffect so that it updates when order status changes ?????
     };
@@ -84,6 +85,11 @@ function App() {
 
     const handleManagersOrderSelection = () => {
       // TODO - send status update to backend to update status of order and change order status here and update button color and text in table 
+      // go from go from ordered to in-progress then from in-progress to awaiting-pickup then to completed 
+
+
+
+
     };
 
     // TODO: remove later, just to show manager gets selected
@@ -312,11 +318,11 @@ function App() {
                     onManagerSelection={handleManagerSelection} />
                   </section>
                   {currentRestaurant.name === "Select a restaurant" ? null : (
-                    <section>
+                    <section className="App-restaurant-name">
                       <h3 className="h2">{currentRestaurant.name}</h3>
                     </section>
                   )}
-                  <section>
+                  <section className="App-manager-order-table">
                     <ManagerTable 
                       orders={currentRestaurantOrders} 
                       onOrderSelection={handleManagersOrderSelection}/>
