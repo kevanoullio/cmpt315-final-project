@@ -8,10 +8,10 @@ import "./currentOrderCartTable.styles.css";
  * Function to render the menuItem table component
  * @param {Array<Object>} menuItemsInCart - The list of menuItems in the cart
  * @param {Function} onRemoveFromCart - The function to remove a menuItem from the cart
+ * @param {Function} onCheckout - The function to checkout the cart
  * @returns {JSX.Element} - The menuItem table component
  */
-const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart }) => {
-    console.log("menuItemsInCart: ", menuItemsInCart);
+const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout }) => {
     // Render the menuItem table
     return (
         <div className="current-order-cart-table">
@@ -37,7 +37,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart }) => {
             </BootstrapTable>
             <div className="subtotal-checkout-container">
                 <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + menuItem.price, 0).toFixed(2)}</h3>
-                <Button variant="success" size="lg" block>
+                <Button variant="success" size="lg" onClick={() => onCheckout(menuItemsInCart)}>
                     Checkout
                 </Button>
                 <Button className="previous-orders-button" variant="secondary" size="md" block>

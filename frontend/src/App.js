@@ -20,7 +20,8 @@ import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Button } from "react-bootstrap";
+
+import axios from "axios";
 
 /**
  * Main App component
@@ -148,6 +149,40 @@ function App() {
       const newCart = menuItemsInCart.filter(item => item !== menuItem);
       setMenuItemsInCart(newCart);
   }
+
+
+  /**
+   * Function to handle the checkout process
+   * @returns {void} - The function does not return a value
+   */
+  const onCheckout = () => {
+    checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
+        console.log(response);
+        setMenuItemsInCart([]);
+    });
+  }
+
+
+	/**
+	 * Function to checkout the cart
+	 * @param {String} currentRestaurant
+   * @param {String} currentCustomer
+   * @param {Array} menuItemsInCart
+	 * @returns {Void} - The function does not return a value
+	 */
+	const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
+		try {
+			const url = `http://localhost:8080/orders/`;
+			const response = await axios.post(url, {
+                customerId: currentCustomer.id,
+                restaurantId: currentRestaurant.id,
+                menuItems: menuItemsInCart.map(menuItem => menuItem.id),
+                pickupTime: "2024-03-15T14:30:00Z"});
+			return response.data;
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 
   /**
@@ -409,6 +444,7 @@ function App() {
                 className="App-current-order-cart-table"
                 menuItemsInCart={menuItemsInCart}
                 onRemoveFromCart={onRemoveFromCart}
+                onCheckout={onCheckout}
               />
             </section>
           </>
