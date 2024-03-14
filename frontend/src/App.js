@@ -406,9 +406,7 @@ function App() {
               <h3 className="h2">Your Order</h3>
               <CurrentOrderCartTable
                 className="App-current-order-cart-table"
-                menuItems={menuItemsInCart}
-                currentRestaurant={currentRestaurant}
-                currentCustomer={currentCustomer}
+                menuItemsInCart={menuItemsInCart}
                 onRemoveFromCart={onRemoveFromCart}
               />
             </section>

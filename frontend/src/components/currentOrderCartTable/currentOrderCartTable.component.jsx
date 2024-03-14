@@ -5,13 +5,12 @@ import "./currentOrderCartTable.styles.css";
 
 /**
  * Function to render the menuItem table component
- * @param {Array<Object>} menuItems - The list of menuItems
- * @param {Object} currentRestaurant - The current restaurant
- * @param {Object} currentCustomer - The current customer
+ * @param {Array<Object>} menuItemsInCart - The list of menuItems in the cart
  * @param {Function} onRemoveFromCart - The function to remove a menuItem from the cart
  * @returns {JSX.Element} - The menuItem table component
  */
-const CurrentOrderCartTable = ({ menuItems, currentRestaurant, currentCustomer, onRemoveFromCart }) => {
+const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart }) => {
+    console.log("menuItemsInCart: ", menuItemsInCart);
     // Render the menuItem table
     return (
         <BootstrapTable className="bootstrap-table" striped bordered hover>
@@ -24,12 +23,10 @@ const CurrentOrderCartTable = ({ menuItems, currentRestaurant, currentCustomer, 
                 </tr>
             </thead>
             <tbody>
-                {menuItems && menuItems.map((menuItem, index) => (
+                {menuItemsInCart && menuItemsInCart.map((menuItem, index) => (
                     <MenuItem
                         key={index} 
                         menuItem={menuItem}
-                        currentRestaurant={currentRestaurant} 
-                        currentCustomer={currentCustomer}
                         onRemoveFromCart={onRemoveFromCart} 
                     />
                 ))}
