@@ -45,6 +45,12 @@ main {
   flex: 2;
 }
 
+.App-current-order {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .App-view-buttons {
   display: flex;
   justify-content: center;
