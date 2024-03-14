@@ -14,6 +14,8 @@ import CurrentOrderCartTable
     from "./components/currentOrderCartTable/currentOrderCartTable.component";
 
 import SearchBar from "./components/searchBar/searchBar.component";
+import ManagerOrderTable from "./components/managerTable/managerOrdersTable.component";
+import ManagerMenuItemsTable from "./components/managerTable/managerMenuItemsTable.component";
 import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -41,6 +43,9 @@ function App() {
   const [currentCustomer, setCurrentCustomer] = useState([]);
   const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
+    const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
+    const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
+
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
 
 
@@ -52,20 +57,22 @@ function App() {
   const onViewButtonClick = (view) => {
       setView(view);
 
-      // reset the restaurant back to empty because restaurant will depend on view 
-      setCurrentRestaurant([]);
-  }
+        // reset the restaurant and restaurant orders back to empty because restaurant will depend on view 
+        setCurrentRestaurant({name: "Select a restaurant"});
+        setCurrentRestaurantOrders([]);
+    }
 
-
-  /**
-    * Sets the orders for a single specified restaurant. 
-    * @param {*} orders a list of all the orders for all restaurants 
-    * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for 
-    */
-  const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
-    setCurrentRestaurantOrders(orders.filter(order => order.restaurantId === currentRestaurantId));
-  };
-
+    /**
+     * Sets the orders for a single specified restaurant. 
+     * @param {*} orders a list of all the orders for all restaurants 
+     * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for 
+     */
+    const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
+      // Filter to get a list of orders for the specified restaurant 
+      const restaurantOrders = orders.filter(order => order.restaurantId === currentRestaurantId);
+      // set the array to empty if there are no orders for the specified restaurant 
+      setCurrentRestaurantOrders(restaurantOrders.length > 0 ? restaurantOrders : []);
+    };    
 
   /**
     * Function to handle the selected manager from the dropdown
@@ -74,11 +81,26 @@ function App() {
     */
   const handleManagerSelection = (selectedManagerId) => {
     // Find the manager with the given ID
-    const selectedManager = managers.find(manager => manager.id === Number(selectedManagerId));
+    const selectedManager = managers.find(manager => manager.id === selectedManagerId);
 
-    // Set the current manager 
-    setCurrentManager(selectedManager);
-  };
+      // Set the current manager 
+      setCurrentManager(selectedManager);
+      console.log(selectedManager);
+      console.log(selectedManager.restaurantId);
+
+      // Get the orders for the restaurant that the manager manages 
+      setCurrentRestaurantOrders(getOrdersForCurrentRestaurant(orders, selectedManager.restaurantId)); // maybe change to UseEffect so that it updates when order status changes ?????
+    };
+
+
+    const handleManagersOrderSelection = () => {
+      // TODO - send status update to backend to update status of order and change order status here and update button color and text in table 
+      // go from go from ordered to in-progress then from in-progress to awaiting-pickup then to completed 
+
+
+
+
+    };
 
 
   /**
@@ -261,12 +283,22 @@ function App() {
       setSearchText(event.target.value);
   };
 
-  return (
-    <div className="App-wrapper">
+    const handleManagerOrderTable = () => {
+      setShowManagerOrderTable(true);
+      setShowManagerMenuItemsTable(false);
+    };
+  
+    const handleManagerMenuItems = () => {
+      setShowManagerOrderTable(false);
+      setShowManagerMenuItemsTable(true);
+    };
+
+    return (
+      <div className="App-wrapper">
         <header>
             <h1 className="h1">Restaurant Order Pickup Management System</h1>
         </header>
-        <section  className="App-view-container">
+        <section className="App-view-container">
           <div className="App-view-buttons">
             <button onClick={() => onViewButtonClick("manager")}>Manager View</button>
             <button onClick={() => onViewButtonClick("customer")}>Customer View</button>
@@ -310,20 +342,12 @@ function App() {
                       onClick={() => {
                           setCurrentRestaurant(restaurant);
                       }}
-                      />
-                    ))}
+                    />
+                  ))}
                 </div>
               </section>
               <section className="App-menu-items">
-                {currentRestaurant.id !== undefined ? (
-                  <>
-                    <h3 className="h3">{currentRestaurant.name}</h3>
-                  </>
-                ) : (
-                  <>
-                    <h3 className="h3">Select a restaurant</h3>
-                  </>
-                )}
+                <h3 className="h3">{currentRestaurant.name}</h3>
                 <SearchBar
                   className="App-menu-item-search-bar"
                   placeholder="Search for menu items"
@@ -331,7 +355,8 @@ function App() {
                 />
                 <MenuItemsTable
                   menuItems={menuItems}
-                  className="App-menu-items-table"
+                  className="App-menu-item-table"
+                  restaurants={filteredRestaurants}
                   currentRestaurant={currentRestaurant}
                   currentCustomer={currentCustomer}
                   onAddToCart={onAddToCart}
@@ -351,19 +376,30 @@ function App() {
           )}
           {view === "manager" && (
             <>
-              <h3 className="h2">{currentRestaurant.name}</h3>
-                {/* <ManagerTable 
-                  orders={getOrdersForCurrentRestaurant(orders, currentRestaurant.id)} 
-                  onOrderSelection={handleOrderSelection}/> */}
+              {currentRestaurant.name === "Select a restaurant" ? null : (
+                <h3>{currentRestaurant.name}</h3>
+              )}
+              <div>
+                <button onClick={handleManagerOrderTable}>Orders</button>
+                <button onClick={handleManagerMenuItems}>Menu Items</button>
+                {showManagerOrderTable && (
+                  <section className="App-manager-order-table">
+                    <ManagerOrderTable 
+                      orders={currentRestaurantOrders} 
+                      onOrderSelection={handleManagersOrderSelection}/>
+                  </section>
+                )}
+                {showManagerMenuItemsTable && <ManagerMenuItemsTable />}
+              </div>
             </>
           )}
         </main>
         <footer>
-          <p>Thank you for choosing Restaurant Order Pickup Management System ||
-              2024 &copy; Copyright</p>
+            <p>Thank you for choosing Restaurant Order Pickup Management System ||
+                2024 &copy; Copyright</p>
         </footer>
-    </div>
-  );
+      </div>
+    );
 }
 
 // Export the App component
