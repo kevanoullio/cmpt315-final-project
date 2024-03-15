@@ -3,13 +3,14 @@
 }
 
 .App-wrapper {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background-color: lightgray;
 }
 
-header, footer {
+header,
+footer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,7 +50,7 @@ main {
   flex: 2;
 }
 
-.App-menu-list{
+.App-menu-list {
   /* change this if we remove the top bar */
   height: 75vh;
   overflow-y: scroll;
@@ -86,14 +87,14 @@ main {
 }
 
 .bootstrap-table .custom-header th {
-    background-color: rgb(108, 108, 108);
-    color: white;
+  background-color: rgb(108, 108, 108);
+  color: white;
 }
 
 .App-restaurant-cards {
   display: flex;
   flex-direction: column;
-  align-items: center ;
+  align-items: center;
   /* change this if we remove the top bar */
   height: 70vh;
   overflow-y: scroll;
