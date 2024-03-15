@@ -30,6 +30,7 @@
 .right {
   border-left: solid 1px #c7c8c9;
   padding-left: 4px;
+  margin-bottom: 4px;
 }
 
 .status-button {

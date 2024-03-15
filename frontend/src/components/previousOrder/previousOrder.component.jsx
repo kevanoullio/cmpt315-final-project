@@ -9,9 +9,7 @@ const PreviousOrder = ({ order }) => {
   }
 
   const getTime = () => {
-    console.log(order.pickupTime)
     const date = new Date(order.pickupTime);
-    console.log(date, typeof date);
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 
@@ -27,12 +25,11 @@ const PreviousOrder = ({ order }) => {
 
         </div>
         <div className='right' >
-        <h5>{order.restaurantId.name}</h5>
-        <p className='item'>Pickup time:</p>
-        <p>{getTime()}</p>
-        <hr />
-        <p className='item'>Subtotal: ${getSubtotal()}</p>
-
+          <h5>{order.restaurantId.name}</h5>
+          <p className='item'>Pickup time:</p>
+          <p>{getTime()}</p>
+          <hr />
+          <p className='item'>Subtotal: ${getSubtotal()}</p>
         </div>
       </div>
       <div className='status-button'>

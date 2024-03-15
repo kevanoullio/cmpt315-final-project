@@ -1,4 +1,3 @@
-// import React, { useState, useEffect } from "react";
 import { useEffect, useState } from "react";
 import BootstrapTable from "react-bootstrap/Table";
 import { Button } from "react-bootstrap";
@@ -17,9 +16,14 @@ import PreviousOrder from "../previousOrder/previousOrder.component";
 const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout, orders, currentCustomer }) => {
   // used for order side menu
   const [show, setShow] = useState(false);
+  const [customerOrders, setCustomerOrders] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect( () => {
+    setCustomerOrders( orders.filter( (order) => order.customerId.id === currentCustomer.id) );
+  }, [currentCustomer, orders]);
 
   // Render the menuItem table
   return (
@@ -58,9 +62,9 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout, 
           <Offcanvas.Title>Previous Orders</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="order-backdrop">
-            {orders.map( (order, index) => (
+            {customerOrders.length > 0 ? customerOrders.map( (order, index) => (
               <PreviousOrder key={`order-${index}`} order={order} />
-            ))}
+            )) : (<p>no previous orders</p>)}
         </Offcanvas.Body>
       </Offcanvas>
     </div>
