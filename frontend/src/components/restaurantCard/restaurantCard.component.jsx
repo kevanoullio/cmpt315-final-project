@@ -1,5 +1,6 @@
 import React from "react";
 import Card from 'react-bootstrap/Card';
+import './restaurantCard.styles.css';
 
 /**
  * Function to render the Restaurant component
@@ -9,7 +10,7 @@ import Card from 'react-bootstrap/Card';
  */
 
 const RestaurantCard = ({ restaurant, onClick }) => (
-	<Card style={{ width: "80%", cursor: "pointer" }} onClick={onClick}>
+	<Card className="card"  onClick={onClick}>
 		{/* <Card.Img variant="top" src={restaurant.image} /> */}
 		<Card.Img variant="top"
 			src="https://img.freepik.com/free-vector/vector-pastel-plate-food-sticker-clipart_53876-170585.jpg?w=826&t=st=1710138142~exp=1710138742~hmac=b4c26387026e4075a450797389cbdbb80a8c9a7ee760731925f7ac359d00134e" />

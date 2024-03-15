@@ -11,3 +11,8 @@
     transition: all 0.3s ease;
     margin-top: 6em;
 }
+
+.card{
+  width: 100%;
+  cursor: pointer;
+}
