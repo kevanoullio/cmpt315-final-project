@@ -34,7 +34,13 @@
 
 .status-button {
   display: flex;
+  margin: 4px 10% 0;
   padding-top: 4px;
   justify-content: center;
+  background-color: #727272;
+}
 
+.status {
+  color: white;
+  text-transform: capitalize;
 }

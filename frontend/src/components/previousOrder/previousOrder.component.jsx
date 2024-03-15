@@ -1,4 +1,3 @@
-import { Button } from 'react-bootstrap';
 import './previousOrder.styles.css';
 
 const PreviousOrder = ({ order }) => {
@@ -37,7 +36,7 @@ const PreviousOrder = ({ order }) => {
         </div>
       </div>
       <div className='status-button'>
-        <Button  >Status</Button>
+        <h5 className='status' >Status: {order.status}</h5>
       </div>
     </div>
   );

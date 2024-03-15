@@ -21,12 +21,6 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout, 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect( () => {
-    if (orders)
-      console.log(orders)
-  }, [orders])
-
-
   // Render the menuItem table
   return (
     <div className="current-order-cart-table">
