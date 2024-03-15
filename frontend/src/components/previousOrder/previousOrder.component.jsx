@@ -19,7 +19,7 @@ const PreviousOrder = ({ order }) => {
       <div className='order-main'>
         <div>
           <h6>Items ordered:</h6>
-          {order.menuItems.map( (item, index) => (
+          {order.menuItems.map((item, index) => (
             <p className='item-small' key={`${order.id}-item-${index}`}>{item.name} - ${item.price}</p>
           ))}
 

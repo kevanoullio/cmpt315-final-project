@@ -21,8 +21,8 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout, 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect( () => {
-    setCustomerOrders( orders.filter( (order) => order.customerId.id === currentCustomer.id) );
+  useEffect(() => {
+    setCustomerOrders(orders.filter((order) => order.customerId.id === currentCustomer.id));
   }, [currentCustomer, orders]);
 
   // Render the menuItem table
@@ -62,9 +62,9 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout, 
           <Offcanvas.Title>Previous Orders</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="order-backdrop">
-            {customerOrders.length > 0 ? customerOrders.map( (order, index) => (
-              <PreviousOrder key={`order-${index}`} order={order} />
-            )) : (<p>no previous orders</p>)}
+          {customerOrders.length > 0 ? customerOrders.map((order, index) => (
+            <PreviousOrder key={`order-${index}`} order={order} />
+          )) : (<p>no previous orders</p>)}
         </Offcanvas.Body>
       </Offcanvas>
     </div>

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axiosClient from "./axios";
 
 import RestaurantCard from "./components/restaurantCard/restaurantCard.component";
 import MenuItemsTable from "./components/menuItemsTable/menuItemsTable.component";
 import CurrentOrderCartTable
-    from "./components/currentOrderCartTable/currentOrderCartTable.component";
+  from "./components/currentOrderCartTable/currentOrderCartTable.component";
 
 import SearchBar from "./components/searchBar/searchBar.component";
 import ManagerOrderTable from "./components/managerTable/managerOrdersTable.component";
@@ -34,7 +34,7 @@ function App() {
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
 
   const [currentManager, setCurrentManager] = useState({});
-  const [currentRestaurant, setCurrentRestaurant] = useState({name: "Select a restaurant"});
+  const [currentRestaurant, setCurrentRestaurant] = useState({ name: "Select a restaurant" });
   const [currentCustomer, setCurrentCustomer] = useState([]);
   const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
@@ -44,8 +44,8 @@ function App() {
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
   const [menuItemIdCounter, setMenuItemIdCounter] = useState(0);
 
-  useEffect(()=> {
-    setCurrentRestaurant(currentManager.restaurantId || {name: "Select a restaurant"});
+  useEffect(() => {
+    setCurrentRestaurant(currentManager.restaurantId || { name: "Select a restaurant" });
   }, [currentManager])
 
   /**
@@ -57,7 +57,7 @@ function App() {
     setView(view);
 
     // reset the restaurant and restaurant orders back to empty because restaurant will depend on view
-    setCurrentRestaurant({name: "Select a restaurant"});
+    setCurrentRestaurant({ name: "Select a restaurant" });
     setCurrentRestaurantOrders([]);
     setMenuItems([]);
     setCurrentCustomer([]);
@@ -133,7 +133,7 @@ function App() {
     */
   const onAddToCart = (menuItem) => {
     // Assign a new unique ID to the item
-    const itemWithId = {...menuItem, id: menuItemIdCounter};
+    const itemWithId = { ...menuItem, id: menuItemIdCounter };
 
     // Add the item to the cart
     setMenuItemsInCart(prevItems => [...prevItems, itemWithId]);
@@ -160,8 +160,8 @@ function App() {
    */
   const onCheckout = () => {
     checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
-        console.log(response);
-        setMenuItemsInCart([]);
+      console.log(response);
+      setMenuItemsInCart([]);
     });
   }
 
@@ -192,33 +192,33 @@ function App() {
     * Fetch MenuItems from the API/Database
     */
   useEffect(() => {
-      const fetchMenuItems = async () => {
-          try {
-              if (currentRestaurant.name === "Select a restaurant") {
-                  return;
-              }
-              if (currentRestaurant.id) {
-                  await axiosClient.get(`/restaurants/menuItems/${currentRestaurant.id}`).then((res) => {
+    const fetchMenuItems = async () => {
+      try {
+        if (currentRestaurant.name === "Select a restaurant") {
+          return;
+        }
+        if (currentRestaurant.id) {
+          await axiosClient.get(`/restaurants/menuItems/${currentRestaurant.id}`).then((res) => {
 
-                      const allMenuItems = res.data;
-                      // extract id, name, status, description, price
-                      const extractedMenuItems = allMenuItems.map(menuItem => {
-                          return {
-                              id: menuItem.id,
-                              name: menuItem.name,
-                              status: menuItem.status,
-                              description: menuItem.description,
-                              price: menuItem.price
-                          };
-                      })
-                      setMenuItems(extractedMenuItems);
-                  })
-              }
-          } catch (error) {
-              console.error(error);
-          }
+            const allMenuItems = res.data;
+            // extract id, name, status, description, price
+            const extractedMenuItems = allMenuItems.map(menuItem => {
+              return {
+                id: menuItem.id,
+                name: menuItem.name,
+                status: menuItem.status,
+                description: menuItem.description,
+                price: menuItem.price
+              };
+            })
+            setMenuItems(extractedMenuItems);
+          })
+        }
+      } catch (error) {
+        console.error(error);
       }
-      fetchMenuItems().then();
+    }
+    fetchMenuItems().then();
   }, [currentRestaurant]);
 
 
@@ -226,17 +226,17 @@ function App() {
     * Fetch Restaurants from the API/Database
     */
   useEffect(() => {
-      const fetchRestaurants = async () => {
-          try {
-              await axiosClient.get("/restaurants").then((res) => {
-                  const allRestaurants = res.data;
-                  setRestaurants(allRestaurants);
-              })
-          } catch (error) {
-              console.error(error);
-          }
+    const fetchRestaurants = async () => {
+      try {
+        await axiosClient.get("/restaurants").then((res) => {
+          const allRestaurants = res.data;
+          setRestaurants(allRestaurants);
+        })
+      } catch (error) {
+        console.error(error);
       }
-      fetchRestaurants().then();
+    }
+    fetchRestaurants().then();
   }, []);
 
 
@@ -249,7 +249,8 @@ function App() {
         await axiosClient.get("/managers").then((res) => {
           const allManagers = res.data;
           setManagers(allManagers);
-      })} catch (error) {
+        })
+      } catch (error) {
         console.error(error);
       }
 
@@ -281,17 +282,17 @@ function App() {
     * Fetch Orders from the API/Database
     */
   useEffect(() => {
-      const fetchOrders = async () => {
-          try {
-              await axiosClient.get("/orders").then((res) => {
-                  const allOrders = res.data;
-                  setOrders(allOrders);
-              })
-          } catch (error) {
-              console.error(error);
-          }
+    const fetchOrders = async () => {
+      try {
+        await axiosClient.get("/orders").then((res) => {
+          const allOrders = res.data;
+          setOrders(allOrders);
+        })
+      } catch (error) {
+        console.error(error);
       }
-      fetchOrders().then();
+    }
+    fetchOrders().then();
   }, []);
 
 
@@ -300,21 +301,21 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   useEffect(() => {
-      // If the search text is empty, set filteredRestaurants to all Restaurants
-      if (!restaurantSearchText) {
-          setFilteredRestaurants(restaurants);
-          return;
-      }
+    // If the search text is empty, set filteredRestaurants to all Restaurants
+    if (!restaurantSearchText) {
+      setFilteredRestaurants(restaurants);
+      return;
+    }
 
-      // Filter the Restaurants based on the search input
-      const newFilteredRestaurants = restaurants.filter(restaurant =>
-          restaurant.name.toLowerCase().includes(restaurantSearchText.toLowerCase())
-        // || restaurant.description.toLowerCase().includes(restaurantSearchText.toLowerCase())
-        // || restaurant.department.toLowerCase().includes(restaurantSearchText.toLowerCase())
-      );
+    // Filter the Restaurants based on the search input
+    const newFilteredRestaurants = restaurants.filter(restaurant =>
+      restaurant.name.toLowerCase().includes(restaurantSearchText.toLowerCase())
+      // || restaurant.description.toLowerCase().includes(restaurantSearchText.toLowerCase())
+      // || restaurant.department.toLowerCase().includes(restaurantSearchText.toLowerCase())
+    );
 
-      // Update the filteredRestaurants state
-      setFilteredRestaurants(newFilteredRestaurants);
+    // Update the filteredRestaurants state
+    setFilteredRestaurants(newFilteredRestaurants);
   }, [restaurants, restaurantSearchText]);
 
 
@@ -323,21 +324,21 @@ function App() {
    * @returns {void} - The function does not return a value
    */
   useEffect(() => {
-      // If the search text is empty, set filteredMenuItems to all MenuItems
-      if (!menuItemSearchText) {
-          setFilteredMenuItems(menuItems);
-          return;
-      }
+    // If the search text is empty, set filteredMenuItems to all MenuItems
+    if (!menuItemSearchText) {
+      setFilteredMenuItems(menuItems);
+      return;
+    }
 
-      // Filter the MenuItems based on the search input
-      const newFilteredMenuItems = menuItems.filter(menuItem =>
-          menuItem.name.toLowerCase().includes(menuItemSearchText.toLowerCase())
-          || menuItem.description.toLowerCase().includes(menuItemSearchText.toLowerCase())
-          // || menuItem.status.toLowerCase().includes(menuItemSearchText.toLowerCase())
-      );
+    // Filter the MenuItems based on the search input
+    const newFilteredMenuItems = menuItems.filter(menuItem =>
+      menuItem.name.toLowerCase().includes(menuItemSearchText.toLowerCase())
+      || menuItem.description.toLowerCase().includes(menuItemSearchText.toLowerCase())
+      // || menuItem.status.toLowerCase().includes(menuItemSearchText.toLowerCase())
+    );
 
-      // Update the filteredMenuItems state
-      setFilteredMenuItems(newFilteredMenuItems);
+    // Update the filteredMenuItems state
+    setFilteredMenuItems(newFilteredMenuItems);
   }, [menuItems, menuItemSearchText]);
 
 
@@ -376,7 +377,7 @@ function App() {
   return (
     <div className="App-wrapper">
       <header>
-          <h1 className="h1">Restaurant Order Pickup Management System</h1>
+        <h1 className="h1">Restaurant Order Pickup Management System</h1>
       </header>
       <section className="App-view-container">
         <div className="App-view-buttons">
@@ -420,7 +421,7 @@ function App() {
                     key={restaurant._id}
                     restaurant={restaurant}
                     onClick={() => {
-                        setCurrentRestaurant(restaurant);
+                      setCurrentRestaurant(restaurant);
                     }}
                   />
                 ))}
@@ -466,14 +467,14 @@ function App() {
                 <section className="App-manager-order-table">
                   <ManagerOrderTable
                     orders={currentRestaurantOrders}
-                    onOrderSelection={handleManagersOrderSelection}/>
+                    onOrderSelection={handleManagersOrderSelection} />
                 </section>
               )}
               {showManagerMenuItemsTable && (
                 <section className="App-manager-menuItems-table">
                   <ManagerMenuItemsTable
                     menuItems={menuItems}
-                    onItemSelection={handleManagersMenuItemSelection}/>
+                    onItemSelection={handleManagersMenuItemSelection} />
                 </section>
               )}
             </div>
@@ -481,8 +482,8 @@ function App() {
         )}
       </main>
       <footer>
-          <p>Thank you for choosing Restaurant Order Pickup Management System ||
-              2024 &copy; Copyright</p>
+        <p>Thank you for choosing Restaurant Order Pickup Management System ||
+          2024 &copy; Copyright</p>
       </footer>
     </div>
   );
