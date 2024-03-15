@@ -1,4 +1,15 @@
+###########
+# Editors #
+###########
 .idea
+.vscode
+*.code-workspace
+
+
+###########
+# Default #
+###########
+
 # Logs
 logs
 *.log

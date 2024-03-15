@@ -1,12 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axiosClient from "./axios";
 
-// import MenuItem from "./components/menuItem/menuItem.component";
-// import Restaurant from "./components/restaurant/restaurant.component";
-// import Manager from "./components/manager/manager.component";
-// import Customer from "./components/customer/customer.component";
-// import Order from "./components/order/order.component";
-
 import RestaurantCard from "./components/restaurantCard/restaurantCard.component";
 import MenuItemsTable from "./components/menuItemsTable/menuItemsTable.component";
 import CurrentOrderCartTable
@@ -20,7 +14,6 @@ import DropDown from "./components/dropDown/dropDown.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import axios from "axios";
 
 /**
  * Main App component
@@ -39,7 +32,7 @@ function App() {
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
-  
+
   const [currentManager, setCurrentManager] = useState({});
   const [currentRestaurant, setCurrentRestaurant] = useState({name: "Select a restaurant"});
   const [currentCustomer, setCurrentCustomer] = useState([]);
@@ -49,6 +42,7 @@ function App() {
   const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
 
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
+  const [menuItemIdCounter, setMenuItemIdCounter] = useState(0);
 
   useEffect(()=> {
     setCurrentRestaurant(currentManager.restaurantId || {name: "Select a restaurant"});
@@ -62,7 +56,7 @@ function App() {
   const onViewButtonClick = (view) => {
     setView(view);
 
-    // reset the restaurant and restaurant orders back to empty because restaurant will depend on view 
+    // reset the restaurant and restaurant orders back to empty because restaurant will depend on view
     setCurrentRestaurant({name: "Select a restaurant"});
     setCurrentRestaurantOrders([]);
     setMenuItems([]);
@@ -72,14 +66,14 @@ function App() {
 
 
   /**
-   * Sets the orders for a single specified restaurant. 
-   * @param {*} orders a list of all the orders for all restaurants 
-   * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for 
+   * Sets the orders for a single specified restaurant.
+   * @param {*} orders a list of all the orders for all restaurants
+   * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for
    */
   const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
-    // Filter to get a list of orders for the specified restaurant 
+    // Filter to get a list of orders for the specified restaurant
     const restaurantOrders = orders.filter(order => order.restaurantId === currentRestaurantId);
-    // set the array to empty if there are no orders for the specified restaurant 
+    // set the array to empty if there are no orders for the specified restaurant
     setCurrentRestaurantOrders(restaurantOrders.length > 0 ? restaurantOrders : []);
   };
 
@@ -93,17 +87,17 @@ function App() {
     // Find the manager with the given ID
     const selectedManager = managers.find(manager => manager.id === selectedManagerId);
 
-    // Set the current manager 
+    // Set the current manager
     setCurrentManager(selectedManager);
 
-    // Get the orders for the restaurant that the manager manages 
+    // Get the orders for the restaurant that the manager manages
     setCurrentRestaurantOrders(getOrdersForCurrentRestaurant(orders, selectedManager.restaurantId)); // maybe change to UseEffect so that it updates when order status changes ?????
   };
 
 
   const handleManagersOrderSelection = () => {
-    // TODO - send status update to backend to update status of order and change order status here and update button color and text in table 
-    // go from go from ordered to in-progress then from in-progress to awaiting-pickup then to completed 
+    // TODO - send status update to backend to update status of order and change order status here and update button color and text in table
+    // go from go from ordered to in-progress then from in-progress to awaiting-pickup then to completed
 
 
 
@@ -131,13 +125,21 @@ function App() {
     setCurrentCustomer(selectedCustomer);
   }
 
+
   /**
     * Function to handle adding a menuItem to the cart
     * @param {Object} menuItem - The menuItem to add to the cart
     * @returns {void} - The function does not return a value
     */
   const onAddToCart = (menuItem) => {
-      setMenuItemsInCart([...menuItemsInCart, menuItem]);
+    // Assign a new unique ID to the item
+    const itemWithId = {...menuItem, id: menuItemIdCounter};
+
+    // Add the item to the cart
+    setMenuItemsInCart(prevItems => [...prevItems, itemWithId]);
+
+    // Increment the menu item ID counter
+    setMenuItemIdCounter(menuItemIdCounter + 1);
   }
 
 
@@ -147,8 +149,8 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   const onRemoveFromCart = (menuItem) => {
-      const newCart = menuItemsInCart.filter(item => item !== menuItem);
-      setMenuItemsInCart(newCart);
+    // Remove only the item with the matching ID
+    setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
   }
 
 
@@ -164,26 +166,26 @@ function App() {
   }
 
 
-	/**
-	 * Function to checkout the cart
-	 * @param {String} currentRestaurant
+  /**
+   * Function to checkout the cart
+   * @param {String} currentRestaurant
    * @param {String} currentCustomer
    * @param {Array} menuItemsInCart
-	 * @returns {Void} - The function does not return a value
-	 */
-	const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
-		try {
-			const url = `http://localhost:8080/orders/`;
-			const response = await axios.post(url, {
-                customerId: currentCustomer.id,
-                restaurantId: currentRestaurant.id,
-                menuItems: menuItemsInCart.map(menuItem => menuItem.id),
-                pickupTime: "2024-03-15T14:30:00Z"});
-			return response.data;
-		} catch (error) {
-			console.error(error);
-		}
-	};
+   * @returns {Void} - The function does not return a value
+   */
+  const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
+    try {
+      const response = await axiosClient.post("/orders", {
+        customerId: currentCustomer.id,
+        restaurantId: currentRestaurant.id,
+        menuItems: menuItemsInCart.map(menuItem => menuItem.id),
+        pickupTime: "2024-03-15T14:30:00Z"
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 
   /**
@@ -240,7 +242,7 @@ function App() {
 
   /**
     * Fetch managers from the API/Database
-    */ 
+    */
   useEffect(() => {
     const fetchManagers = async () => {
       try {
@@ -250,7 +252,7 @@ function App() {
       })} catch (error) {
         console.error(error);
       }
-      
+
     };
     fetchManagers();
   }, []);
@@ -370,6 +372,7 @@ function App() {
     setShowManagerMenuItemsTable(true);
   };
 
+
   return (
     <div className="App-wrapper">
       <header>
@@ -383,7 +386,7 @@ function App() {
         <section className="App-view-dropdowns">
           {view === "manager" && (
             <>
-              <DropDown 
+              <DropDown
                 options={managers}
                 currentOption={currentManager}
                 onManagerSelection={handleManagerSelection}
@@ -392,7 +395,7 @@ function App() {
           )}
           {view === "customer" && (
             <>
-              <DropDown 
+              <DropDown
                 options={customers}
                 currentOption={currentCustomer}
                 onCustomerSelection={handleCustomerSelection}
@@ -459,15 +462,15 @@ function App() {
               <button onClick={handleManagerMenuItems}>Menu Items</button>
               {showManagerOrderTable && (
                 <section className="App-manager-order-table">
-                  <ManagerOrderTable 
-                    orders={currentRestaurantOrders} 
+                  <ManagerOrderTable
+                    orders={currentRestaurantOrders}
                     onOrderSelection={handleManagersOrderSelection}/>
                 </section>
               )}
               {showManagerMenuItemsTable && (
                 <section className="App-manager-menuItems-table">
-                  <ManagerMenuItemsTable 
-                    menuItems={menuItems} 
+                  <ManagerMenuItemsTable
+                    menuItems={menuItems}
                     onItemSelection={handleManagersMenuItemSelection}/>
                 </section>
               )}
