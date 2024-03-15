@@ -1,6 +1,8 @@
 // import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import BootstrapTable from "react-bootstrap/Table";
 import { Button } from "react-bootstrap";
+import Offcanvas from 'react-bootstrap/Offcanvas';
 import MenuItem from "../menuItem/menuItem.component";
 import "./currentOrderCartTable.styles.css";
 
@@ -12,6 +14,13 @@ import "./currentOrderCartTable.styles.css";
  * @returns {JSX.Element} - The menuItem table component
  */
 const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout }) => {
+  // used for order side menu
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+
   // Render the menuItem table
   return (
     <div className="current-order-cart-table">
@@ -40,10 +49,18 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout }
         <Button variant="success" size="lg" onClick={() => onCheckout(menuItemsInCart)}>
           Checkout
         </Button>
-        <Button className="previous-orders-button" variant="secondary" size="md" block>
+        <Button className="previous-orders-button" variant="secondary" size="md" onClick={handleShow} block>
           Previous Orders
         </Button>
       </div>
+      <Offcanvas show={show} onHide={handleClose} placement="end">
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Previous Orders</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+
+        </Offcanvas.Body>
+      </Offcanvas>
     </div>
   );
 };
