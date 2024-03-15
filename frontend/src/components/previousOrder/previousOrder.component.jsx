@@ -29,7 +29,7 @@ const PreviousOrder = ({ order }) => {
           <p className='item'>Pickup time:</p>
           <p>{getTime()}</p>
           <hr />
-          <p className='item'>Subtotal: ${getSubtotal()}</p>
+          <p className='item'>Subtotal: ${getSubtotal().toFixed(2)}</p>
         </div>
       </div>
       <div className='status-button'>
