@@ -1,9 +1,44 @@
+import { Button } from 'react-bootstrap';
 import './previousOrder.styles.css';
 
 const PreviousOrder = ({ order }) => {
+
+  const getSubtotal = () => {
+    return order.menuItems.reduce(
+      (accumulator, item) => accumulator + item.price, 0
+    );
+  }
+
+  const getTime = () => {
+    console.log(order.pickupTime)
+    const date = new Date(order.pickupTime);
+    console.log(date, typeof date);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  }
+
   return (
     <div className="order-bg" >
-      <p>test</p>
+      <h5 className='order-name' >Order ID: {order.id}</h5>
+      <div className='order-main'>
+        <div>
+          <h6>Items ordered:</h6>
+          {order.menuItems.map( (item, index) => (
+            <p className='item-small' key={`${order.id}-item-${index}`}>{item.name} - ${item.price}</p>
+          ))}
+
+        </div>
+        <div className='right' >
+        <h5>{order.restaurantId.name}</h5>
+        <p className='item'>Pickup time:</p>
+        <p>{getTime()}</p>
+        <hr />
+        <p className='item'>Subtotal: ${getSubtotal()}</p>
+
+        </div>
+      </div>
+      <div className='status-button'>
+        <Button  >Status</Button>
+      </div>
     </div>
   );
 };
