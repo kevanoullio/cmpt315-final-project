@@ -14,3 +14,8 @@
 .order-backdrop {
   background-color: lightgray;
 }
+
+.cart-table {
+  height: 60vh;
+  overflow-y: scroll;
+}

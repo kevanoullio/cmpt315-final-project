@@ -434,24 +434,28 @@ function App() {
                 placeholder="Search for menu items"
                 handleInput={handleMenuItemSearchInput}
               />
-              <MenuItemsTable
-                menuItems={filteredMenuItems}
-                className="App-menu-item-table"
-                currentRestaurant={currentRestaurant}
-                currentCustomer={currentCustomer}
-                onAddToCart={onAddToCart}
-              />
+              <div className="App-menu-list">
+                <MenuItemsTable
+                  menuItems={filteredMenuItems}
+                  className="App-menu-item-table"
+                  currentRestaurant={currentRestaurant}
+                  currentCustomer={currentCustomer}
+                  onAddToCart={onAddToCart}
+                />
+              </div>
             </section>
             <section className="App-current-order">
               <h2 className="h2">Your Order</h2>
-              <CurrentOrderCartTable
-                className="App-current-order-cart-table"
-                menuItemsInCart={menuItemsInCart}
-                onRemoveFromCart={onRemoveFromCart}
-                onCheckout={onCheckout}
-                orders={orders}
-                currentCustomer={currentCustomer}
-              />
+              <div className="current-order-table">
+                <CurrentOrderCartTable
+                  className="App-current-order-cart-table"
+                  menuItemsInCart={menuItemsInCart}
+                  onRemoveFromCart={onRemoveFromCart}
+                  onCheckout={onCheckout}
+                  orders={orders}
+                  currentCustomer={currentCustomer}
+                />
+              </div>
             </section>
           </>
         )}

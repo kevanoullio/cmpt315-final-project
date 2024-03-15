@@ -1,3 +1,7 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
 .App-wrapper {
 	display: flex;
 	flex-direction: column;
@@ -45,10 +49,19 @@ main {
   flex: 2;
 }
 
+.App-menu-list{
+  height: 75vh;
+  overflow-y: scroll;
+}
+
 .App-current-order {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.current-order-table {
+  height: 75vh;
 }
 
 .App-view-buttons {
@@ -63,7 +76,7 @@ main {
 }
 
 .App-select-manager,
-.App-restaurant-name, 
+.App-restaurant-name,
 .App-manager-order-table {
   display: flex;
   flex-direction: column;
@@ -73,4 +86,12 @@ main {
 .bootstrap-table .custom-header th {
     background-color: rgb(108, 108, 108);
     color: white;
+}
+
+.App-restaurant-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center ;
+  height: 70vh;
+  overflow-y: scroll;
 }
