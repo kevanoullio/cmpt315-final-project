@@ -1,10 +1,11 @@
 // import React, { useState, useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BootstrapTable from "react-bootstrap/Table";
 import { Button } from "react-bootstrap";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import MenuItem from "../menuItem/menuItem.component";
 import "./currentOrderCartTable.styles.css";
+import PreviousOrder from "../previousOrder/previousOrder.component";
 
 /**
  * Function to render the menuItem table component
@@ -13,12 +14,17 @@ import "./currentOrderCartTable.styles.css";
  * @param {Function} onCheckout - The function to checkout the cart
  * @returns {JSX.Element} - The menuItem table component
  */
-const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout }) => {
+const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout, orders, currentCustomer }) => {
   // used for order side menu
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect( () => {
+    if (orders)
+      console.log(orders)
+  }, [orders])
 
 
   // Render the menuItem table
@@ -49,16 +55,18 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout }
         <Button variant="success" size="lg" onClick={() => onCheckout(menuItemsInCart)}>
           Checkout
         </Button>
-        <Button className="previous-orders-button" variant="secondary" size="md" onClick={handleShow} block>
+        <Button className="previous-orders-button" variant="secondary" size="md" onClick={handleShow} block="true">
           Previous Orders
         </Button>
       </div>
-      <Offcanvas show={show} onHide={handleClose} placement="end">
+      <Offcanvas show={show} onHide={handleClose} placement="end" >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Previous Orders</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
-
+        <Offcanvas.Body className="order-backdrop">
+            {orders.map( (order, index) => (
+              <PreviousOrder key={`order-${index}`} order={order} />
+            ))}
         </Offcanvas.Body>
       </Offcanvas>
     </div>

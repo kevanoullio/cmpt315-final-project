@@ -448,6 +448,8 @@ function App() {
                 menuItemsInCart={menuItemsInCart}
                 onRemoveFromCart={onRemoveFromCart}
                 onCheckout={onCheckout}
+                orders={orders}
+                currentCustomer={currentCustomer}
               />
             </section>
           </>
