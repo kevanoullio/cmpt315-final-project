@@ -45,6 +45,12 @@ function App() {
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
   const [menuItemIdCounter, setMenuItemIdCounter] = useState(0);
 
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const toggleCheckout = () => setShowCheckout(!showCheckout);
+  const toggleConfirmation = () => setShowConfirmation(!showConfirmation);
+
   useEffect(() => {
     setCurrentRestaurant(currentManager.restaurantId || { name: "Select a restaurant" });
   }, [currentManager])
@@ -113,9 +119,9 @@ function App() {
    */
   const handleManagersMenuItemSelection = async (itemId) => {
     try {
-      // Send a PATCH request to change the status to its opposite value 
-      await axiosClient.patch(`/menuItems/${itemId}`, { 
-         // Find the current status and change it 
+      // Send a PATCH request to change the status to its opposite value
+      await axiosClient.patch(`/menuItems/${itemId}`, {
+         // Find the current status and change it
         status: menuItems.find(item => item.id === itemId).status === "sold-out" ? "in stock" : "sold-out"
       });
 
@@ -174,10 +180,11 @@ function App() {
    * Function to handle the checkout process
    * @returns {void} - The function does not return a value
    */
-  const onCheckout = () => {
+  const onSubmitOrder = () => {
     checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
-      console.log(response);
       setMenuItemsInCart([]);
+      toggleCheckout();
+      toggleConfirmation();
     });
   }
 
@@ -327,7 +334,6 @@ function App() {
     const newFilteredRestaurants = restaurants.filter(restaurant =>
       restaurant.name.toLowerCase().includes(restaurantSearchText.toLowerCase())
       // || restaurant.description.toLowerCase().includes(restaurantSearchText.toLowerCase())
-      // || restaurant.department.toLowerCase().includes(restaurantSearchText.toLowerCase())
     );
 
     // Update the filteredRestaurants state
@@ -467,7 +473,11 @@ function App() {
                   className="App-current-order-cart-table"
                   menuItemsInCart={menuItemsInCart}
                   onRemoveFromCart={onRemoveFromCart}
-                  onCheckout={onCheckout}
+                  onSubmitOrder={onSubmitOrder}
+                  showCheckout={showCheckout}
+                  toggleCheckout={toggleCheckout}
+                  showConfirmation={showConfirmation}
+                  toggleConfirmation={toggleConfirmation}
                   orders={orders}
                   currentCustomer={currentCustomer}
                 />
