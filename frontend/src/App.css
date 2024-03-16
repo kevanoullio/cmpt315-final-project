@@ -34,7 +34,8 @@ main {
 
 .App-restaurant-list,
 .App-menu-items,
-.App-current-order {
+.App-current-order,
+.App-manager-table-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -67,14 +68,16 @@ main {
   height: 75vh;
 }
 
-.App-view-buttons {
+.App-view-buttons, 
+.App-manager-table-buttons {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 10px;
 }
 
-.App-view-buttons button {
+.App-view-buttons button,
+.App-manager-table-buttons button {
   border-radius: 10px;
 }
 
@@ -98,4 +101,9 @@ main {
   /* change this if we remove the top bar */
   height: 70vh;
   overflow-y: scroll;
+}
+
+.App-manager-restaurant-name {
+  display: flex;
+  justify-content: center;
 }
