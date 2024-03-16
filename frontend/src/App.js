@@ -63,6 +63,7 @@ function App() {
     setMenuItems([]);
     setCurrentCustomer({});
     setCurrentManager({});
+    setMenuItemsInCart([]);
   };
 
 
