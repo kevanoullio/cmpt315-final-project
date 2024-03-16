@@ -68,21 +68,22 @@ main {
   height: 75vh;
 }
 
-.App-view-buttons {
+.App-view-buttons, 
+.App-manager-table-buttons {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 10px;
 }
 
-.App-view-buttons button {
+.App-view-buttons button,
+.App-manager-table-buttons button {
   border-radius: 10px;
 }
 
 .App-select-manager,
 .App-restaurant-name,
-.App-manager-order-table,
-.App-manager-restaurant-name {
+.App-manager-order-table {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -100,4 +101,9 @@ main {
   /* change this if we remove the top bar */
   height: 70vh;
   overflow-y: scroll;
+}
+
+.App-manager-restaurant-name {
+  display: flex;
+  justify-content: center;
 }
