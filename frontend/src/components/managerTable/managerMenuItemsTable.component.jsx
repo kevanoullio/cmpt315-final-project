@@ -28,25 +28,14 @@ const MenuItemTable = ({ menuItems, onItemSelection }) => {
                     <tr key={item.id}>
                     <td>{item.name}</td>
                     <td>{item.description}</td>
-                    <td>{item.price}</td>
+                    <td>{"$" + item.price}</td>
                     <td>
-                      {(() => {
-                        let variant;
-                        if (item.status === "sold-out") {
-                          variant = "danger";
-                        } else {
-                          variant = "primary";
-                        }
-
-                        return (
-                          <Button
-                            variant={variant}
-                            onClick={() => handleStatusButtonClick(item._id)}
-                          >
-                            {item.status}
-                          </Button>
-                        );
-                      })()}
+                    <Button
+                        variant={item.status === "sold-out" ? "danger" : "primary"}
+                        onClick={() => handleStatusButtonClick(item.id)}
+                      >
+                        {item.status === "sold-out" ? "Sold Out" : "In Stock"}
+                    </Button>
                     </td>
                 </tr>
             ))}

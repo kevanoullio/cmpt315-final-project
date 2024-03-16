@@ -21,7 +21,7 @@ menuItemRouter.post("/", createMenuItem);
 
 /* example patch: localhost:8080/menuItems/8 with body:
 {
-  "status": "5" // meaning 5 in stock
+  "status": "in stock" 
 }
 */
 menuItemRouter.patch("/:menuItemID", updateMenuItem);

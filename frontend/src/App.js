@@ -35,7 +35,8 @@ function App() {
 
   const [currentManager, setCurrentManager] = useState({});
   const [currentRestaurant, setCurrentRestaurant] = useState({ name: "Select a restaurant" });
-  const [currentCustomer, setCurrentCustomer] = useState([]);
+  const [currentCustomer, setCurrentCustomer] = useState({});
+  const [currentMenuItemId, setCurrentMenuItemId] = useState(null);
   const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
   const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
@@ -60,8 +61,8 @@ function App() {
     setCurrentRestaurant({ name: "Select a restaurant" });
     setCurrentRestaurantOrders([]);
     setMenuItems([]);
-    setCurrentCustomer([]);
-    setCurrentManager([]);
+    setCurrentCustomer({});
+    setCurrentManager({});
   };
 
 
@@ -104,11 +105,25 @@ function App() {
 
   };
 
-  const handleManagersMenuItemSelection = () => {
-    // TODO - change status of menu item to sold-out or in-stock
+  
+  /**
+   * Changes the status of a menu item to sold-out or in-stock when the button is clicked in the table
+   * @param {*} itemId the id of the menuItem to update the status of
+   */
+  const handleManagersMenuItemSelection = async (itemId) => {
+    try {
+      // Send a PATCH request to change the status to its opposite value 
+      await axiosClient.patch(`/menuItems/${itemId}`, { 
+         // Find the current status and change it 
+        status: menuItems.find(item => item.id === itemId).status === "sold-out" ? "in stock" : "sold-out"
+      });
 
+      // Set currentMenuItemId to trigger useEffect to retrieve updated menuItems
+      setCurrentMenuItemId(itemId);
 
-
+    } catch (error) {
+        console.error("Error updating status:", error);
+    }
   };
 
 
@@ -219,7 +234,7 @@ function App() {
       }
     }
     fetchMenuItems().then();
-  }, [currentRestaurant]);
+  }, [currentRestaurant, currentMenuItemId, menuItems]);
 
 
   /**
