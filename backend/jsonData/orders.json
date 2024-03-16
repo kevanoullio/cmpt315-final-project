@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "status": "odered",
+        "status": "ordered",
         "customerId": 1,
         "restaurantId": 1,
         "menuItems": [1, 2],
@@ -9,7 +9,7 @@
     },
     {
         "id": 2,
-        "status": "odered",
+        "status": "ordered",
         "customerId": 2,
         "restaurantId": 2,
         "menuItems": [7, 8],
@@ -17,7 +17,7 @@
     },
     {
         "id": 3,
-        "status": "odered",
+        "status": "ordered",
         "customerId": 3,
         "restaurantId": 3,
         "menuItems": [13, 14],
@@ -25,7 +25,7 @@
     },
     {
         "id": 4,
-        "status": "odered",
+        "status": "ordered",
         "customerId": 3,
         "restaurantId": 4,
         "menuItems": [19, 20],
@@ -33,7 +33,7 @@
     },
     {
         "id": 5,
-        "status": "odered",
+        "status": "ordered",
         "customerId": 4,
         "restaurantId": 2,
         "menuItems": [9, 10],
@@ -41,7 +41,7 @@
     },
     {
         "id": 6,
-        "status": "odered",
+        "status": "ordered",
         "customerId": 1,
         "restaurantId": 1,
         "menuItems": [3, 4],
