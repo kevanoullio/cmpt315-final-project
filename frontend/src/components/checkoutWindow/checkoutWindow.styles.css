@@ -7,7 +7,6 @@
 .checkout-cust-info {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
 }
 
 .checkout-order-summary {
