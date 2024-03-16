@@ -105,7 +105,7 @@ function App() {
 
   };
 
-  
+
   /**
    * Changes the status of a menu item to sold-out or in-stock when the button is clicked in the table
    * @param {*} itemId the id of the menuItem to update the status of
@@ -476,12 +476,17 @@ function App() {
         )}
         {view === "manager" && (
           <>
-            {currentRestaurant.name === "Select a restaurant" ? null : (
-              <h3>{currentRestaurant.name}</h3>
+          <section>
+            <div className="App-manager-restaurant-name">
+              {currentRestaurant.name === "Select a restaurant" ? null : (
+                <h3>{currentRestaurant.name}</h3>
             )}
+            </div>
             <div>
-              <button onClick={handleManagerOrderTable}>Orders</button>
-              <button onClick={handleManagerMenuItems}>Menu Items</button>
+              <div className="App-manager-table-buttons">
+                <button onClick={handleManagerOrderTable}>Orders</button>
+                <button onClick={handleManagerMenuItems}>Menu Items</button>
+              </div>
               {showManagerOrderTable && (
                 <section className="App-manager-order-table">
                   <ManagerOrderTable
@@ -497,6 +502,7 @@ function App() {
                 </section>
               )}
             </div>
+          </section>
           </>
         )}
       </main>

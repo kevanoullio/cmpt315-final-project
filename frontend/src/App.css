@@ -34,7 +34,8 @@ main {
 
 .App-restaurant-list,
 .App-menu-items,
-.App-current-order {
+.App-current-order,
+.App-manager-table-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -80,7 +81,8 @@ main {
 
 .App-select-manager,
 .App-restaurant-name,
-.App-manager-order-table {
+.App-manager-order-table,
+.App-manager-restaurant-name {
   display: flex;
   flex-direction: column;
   justify-content: center;
