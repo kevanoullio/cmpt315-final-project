@@ -1,0 +1,47 @@
+.order-bg {
+  background-color: white;
+  filter: drop-shadow(1px 1px 2px #727272);
+  padding: 8px;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+.order-name {
+  border-bottom: solid 1px #c7c8c9;
+}
+
+.order-main {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: solid 1px #c7c8c9;
+}
+
+.item {
+  margin: 0px;
+  padding: 0px;
+}
+
+.item-small {
+  font-size: small;
+  margin: 0px;
+  padding: 0px;
+}
+
+.right {
+  border-left: solid 1px #c7c8c9;
+  padding-left: 4px;
+  margin-bottom: 4px;
+}
+
+.status-button {
+  display: flex;
+  margin: 4px 10% 0;
+  padding-top: 4px;
+  justify-content: center;
+  background-color: #727272;
+}
+
+.status {
+  color: white;
+  text-transform: capitalize;
+}
