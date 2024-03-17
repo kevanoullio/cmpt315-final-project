@@ -15,11 +15,12 @@ const AddToCartButton = ({ menuItem, currentRestaurant, currentCustomer, onAddTo
         return <Button variant="secondary" disabled>No Restaurant</Button>;
     } else if (!currentCustomer || !currentCustomer.id) {
         return <Button variant="secondary" disabled>No Customer</Button>;
-    } else if (menuItem.status === "Sold Out") {
+    } else if (menuItem.status === "sold-out") {
         return <Button variant="danger" disabled>Sold Out</Button>;
-    // } else if (menuItem.status === "In Stock") {
-    } else {
+    } else if (menuItem.status === "in stock") {
         return <Button variant="primary" onClick={() => onAddToCart(menuItem)}>Add Item</Button>;
+    } else {
+        return <Button variant="secondary" disabled>Unknown Status</Button>;
     }
 };
 

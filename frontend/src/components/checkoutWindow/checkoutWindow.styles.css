@@ -1,0 +1,20 @@
+.checkout-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.checkout-cust-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-order-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-footer button {
+  justify-content: space-between;
+}

@@ -40,8 +40,13 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
 					/>
 				</td>
 			</tr>
+    : onAddToCart === undefined && onRemoveFromCart === undefined ?
+      <tr>
+        <td>{menuItem.name}</td>
+        <td>{"$" + menuItem.price}</td>
+      </tr>
 		: null
-	)	
+	)
 };
 
 export default menuItem;

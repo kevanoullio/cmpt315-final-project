@@ -1,25 +1,36 @@
 import { useEffect, useState } from "react";
 import BootstrapTable from "react-bootstrap/Table";
-import { Button } from "react-bootstrap";
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { Button } from "react-bootstrap";
+
 import MenuItem from "../menuItem/menuItem.component";
-import "./currentOrderCartTable.styles.css";
+import CheckoutWindow from "../checkoutWindow/checkoutWindow.component";
 import PreviousOrder from "../previousOrder/previousOrder.component";
+
+import "./currentOrderCartTable.styles.css";
+import OrderConfirmation from "../orderConfirmation/orderConfirmation.component";
 
 /**
  * Function to render the menuItem table component
  * @param {Array<Object>} menuItemsInCart - The list of menuItems in the cart
  * @param {Function} onRemoveFromCart - The function to remove a menuItem from the cart
- * @param {Function} onCheckout - The function to checkout the cart
+ * @param {Function} onSubmitOrder - The function to submit an order
+ * @param {Boolean} showCheckout - The boolean to show the checkout window
+ * @param {Function} toggleCheckout - The function to toggle the checkout window
+ * @param {Boolean} showConfirmation - The boolean to show the order confirmation
+ * @param {Function} toggleConfirmation - The function to toggle the order confirmation
+ * @param {Array<Object>} orders - The list of orders
+ * @param {Object} currentCustomer - The current customer
  * @returns {JSX.Element} - The menuItem table component
  */
-const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout, orders, currentCustomer }) => {
-  // used for order side menu
-  const [show, setShow] = useState(false);
+const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onSubmitOrder, showCheckout,
+                              toggleCheckout, showConfirmation, toggleConfirmation, orders,
+                              currentCustomer }) => {
+  // used for prev orders side menu
+  const [showPrevOrders, setShowPrevOrders] = useState(false);
   const [customerOrders, setCustomerOrders] = useState([]);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClosePrevOrders = () => setShowPrevOrders(false);
+  const handleShowPrevOrders = () => setShowPrevOrders(true);
 
   useEffect(() => {
     setCustomerOrders(orders.filter((order) => order.customerId.id === currentCustomer.id));
@@ -52,14 +63,30 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCheckout, 
       </div>
       <div className="subtotal-checkout-container">
         <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + menuItem.price, 0).toFixed(2)}</h3>
-        <Button variant="success" size="lg" onClick={() => onCheckout(menuItemsInCart)}>
+        <Button
+          variant="success"
+          size="lg"
+          onClick={toggleCheckout}
+          disabled={!menuItemsInCart || menuItemsInCart.length === 0}
+        >
           Checkout
         </Button>
-        <Button className="previous-orders-button" variant="secondary" size="md" onClick={handleShow} block="true">
+        <Button className="previous-orders-button" variant="secondary" size="md" onClick={handleShowPrevOrders}>
           Previous Orders
         </Button>
       </div>
-      <Offcanvas show={show} onHide={handleClose} placement="end" >
+      <CheckoutWindow
+        showCheckout={showCheckout}
+        toggleCheckout={toggleCheckout}
+        onSubmitOrder={onSubmitOrder}
+        currentCustomer={currentCustomer}
+        menuItemsInCart={menuItemsInCart}
+      />
+      <OrderConfirmation
+        showConfirmation={showConfirmation}
+        toggleConfirmation={toggleConfirmation}
+      />
+      <Offcanvas className="prev-orders" show={showPrevOrders} onHide={handleClosePrevOrders} placement="end" >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Previous Orders</Offcanvas.Title>
         </Offcanvas.Header>
