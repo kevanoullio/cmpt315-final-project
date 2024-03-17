@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import BootstrapTable from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
 import MenuItem from "../menuItem/menuItem.component";
+import DateTimePicker from "../dateTimePicker/dateTimePicker.component";
 import "./checkoutWindow.styles.css";
 
 /**
@@ -12,10 +13,13 @@ import "./checkoutWindow.styles.css";
  * @param {Function} toggleCheckout - The function to toggle the checkout window
  * @param {Function} onSubmitOrder - The function to submit an order
  * @param {Object} currentCustomer - The current customer
- * @param {Array<Object>} menuItemsInCart - The list of menuItems in the cart
+ * @param {ArrayObject} menuItemsInCart - The list of menuItems in the cart
  * @returns {JSX.Element} - The checkout window component
  */
 const CheckoutWindow = ({ showCheckout, toggleCheckout, onSubmitOrder, currentCustomer, menuItemsInCart }) => {
+
+  const [dateTime, setDateTime] = useState(new Date());
+
   return (
     <Modal
       className="checkout-window"
@@ -30,15 +34,22 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onSubmitOrder, currentCu
       </Modal.Header>
       <Modal.Body>
         <div className="checkout-container">
-          <section className="checkout-cust-info">
-            {currentCustomer && (
-              <>
-                <h4><u>Customer Information</u></h4>
-                <h5>Name: {currentCustomer.name}</h5>
-                <h5>Email: {currentCustomer.email}</h5>
-                <h5>Address: {currentCustomer.address}</h5>
-              </>
-            )}
+          <section className="checkout-left-section">
+            <div className="checkout-cust-info">
+              {currentCustomer && (
+                <>
+                  <h4><u>Customer Information</u></h4>
+                  <h5>
+                    Name: {currentCustomer.name}<br />
+                    Email: {currentCustomer.email}<br />
+                    Address: {currentCustomer.address}
+                  </h5>
+                </>
+              )}
+            </div>
+            <div className="date-time-picker">
+              <DateTimePicker />
+            </div>
           </section>
           <section className="checkout-order-summary">
             <div className="checkout-table">

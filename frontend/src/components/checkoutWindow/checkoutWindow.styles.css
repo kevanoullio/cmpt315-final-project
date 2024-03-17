@@ -4,17 +4,32 @@
   justify-content: space-evenly;
 }
 
-.checkout-cust-info {
+.checkout-left-section {
   display: flex;
   flex-direction: column;
+}
+
+.checkout-cust-info {
+  border-bottom: 1px solid black;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .checkout-order-summary {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+}
+
+.checkout-order-summary h3 {
+  text-align: center;
 }
 
 .modal-footer button {
   justify-content: space-between;
+}
+
+.checkbox-asap .form-check-input{
+  border-color: darkgray;
 }
