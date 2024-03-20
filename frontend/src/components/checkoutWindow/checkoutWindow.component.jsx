@@ -26,6 +26,7 @@ import "./checkoutWindow.styles.css";
  * @param {Date} minDate - The minimum date
  * @param {Date} maxDate - The maximum date
  * @param {Date} minTime - The minimum time
+ * @param {Date} minTimeToday - The minimum time for today
  * @param {Date} maxTime - The maximum time
  * @param {Boolean} asap - The boolean for ASAP
  * @param {Function} setAsap - The function to set ASAP
@@ -34,7 +35,10 @@ import "./checkoutWindow.styles.css";
 const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubmitOrder,
                           currentCustomer, menuItemsInCart, selectedDate, setSelectedDate,
                           selectedTime, handleTimeChange, minDate, maxDate,
-                          minTime, maxTime, asap, setAsap }) => {
+                          minTime, minTimeToday, maxTime, asap, setAsap }) => {
+
+  const isToday = selectedDate.toDateString() === new Date().toDateString();
+
   return (
     <Modal
       className="checkout-window"
@@ -71,14 +75,28 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                 maxDate={maxDate}
                 disabled={asap}
               />
-              <TimePicker
-                value={selectedTime}
-                onChange={handleTimeChange}
-                minTime={minTime}
-                maxTime={maxTime}
-                // step={15}
-                disabled={asap}
-              />
+              <br />
+              {isToday ? (
+                <TimePicker
+                  value={selectedTime}
+                  onChange={handleTimeChange}
+                  minTime={minTimeToday}
+                  maxTime={maxTime}
+                  format="h:mm a"
+                  // step={15}
+                  disabled={asap}
+                />
+              ) : (
+                <TimePicker
+                  value={selectedTime}
+                  onChange={handleTimeChange}
+                  minTime={minTime}
+                  maxTime={maxTime}
+                  format="h:mm a"
+                  // step={15}
+                  disabled={asap}
+                />
+              )}
               <Form>
                 {["checkbox"].map((type) => (
                   <div key={type} className="mb-3">

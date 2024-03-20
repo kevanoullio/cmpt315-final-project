@@ -27,6 +27,7 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
  * @param {Date} minDate - The minimum date
  * @param {Date} maxDate - The maximum date
  * @param {Date} minTime - The minimum time
+ * @param {Date} minTimeToday - The minimum time for today
  * @param {Date} maxTime - The maximum time
  * @param {Boolean} asap - The boolean for ASAP
  * @param {Function} setAsap - The function to set ASAP
@@ -37,7 +38,7 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
 const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelCheckout, onSubmitOrder,
                               showCheckout, toggleCheckout, showConfirmation, toggleConfirmation,
                               selectedDate, setSelectedDate, selectedTime, handleTimeChange,
-                              minDate, maxDate, minTime, maxTime, asap, setAsap,
+                              minDate, maxDate, minTime, minTimeToday, maxTime, asap, setAsap,
                               orders, currentCustomer }) => {
 
   // used for prev orders side menu
@@ -103,6 +104,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         minDate={minDate}
         maxDate={maxDate}
         minTime={minTime}
+        minTimeToday={minTimeToday}
         maxTime={maxTime}
         asap={asap}
         setAsap={setAsap}

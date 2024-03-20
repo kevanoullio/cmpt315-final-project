@@ -54,17 +54,16 @@ function App() {
   const storeHours = [10, 20];
 
   const minDate = new Date();
-  minDate.setDate(minDate.getDate());
+  // minDate.setDate(minDate.getDate());
 
   const maxDate = new Date();
   maxDate.setDate(maxDate.getDate() + 28);
 
   const minTime = new Date();
-  minTime.setHours(storeHours[0], 0, 0, 0);
+  minTime.setHours(storeHours[0]);
 
-  const minTImeToday = new Date();
-  minTImeToday.setHours(minTime.getHours(), minTime.getMinutes(), 0, 0);
-  minTImeToday.setMinutes(minTime.getMinutes() + 15);
+  const minTimeToday = new Date();
+  minTimeToday.setMinutes(minTime.getMinutes() + 15);
 
   const maxTime = new Date();
   maxTime.setHours(storeHours[1], 0, 0, 0);
@@ -253,14 +252,21 @@ function App() {
 
 
   /**
-   * Function to format the date object to a string
-   * @param {Date} date
-   * @returns {String} - The string formatted date
+   * Function to format the time
+   * @param {Date} date - The date
+   * @returns {String} - The formatted time
    */
   const formatTime = (date) => {
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
+    const pad = (num) => num.toString().padStart(2, '0');
+
+    const yyyy = date.getFullYear();
+    const mm = pad(date.getMonth() + 1); // Months are 0-based
+    const dd = pad(date.getDate());
+    const hh = pad(date.getHours());
+    const min = pad(date.getMinutes());
+    const ss = pad(date.getSeconds());
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}:${ss}`;
   };
 
 
@@ -279,23 +285,32 @@ function App() {
 
   /**
    * Function to handle min and max time based on date selection
-   * @param {*} value
+   * @param {String} time - The time in the format HH:MM
    * @returns {void} - The function does not return a value
    */
-  const handleTimeChange = (value) => {
-    if (isToday(selectedDate)) {
-      if (value < formatTime(minTImeToday)) {
-        setSelectedTime(formatTime(minTImeToday));
-      } else {
-        setSelectedTime(value);
-      }
-    } else {
-      if (value < formatTime(minTime)) {
-        setSelectedTime(formatTime(minTime));
-      } else {
-        setSelectedTime(value);
-      }
-    }
+  const handleTimeChange = (time) => {
+    // Split the time into hours and minutes
+    const [hours, minutes] = time.split(':');
+
+    const selectedTime = new Date();
+    selectedTime.setHours(parseInt(hours), parseInt(minutes));
+
+    // if (isToday(selectedDate)) {
+    //   if (value < formatTime(minTimeToday)) {
+    //     setSelectedTime(formatTime(minTimeToday));
+    //   } else {
+    //     setSelectedTime(value);
+    //   }
+    // } else {
+    //   if (value < formatTime(minTime)) {
+    //     setSelectedTime(formatTime(minTime));
+    //   } else {
+    //     setSelectedTime(value);
+    //   }
+    // }
+
+    // Set the selected time
+    setSelectedTime(selectedTime);
   };
 
 
@@ -330,7 +345,7 @@ function App() {
       }
     }
     fetchMenuItems().then();
-  }, [currentRestaurant, currentMenuItemId, menuItems]);
+  }, [currentRestaurant, currentMenuItemId]);
 
 
   /**
@@ -571,9 +586,11 @@ function App() {
                   setSelectedDate={setSelectedDate}
                   selectedTime={selectedTime}
                   setSelectedTime={setSelectedTime}
+                  handleTimeChange={handleTimeChange}
                   minDate={minDate}
                   maxDate={maxDate}
                   minTime={minTime}
+                  minTimeToday={minTimeToday}
                   maxTime={maxTime}
                   asap={asap}
                   setAsap={setAsap}

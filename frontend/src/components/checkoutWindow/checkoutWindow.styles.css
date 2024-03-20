@@ -34,11 +34,7 @@
   border-color: darkgray;
 }
 
-.react-datetime-picker__wrapper,
-.react-datetime-picker__inputGroup,
-.react-datetime-picker__inputGroup__input,
-.react-datetime-picker__calendar,
-.react-datetime-picker__button {
+.react-datepicker-wrapper {
   position: relative;
   z-index: 9999;
   background-color: white;
