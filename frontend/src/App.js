@@ -185,6 +185,7 @@ function App() {
       setMenuItemsInCart([]);
       toggleCheckout();
       toggleConfirmation();
+      fetchOrders();
     });
   }
 
@@ -304,17 +305,17 @@ function App() {
   /**
     * Fetch Orders from the API/Database
     */
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        await axiosClient.get("/orders").then((res) => {
-          const allOrders = res.data;
-          setOrders(allOrders);
-        })
-      } catch (error) {
-        console.error(error);
-      }
+  const fetchOrders = async () => {
+    try {
+      await axiosClient.get("/orders").then((res) => {
+        const allOrders = res.data;
+        setOrders(allOrders);
+      })
+    } catch (error) {
+      console.error(error);
     }
+  };
+  useEffect(() => {
     fetchOrders().then();
   }, []);
 
@@ -480,6 +481,7 @@ function App() {
                   toggleConfirmation={toggleConfirmation}
                   orders={orders}
                   currentCustomer={currentCustomer}
+                  fetchOrders={fetchOrders}
                 />
               </div>
             </section>
