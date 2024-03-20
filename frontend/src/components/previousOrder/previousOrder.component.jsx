@@ -3,7 +3,7 @@ import './previousOrder.styles.css';
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-const PreviousOrder = ({ order, fetchOrders }) => {
+const PreviousOrder = ({ order, completeOrder }) => {
   const [open, setOpen] = useState(false);
 
   const getSubtotal = () => {
@@ -17,9 +17,9 @@ const PreviousOrder = ({ order, fetchOrders }) => {
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 
-  const completeOrder = () => {
+  const setOrderComplete = () => {
     console.log("completed");
-    fetchOrders();
+    completeOrder(order.id);
     setOpen(false);
   }
 
@@ -59,7 +59,7 @@ const PreviousOrder = ({ order, fetchOrders }) => {
           <Button variant="secondary" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={() => completeOrder()}>
+          <Button variant="primary" onClick={() => setOrderComplete()}>
             Confirm
           </Button>
         </Modal.Footer>

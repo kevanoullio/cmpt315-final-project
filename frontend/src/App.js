@@ -211,6 +211,23 @@ function App() {
     }
   };
 
+  /**
+   * Function to update order status to "Completed"
+   * @param {String} OrderID - id of the order to update, this is all we need, as ID is unique
+   * @returns {Void} - The function does not return a value
+   */
+  const completeOrder = async (orderID) => {
+    try {
+      const response = await axiosClient.patch(`/orders/${orderID}`, {
+        status: "completed"
+      });
+      fetchOrders();
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   /**
     * Fetch MenuItems from the API/Database
@@ -481,7 +498,7 @@ function App() {
                   toggleConfirmation={toggleConfirmation}
                   orders={orders}
                   currentCustomer={currentCustomer}
-                  fetchOrders={fetchOrders}
+                  completeOrder={completeOrder}
                 />
               </div>
             </section>
