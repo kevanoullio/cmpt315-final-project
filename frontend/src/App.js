@@ -98,9 +98,6 @@ function App() {
 
     // Set the current manager
     setCurrentManager(selectedManager);
-
-    // Get the orders for the restaurant that the manager manages
-    getOrdersForCurrentRestaurant(orders, selectedManager.restaurantId); // maybe change to UseEffect so that it updates when order status changes ?????
   };
 
 
