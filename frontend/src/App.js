@@ -51,6 +51,29 @@ function App() {
   const toggleCheckout = () => setShowCheckout(!showCheckout);
   const toggleConfirmation = () => setShowConfirmation(!showConfirmation);
 
+  const storeHours = [10, 20];
+
+  const minDate = new Date();
+  minDate.setDate(minDate.getDate());
+
+  const maxDate = new Date();
+  maxDate.setDate(maxDate.getDate() + 28);
+
+  const minTime = new Date();
+  minTime.setHours(storeHours[0], 0, 0, 0);
+
+  const minTImeToday = new Date();
+  minTImeToday.setHours(minTime.getHours(), minTime.getMinutes(), 0, 0);
+  minTImeToday.setMinutes(minTime.getMinutes() + 15);
+
+  const maxTime = new Date();
+  maxTime.setHours(storeHours[1], 0, 0, 0);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [asap, setAsap] = useState(false);
+
+
   useEffect(() => {
     setCurrentRestaurant(currentManager.restaurantId || { name: "Select a restaurant" });
   }, [currentManager])
@@ -177,14 +200,28 @@ function App() {
 
 
   /**
+   * Function to cancel the checkout process
+   * @returns {void} - The function does not return a value
+   */
+  const onCancelCheckout = () => {
+    toggleCheckout();
+    setAsap(false);
+  }
+
+
+  /**
    * Function to handle the checkout process
    * @returns {void} - The function does not return a value
    */
   const onSubmitOrder = () => {
     checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
+      toggleConfirmation();
       setMenuItemsInCart([]);
       toggleCheckout();
-      toggleConfirmation();
+      setAsap(false);
+    })
+    .catch((error) => {
+      console.error("Error submitting order:", error);
     });
   }
 
@@ -198,15 +235,66 @@ function App() {
    */
   const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
     try {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() + 15);
+      const selectedPickupTime = asap ? formatTime(now) : formatTime(new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0)));
+
       const response = await axiosClient.post("/orders", {
         customerId: currentCustomer.id,
         restaurantId: currentRestaurant.id,
         menuItems: menuItemsInCart.map(menuItem => menuItem.id),
-        pickupTime: "2024-03-15T14:30:00Z"
+        pickupTime: selectedPickupTime
       });
       return response.data;
     } catch (error) {
       console.error(error);
+    }
+  };
+
+
+  /**
+   * Function to format the date object to a string
+   * @param {Date} date
+   * @returns {String} - The string formatted date
+   */
+  const formatTime = (date) => {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
+
+  /**
+   * Function to check if the date is today
+   * @param {Date} date
+   * @returns {Boolean} - The boolean value
+   */
+  const isToday = (date) => {
+    const today = new Date();
+    return date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear();
+  }
+
+
+  /**
+   * Function to handle min and max time based on date selection
+   * @param {*} value
+   * @returns {void} - The function does not return a value
+   */
+  const handleTimeChange = (value) => {
+    if (isToday(selectedDate)) {
+      if (value < formatTime(minTImeToday)) {
+        setSelectedTime(formatTime(minTImeToday));
+      } else {
+        setSelectedTime(value);
+      }
+    } else {
+      if (value < formatTime(minTime)) {
+        setSelectedTime(formatTime(minTime));
+      } else {
+        setSelectedTime(value);
+      }
     }
   };
 
@@ -473,11 +561,22 @@ function App() {
                   className="App-current-order-cart-table"
                   menuItemsInCart={menuItemsInCart}
                   onRemoveFromCart={onRemoveFromCart}
+                  onCancelCheckout={onCancelCheckout}
                   onSubmitOrder={onSubmitOrder}
                   showCheckout={showCheckout}
                   toggleCheckout={toggleCheckout}
                   showConfirmation={showConfirmation}
                   toggleConfirmation={toggleConfirmation}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  selectedTime={selectedTime}
+                  setSelectedTime={setSelectedTime}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                  minTime={minTime}
+                  maxTime={maxTime}
+                  asap={asap}
+                  setAsap={setAsap}
                   orders={orders}
                   currentCustomer={currentCustomer}
                 />

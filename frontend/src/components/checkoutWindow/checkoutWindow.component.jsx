@@ -1,25 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import BootstrapTable from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
+import DatePicker from "react-datepicker";
+import TimePicker from "react-time-picker";
+import Form from "react-bootstrap/Form";
 
 import MenuItem from "../menuItem/menuItem.component";
-import DateTimePicker from "../dateTimePicker/dateTimePicker.component";
+import "react-datepicker/dist/react-datepicker.css";
+import "react-time-picker/dist/TimePicker.css";
 import "./checkoutWindow.styles.css";
 
 /**
  * Function to render the checkout window component
  * @param {Boolean} showCheckout - The boolean to show the checkout window
  * @param {Function} toggleCheckout - The function to toggle the checkout window
+ * @param {Function} onCancelCheckout - The function to cancel the checkout
  * @param {Function} onSubmitOrder - The function to submit an order
  * @param {Object} currentCustomer - The current customer
  * @param {ArrayObject} menuItemsInCart - The list of menuItems in the cart
+ * @param {Date} selectedDate - The selected date
+ * @param {Function} setSelectedDate - The function to set the selected date
+ * @param {Date} selectedTime - The selected time
+ * @param {Function} handleTimeChange - The function to handle time change
+ * @param {Date} minDate - The minimum date
+ * @param {Date} maxDate - The maximum date
+ * @param {Date} minTime - The minimum time
+ * @param {Date} maxTime - The maximum time
+ * @param {Boolean} asap - The boolean for ASAP
+ * @param {Function} setAsap - The function to set ASAP
  * @returns {JSX.Element} - The checkout window component
  */
-const CheckoutWindow = ({ showCheckout, toggleCheckout, onSubmitOrder, currentCustomer, menuItemsInCart }) => {
-
-  const [dateTime, setDateTime] = useState(new Date());
-
+const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubmitOrder,
+                          currentCustomer, menuItemsInCart, selectedDate, setSelectedDate,
+                          selectedTime, handleTimeChange, minDate, maxDate,
+                          minTime, maxTime, asap, setAsap }) => {
   return (
     <Modal
       className="checkout-window"
@@ -48,7 +63,35 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onSubmitOrder, currentCu
               )}
             </div>
             <div className="date-time-picker">
-              <DateTimePicker />
+              <h5>Select a pickup date and time:</h5>
+              <DatePicker
+                selected={selectedDate}
+                onChange={setSelectedDate}
+                minDate={minDate}
+                maxDate={maxDate}
+                disabled={asap}
+              />
+              <TimePicker
+                value={selectedTime}
+                onChange={handleTimeChange}
+                minTime={minTime}
+                maxTime={maxTime}
+                // step={15}
+                disabled={asap}
+              />
+              <Form>
+                {["checkbox"].map((type) => (
+                  <div key={type} className="mb-3">
+                    <Form.Check
+                      className="checkbox-asap"
+                      type={type}
+                      id={`asap-${type}`}
+                      label="ASAP"
+                      onChange={() => setAsap(!asap)}
+                    />
+                  </div>
+                ))}
+              </Form>
             </div>
           </section>
           <section className="checkout-order-summary">
@@ -75,7 +118,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onSubmitOrder, currentCu
         <Button
           className="cancel-order-button"
           variant="secondary"
-          onClick={toggleCheckout}
+          onClick={onCancelCheckout}
         >
           Cancel
         </Button>

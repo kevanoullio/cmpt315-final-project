@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import BootstrapTable from "react-bootstrap/Table";
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 
 import MenuItem from "../menuItem/menuItem.component";
 import CheckoutWindow from "../checkoutWindow/checkoutWindow.component";
@@ -14,18 +14,32 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
  * Function to render the menuItem table component
  * @param {Array<Object>} menuItemsInCart - The list of menuItems in the cart
  * @param {Function} onRemoveFromCart - The function to remove a menuItem from the cart
+ * @param {Function} onCancelCheckout - The function to cancel the checkout
  * @param {Function} onSubmitOrder - The function to submit an order
  * @param {Boolean} showCheckout - The boolean to show the checkout window
  * @param {Function} toggleCheckout - The function to toggle the checkout window
  * @param {Boolean} showConfirmation - The boolean to show the order confirmation
  * @param {Function} toggleConfirmation - The function to toggle the order confirmation
+ * @param {Date} selectedDate - The selected date
+ * @param {Function} setSelectedDate - The function to set the selected date
+ * @param {Date} selectedTime - The selected time
+ * @param {Function} handleTimeChange - The function to handle time change
+ * @param {Date} minDate - The minimum date
+ * @param {Date} maxDate - The maximum date
+ * @param {Date} minTime - The minimum time
+ * @param {Date} maxTime - The maximum time
+ * @param {Boolean} asap - The boolean for ASAP
+ * @param {Function} setAsap - The function to set ASAP
  * @param {Array<Object>} orders - The list of orders
  * @param {Object} currentCustomer - The current customer
  * @returns {JSX.Element} - The menuItem table component
  */
-const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onSubmitOrder, showCheckout,
-                              toggleCheckout, showConfirmation, toggleConfirmation, orders,
-                              currentCustomer }) => {
+const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelCheckout, onSubmitOrder,
+                              showCheckout, toggleCheckout, showConfirmation, toggleConfirmation,
+                              selectedDate, setSelectedDate, selectedTime, handleTimeChange,
+                              minDate, maxDate, minTime, maxTime, asap, setAsap,
+                              orders, currentCustomer }) => {
+
   // used for prev orders side menu
   const [showPrevOrders, setShowPrevOrders] = useState(false);
   const [customerOrders, setCustomerOrders] = useState([]);
@@ -78,9 +92,20 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onSubmitOrde
       <CheckoutWindow
         showCheckout={showCheckout}
         toggleCheckout={toggleCheckout}
+        onCancelCheckout={onCancelCheckout}
         onSubmitOrder={onSubmitOrder}
         currentCustomer={currentCustomer}
         menuItemsInCart={menuItemsInCart}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        selectedTime={selectedTime}
+        handleTimeChange={handleTimeChange}
+        minDate={minDate}
+        maxDate={maxDate}
+        minTime={minTime}
+        maxTime={maxTime}
+        asap={asap}
+        setAsap={setAsap}
       />
       <OrderConfirmation
         showConfirmation={showConfirmation}

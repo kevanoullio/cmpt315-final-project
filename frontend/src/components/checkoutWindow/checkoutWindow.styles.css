@@ -11,8 +11,8 @@
 
 .checkout-cust-info {
   border-bottom: 1px solid black;
-  padding-bottom: 30px;
-  margin-bottom: 30px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .checkout-order-summary {
@@ -32,4 +32,14 @@
 
 .checkbox-asap .form-check-input{
   border-color: darkgray;
+}
+
+.react-datetime-picker__wrapper,
+.react-datetime-picker__inputGroup,
+.react-datetime-picker__inputGroup__input,
+.react-datetime-picker__calendar,
+.react-datetime-picker__button {
+  position: relative;
+  z-index: 9999;
+  background-color: white;
 }
