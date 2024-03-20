@@ -80,7 +80,8 @@ function App() {
    */
   const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
     // Filter to get a list of orders for the specified restaurant
-    const restaurantOrders = orders.filter(order => order.restaurantId === currentRestaurantId);
+    const restaurantOrders = orders.filter(order => order.restaurantId._id === currentRestaurantId._id);
+
     // set the array to empty if there are no orders for the specified restaurant
     setCurrentRestaurantOrders(restaurantOrders.length > 0 ? restaurantOrders : []);
   };
@@ -99,17 +100,33 @@ function App() {
     setCurrentManager(selectedManager);
 
     // Get the orders for the restaurant that the manager manages
-    setCurrentRestaurantOrders(getOrdersForCurrentRestaurant(orders, selectedManager.restaurantId)); // maybe change to UseEffect so that it updates when order status changes ?????
+    getOrdersForCurrentRestaurant(orders, selectedManager.restaurantId); // maybe change to UseEffect so that it updates when order status changes ?????
   };
 
 
-  const handleManagersOrderSelection = () => {
-    // TODO - send status update to backend to update status of order and change order status here and update button color and text in table
-    // go from go from ordered to in-progress then from in-progress to awaiting-pickup then to completed
-
-
-
-
+  /**
+  * Updates the status of an order and fetches the updated list of orders.
+  * 
+  * This function sends a PATCH request to the server to update the status of a specific order
+  * identified by its orderId. Upon successful update, it fetches the updated list of orders 
+  * to ensure the UI reflects the latest data. If the request fails to update the order status 
+  * or encounters an error, it logs the error message to the console.
+  * 
+  * @param {string|number} orderId The unique identifier of the order to update.
+  * @param {string} newStatus The new status to be assigned to the order.
+  */
+  const managerUpdateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const response = await axiosClient.patch(`/orders/${orderId}`, { status: newStatus });
+      if (response.status === 200) {
+        // After successfully updating the order status, fetch orders again for a UI update
+        fetchOrders();
+      } else {
+        console.error("Failed to update order status");
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
   };
 
 
@@ -300,23 +317,28 @@ function App() {
     fetchCustomers();
   }, []);
 
-
   /**
-    * Fetch Orders from the API/Database
-    */
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        await axiosClient.get("/orders").then((res) => {
-          const allOrders = res.data;
-          setOrders(allOrders);
-        })
-      } catch (error) {
-        console.error(error);
-      }
+  * Fetch Orders from the API/Database
+  */
+  const fetchOrders = async () => {
+    try {
+      const response = await axiosClient.get("/orders");
+      setOrders(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
     }
-    fetchOrders().then();
+  };
+
+  useEffect(() => {
+    fetchOrders();
   }, []);
+
+  // Reacts to changes in orders and currentManager to update the orders for the current restaurant
+  useEffect(() => {
+    if (orders && currentManager && currentManager.restaurantId) {
+      getOrdersForCurrentRestaurant(orders, currentManager.restaurantId);
+    }
+  }, [orders, currentManager]);
 
 
   /**
@@ -502,7 +524,7 @@ function App() {
                 <section className="App-manager-order-table">
                   <ManagerOrderTable
                     orders={currentRestaurantOrders}
-                    onOrderSelection={handleManagersOrderSelection} />
+                    onUpdateOrderStatus={managerUpdateOrderStatus}/>
                 </section>
               )}
               {showManagerMenuItemsTable && (
