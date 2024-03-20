@@ -176,14 +176,19 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   const onAddToCart = (menuItem) => {
-    // Assign a new unique ID to the item
-    const itemWithId = { ...menuItem, id: menuItemIdCounter };
+    // Check if the item is already in the cart
+    const existingItem = menuItemsInCart.find(item => item.id === menuItem.id);
 
-    // Add the item to the cart
-    setMenuItemsInCart(prevItems => [...prevItems, itemWithId]);
-
-    // Increment the menu item ID counter
-    setMenuItemIdCounter(menuItemIdCounter + 1);
+    // If the item is already in the cart, increment the quantity
+    if (existingItem) {
+      // If the item is already in the cart, increment its quantity
+      setMenuItemsInCart(prevItems => prevItems.map(item =>
+        item.id === menuItem.id ? { ...item, quantity: item.quantity + 1 } : item
+      ));
+    } else {
+      // Otherwise, add the item to the cart
+      setMenuItemsInCart(prevItems => [...prevItems, { ...menuItem, quantity: 1 }]);
+    }
   }
 
 
@@ -193,8 +198,18 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   const onRemoveFromCart = (menuItem) => {
-    // Remove only the item with the matching ID
-    setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
+    // Check if the item has a quantity greater than 1
+    const existingItem = menuItemsInCart.find(item => item.id === menuItem.id);
+
+    if (existingItem && existingItem.quantity > 1) {
+      // If the item has a quantity greater than 1, decrement the quantity
+      setMenuItemsInCart(prevItems => prevItems.map(item =>
+        item.id === menuItem.id ? { ...item, quantity: item.quantity - 1 } : item
+      ));
+    } else {
+      // Otherwise, remove the item from the cart
+      setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
+    }
   }
 
 
@@ -213,6 +228,10 @@ function App() {
    * @returns {void} - The function does not return a value
    */
   const onSubmitOrder = () => {
+    console.log("Submitting order...")
+    console.log("currentRestaurant:", currentRestaurant)
+    console.log("currentCustomer:", currentCustomer)
+    console.log("menuItemsInCart:", menuItemsInCart)
     checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
       toggleConfirmation();
       setMenuItemsInCart([]);
@@ -234,14 +253,23 @@ function App() {
    */
   const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
     try {
+      // Create the now and selected time
       const now = new Date();
       now.setMinutes(now.getMinutes() + 15);
-      const selectedPickupTime = asap ? formatTime(now) : formatTime(new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0)));
+      const selectedPickupTime = asap ? formatTime(now) :
+        formatTime(new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0)));
+
+      // If any of the menuItems have quantity > 1, create a new array with each menuItem repeated by its quantity
+      const menuItemsInCartFlattened = menuItemsInCart.flatMap(menuItem =>
+        Array.from({ length: menuItem.quantity }, () => menuItem)
+      );
+
+      console.log("menuItemsInCartFlattened: ", menuItemsInCartFlattened)
 
       const response = await axiosClient.post("/orders", {
         customerId: currentCustomer.id,
         restaurantId: currentRestaurant.id,
-        menuItems: menuItemsInCart.map(menuItem => menuItem.id),
+        menuItems: menuItemsInCartFlattened.map(menuItem => menuItem.id),
         pickupTime: selectedPickupTime
       });
       return response.data;

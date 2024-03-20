@@ -61,7 +61,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
             <tr>
               <th>Menu Item</th>
               <th>Price</th>
-              {/* <th>#</th> >>> can add later if decide to have items stack up */}
+              <th>#</th>
               <th>Cart</th>
             </tr>
           </thead>
@@ -77,7 +77,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         </BootstrapTable>
       </div>
       <div className="subtotal-checkout-container">
-        <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + menuItem.price, 0).toFixed(2)}</h3>
+        <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
         <Button
           variant="success"
           size="lg"

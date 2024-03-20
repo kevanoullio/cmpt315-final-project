@@ -40,6 +40,8 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
   const isToday = selectedDate.toDateString() === new Date().toDateString();
 
   return (
+
+
     <Modal
       className="checkout-window"
       show={showCheckout}
@@ -119,6 +121,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                   <tr>
                     <th>Menu Item</th>
                     <th>Price</th>
+                    <th>#</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -127,7 +130,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                   ))}
                 </tbody>
               </BootstrapTable>
-              <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + menuItem.price, 0).toFixed(2)}</h3>
+              <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
             </div>
           </section>
         </div>

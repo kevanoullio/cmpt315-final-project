@@ -82,10 +82,13 @@ export const validateMenuItem = async (menuItems) => {
   // await Tank.find({ size: 'small' }).where('createdDate').gt(oneYearAgo).exec();
   const itemsToOrder = await MenuItem.find({ id: { $in: menuItems } });
 
-  // Verify all requested items are found
-  if (itemsToOrder.length !== menuItems.length) {
-    throw new Error("One or more menu items are not found.");
+  // Verify all requested items exist
+  for (const item of menuItems) {
+    if (!menuItemExists(item)) {
+      throw new Error("One or more menu items do not exist.");
+    }
   }
+
   // Verify all requested items have sufficient status (available)
   if (itemsToOrder.some(item => item.status !== 'in stock')) {
     throw new Error("One or more menu items are sold out or not available.");
