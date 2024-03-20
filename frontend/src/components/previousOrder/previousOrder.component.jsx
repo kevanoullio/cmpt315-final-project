@@ -1,6 +1,10 @@
+import { Button } from 'react-bootstrap';
 import './previousOrder.styles.css';
+import { useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
 
-const PreviousOrder = ({ order }) => {
+const PreviousOrder = ({ order, fetchOrders }) => {
+  const [open, setOpen] = useState(false);
 
   const getSubtotal = () => {
     return order.menuItems.reduce(
@@ -11,6 +15,12 @@ const PreviousOrder = ({ order }) => {
   const getTime = () => {
     const date = new Date(order.pickupTime);
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  }
+
+  const completeOrder = () => {
+    console.log("completed");
+    fetchOrders();
+    setOpen(false);
   }
 
   return (
@@ -35,6 +45,25 @@ const PreviousOrder = ({ order }) => {
       <div className='status-button'>
         <h5 className='status' >Status: {order.status}</h5>
       </div>
+      { order.status === "awaiting-pickup" && (
+        <div className='order-button' >
+          <Button onClick={() => setOpen(true)} >Complete Order</Button>
+        </div>
+      )}
+      <Modal show={open} onHide={() => setOpen(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Complete Order?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>This will mark your order as completed</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={() => completeOrder()}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

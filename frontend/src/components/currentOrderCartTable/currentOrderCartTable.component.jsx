@@ -25,7 +25,7 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
  */
 const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onSubmitOrder, showCheckout,
                               toggleCheckout, showConfirmation, toggleConfirmation, orders,
-                              currentCustomer }) => {
+                              currentCustomer, fetchOrders }) => {
   // used for prev orders side menu
   const [showPrevOrders, setShowPrevOrders] = useState(false);
   const [customerOrders, setCustomerOrders] = useState([]);
@@ -92,7 +92,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onSubmitOrde
         </Offcanvas.Header>
         <Offcanvas.Body className="order-backdrop">
           {customerOrders.length > 0 ? customerOrders.map((order, index) => (
-            <PreviousOrder key={`order-${index}`} order={order} />
+            <PreviousOrder key={`order-${index}`} order={order} fetchOrders={fetchOrders} />
           )) : (<p>no previous orders</p>)}
         </Offcanvas.Body>
       </Offcanvas>
