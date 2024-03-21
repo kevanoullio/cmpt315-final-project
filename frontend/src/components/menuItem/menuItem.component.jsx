@@ -33,6 +33,7 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
 				<td>{menuItem.name}</td>
 				<td>{"$" + menuItem.price}</td>
 				<td>{menuItem.quantity}</td>
+        <td>{"$" + menuItem.price * menuItem.quantity}</td>
 				<td className="button-cell">
 					<RemoveFromCartButton
 						menuItem={menuItem}
@@ -45,6 +46,7 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
         <td>{menuItem.name}</td>
         <td>{"$" + menuItem.price}</td>
         <td>{menuItem.quantity}</td>
+        <td>{"$" + menuItem.price * menuItem.quantity}</td>
       </tr>
 		: null
 	)

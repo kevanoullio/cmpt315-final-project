@@ -76,8 +76,8 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
               <TimePicker
                 value={selectedTime}
                 onChange={selectedTime => setSelectedTime(selectedTime)}
-                minTime={minTime}
-                maxTime={maxTime}
+                minTime={"08:00:00"}
+                maxTime={"21:00:00"}
                 format="hh:mm a"
                 disabled={asap}
                 disableClock={true}
@@ -105,6 +105,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                     <th>Menu Item</th>
                     <th>Price</th>
                     <th>#</th>
+                    <th>Subtotal</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -113,7 +114,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                   ))}
                 </tbody>
               </BootstrapTable>
-              <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
+              <h3>Order Total: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
             </div>
           </section>
         </div>
