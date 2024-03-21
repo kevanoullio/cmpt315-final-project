@@ -35,10 +35,17 @@
 
 .status-button {
   display: flex;
-  margin: 4px 10% 0;
+  margin: 4px 0 0;
   padding-top: 4px;
   justify-content: center;
   background-color: #727272;
+}
+
+.order-button {
+  display: flex;
+  padding-top: 4px;
+  justify-content: center;
+
 }
 
 .status {
