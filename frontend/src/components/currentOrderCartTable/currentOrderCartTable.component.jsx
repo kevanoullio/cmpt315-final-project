@@ -39,7 +39,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
                               showCheckout, toggleCheckout, showConfirmation, toggleConfirmation,
                               selectedDate, setSelectedDate, selectedTime, handleTimeChange,
                               minDate, maxDate, minTime, minTimeToday, maxTime, asap, setAsap,
-                              orders, currentCustomer }) => {
+                              orders, currentCustomer, completeOrder }) => {
 
   // used for prev orders side menu
   const [showPrevOrders, setShowPrevOrders] = useState(false);
@@ -119,7 +119,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         </Offcanvas.Header>
         <Offcanvas.Body className="order-backdrop">
           {customerOrders.length > 0 ? customerOrders.map((order, index) => (
-            <PreviousOrder key={`order-${index}`} order={order} />
+            <PreviousOrder key={`order-${index}`} order={order} completeOrder={completeOrder} />
           )) : (<p>no previous orders</p>)}
         </Offcanvas.Body>
       </Offcanvas>

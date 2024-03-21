@@ -1,6 +1,8 @@
 import { createOrder as createOrderRepo, getAllOrders, updateOrderStatus as updateOrderStatusRepo} from '../repositories/order.repository.js';
 import { deleteOrder as deleteOrderRepo, getOrderById } from '../repositories/order.repository.js';
-
+import { fetchOrdersByCustomer as fetchOrdersByCustomerRepo, 
+         fetchOrdersByRestaurant as fetchOrdersByRestaurantRepo, 
+         schedulePickupTime as schedulePickupTimeRepo } from '../repositories/order.repository.js';
 
 // creating a new order
 export const createOrder = async (req, res) => {
@@ -70,6 +72,45 @@ export const deleteOrder = async (req, res) => {
         const deletedOrder = await deleteOrderRepo(orderId);
 
         res.json({ message: "Order successfully deleted", orderId: deletedOrder.id });
+    } catch (error) {
+        // Determine the type of error and respond accordingly
+        if (error.message.includes("not found")) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: error.message });
+        }
+    }
+};
+
+
+export const fetchOrdersByCustomer = async (req, res) => {
+    try {
+        const customerId = req.params.customerId;
+        const orders = await fetchOrdersByCustomerRepo(customerId);
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const fetchOrdersByRestaurant = async (req, res) => {
+    try {
+        const restaurantId = req.params.restaurantId;
+        const orders = await fetchOrdersByRestaurantRepo(restaurantId);
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const schedulePickupTime = async (req, res) => {
+    const { orderId, pickupTime } = req.body;
+
+    try {
+        const updatedOrder = await schedulePickupTimeRepo(orderId, pickupTime);
+        res.json(updatedOrder);
     } catch (error) {
         // Determine the type of error and respond accordingly
         if (error.message.includes("not found")) {
