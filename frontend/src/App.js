@@ -271,8 +271,8 @@ function App() {
       // Create the now and selected time
       const now = new Date();
       now.setMinutes(now.getMinutes() + 15);
-      const selectedPickupTime = asap ? formatTime(now) :
-        formatTime(new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0)));
+      const selectedPickupTime = asap ? now :
+        new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0));
 
       // If any of the menuItems have quantity > 1, create a new array with each menuItem repeated by its quantity
       const menuItemsInCartFlattened = menuItemsInCart.flatMap(menuItem =>
@@ -285,7 +285,7 @@ function App() {
         customerId: currentCustomer.id,
         restaurantId: currentRestaurant.id,
         menuItems: menuItemsInCartFlattened.map(menuItem => menuItem.id),
-        pickupTime: selectedPickupTime
+        pickupTime: formatTime(selectedPickupTime)
       });
       return response.data;
     } catch (error) {
@@ -329,32 +329,29 @@ function App() {
   /**
    * Function to handle min and max time based on date selection
    * @param {String} time - The time in the format HH:MM
-   * @returns {void} - The function does not return a value
+   * @returns {void} - The function does not return a time
    */
   const handleTimeChange = (time) => {
     // Split the time into hours and minutes
     const [hours, minutes] = time.split(':');
 
-    const selectedTime = new Date();
+    const selectedTime = new Date(selectedDate);
     selectedTime.setHours(parseInt(hours), parseInt(minutes));
 
-    // if (isToday(selectedDate)) {
-    //   if (value < formatTime(minTimeToday)) {
-    //     setSelectedTime(formatTime(minTimeToday));
-    //   } else {
-    //     setSelectedTime(value);
-    //   }
-    // } else {
-    //   if (value < formatTime(minTime)) {
-    //     setSelectedTime(formatTime(minTime));
-    //   } else {
-    //     setSelectedTime(value);
-    //   }
-    // }
+    if (isToday(selectedDate)) {
+      const now = new Date()
+      now.setMinutes(now.getMinutes() + 15);
 
-    // Set the selected time
-    setSelectedTime(selectedTime);
+      if (selectedTime < now) {
+        setSelectedTime(now);
+      } else {
+        setSelectedTime(selectedTime);
+      }
+    } else {
+      setSelectedTime(selectedTime);
+    }
   };
+
 
   /**
    * Function to update order status to "Completed"
