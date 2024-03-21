@@ -23,16 +23,9 @@ const orderSchema = new mongoose.Schema(
             required: [true, "Restaurant is required"]
         },
         menuItems: [{
-          item: {
             type: Types.ObjectId,
             ref: "MenuItem",
             required: [true, "Menu items are required"]
-          },
-          quantity: {
-            type: Number,
-            required: [true, "Quantity is required"],
-            min: [1, "Quantity must be at least 1"]
-          }
         }],
         pickupTime: {
             type: Date,
