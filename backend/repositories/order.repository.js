@@ -17,8 +17,8 @@ export const createOrder = async ({customerId, restaurantId, menuItems, pickupTi
         // Create and save the new order
         const newOrder = await new Order({
             id: newOrderId,
-            customerId: customerObjectId,
             restaurantId: restaurantObjectId,
+            customerId: customerObjectId,
             menuItems: menuItemObjectIds,
             status: 'ordered',
             pickupTime: pickupTime ? new Date(pickupTime) : null,

@@ -51,6 +51,11 @@ function App() {
   const toggleCheckout = () => setShowCheckout(!showCheckout);
   const toggleConfirmation = () => setShowConfirmation(!showConfirmation);
 
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [asap, setAsap] = useState(false);
+
+
   useEffect(() => {
     setCurrentRestaurant(currentManager.restaurantId || { name: "Select a restaurant" });
   }, [currentManager])
@@ -103,12 +108,12 @@ function App() {
 
   /**
   * Updates the status of an order and fetches the updated list of orders.
-  * 
+  *
   * This function sends a PATCH request to the server to update the status of a specific order
-  * identified by its orderId. Upon successful update, it fetches the updated list of orders 
-  * to ensure the UI reflects the latest data. If the request fails to update the order status 
+  * identified by its orderId. Upon successful update, it fetches the updated list of orders
+  * to ensure the UI reflects the latest data. If the request fails to update the order status
   * or encounters an error, it logs the error message to the console.
-  * 
+  *
   * @param {string|number} orderId The unique identifier of the order to update.
   * @param {string} newStatus The new status to be assigned to the order.
   */
@@ -168,14 +173,19 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   const onAddToCart = (menuItem) => {
-    // Assign a new unique ID to the item
-    const itemWithId = { ...menuItem, id: menuItemIdCounter };
+    // Check if the item is already in the cart
+    const existingItem = menuItemsInCart.find(item => item.id === menuItem.id);
 
-    // Add the item to the cart
-    setMenuItemsInCart(prevItems => [...prevItems, itemWithId]);
-
-    // Increment the menu item ID counter
-    setMenuItemIdCounter(menuItemIdCounter + 1);
+    // If the item is already in the cart, increment the quantity
+    if (existingItem) {
+      // If the item is already in the cart, increment its quantity
+      setMenuItemsInCart(prevItems => prevItems.map(item =>
+        item.id === menuItem.id ? { ...item, quantity: item.quantity + 1 } : item
+      ));
+    } else {
+      // Otherwise, add the item to the cart
+      setMenuItemsInCart(prevItems => [...prevItems, { ...menuItem, quantity: 1 }]);
+    }
   }
 
 
@@ -185,8 +195,28 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   const onRemoveFromCart = (menuItem) => {
-    // Remove only the item with the matching ID
-    setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
+    // Check if the item has a quantity greater than 1
+    const existingItem = menuItemsInCart.find(item => item.id === menuItem.id);
+
+    if (existingItem && existingItem.quantity > 1) {
+      // If the item has a quantity greater than 1, decrement the quantity
+      setMenuItemsInCart(prevItems => prevItems.map(item =>
+        item.id === menuItem.id ? { ...item, quantity: item.quantity - 1 } : item
+      ));
+    } else {
+      // Otherwise, remove the item from the cart
+      setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
+    }
+  }
+
+
+  /**
+   * Function to cancel the checkout process
+   * @returns {void} - The function does not return a value
+   */
+  const onCancelCheckout = () => {
+    toggleCheckout();
+    setAsap(false);
   }
 
 
@@ -195,11 +225,19 @@ function App() {
    * @returns {void} - The function does not return a value
    */
   const onSubmitOrder = () => {
+    console.log("Submitting order...")
+    console.log("currentRestaurant:", currentRestaurant)
+    console.log("currentCustomer:", currentCustomer)
+    console.log("menuItemsInCart:", menuItemsInCart)
     checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
+      toggleConfirmation();
       setMenuItemsInCart([]);
       toggleCheckout();
-      toggleConfirmation();
+      setAsap(false);
       fetchOrders();
+    })
+    .catch((error) => {
+      console.error("Error submitting order:", error);
     });
   }
 
@@ -213,17 +251,126 @@ function App() {
    */
   const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
     try {
+      // Create the now and selected time
+      const now = new Date();
+      now.setMinutes(now.getMinutes() + 15);
+      const selectedPickupTime = asap ? now :
+        new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0));
+
+      // If any of the menuItems have quantity > 1, create a new array with each menuItem repeated by its quantity
+      const menuItemsInCartFlattened = menuItemsInCart.flatMap(menuItem =>
+        Array.from({ length: menuItem.quantity }, () => menuItem)
+      );
+
+      console.log("menuItemsInCartFlattened: ", menuItemsInCartFlattened)
+
       const response = await axiosClient.post("/orders", {
         customerId: currentCustomer.id,
         restaurantId: currentRestaurant.id,
-        menuItems: menuItemsInCart.map(menuItem => menuItem.id),
-        pickupTime: "2024-03-15T14:30:00Z"
+        menuItems: menuItemsInCartFlattened.map(menuItem => menuItem.id),
+        pickupTime: formatTime(selectedPickupTime)
       });
       return response.data;
     } catch (error) {
       console.error(error);
     }
   };
+
+
+  /**
+   * Function to format the time
+   * @param {Date} date - The date
+   * @returns {String} - The formatted time
+   */
+  const formatTime = (date) => {
+    const pad = (num) => num.toString().padStart(2, '0');
+
+    const yyyy = date.getFullYear();
+    const mm = pad(date.getMonth() + 1); // Months are 0-based
+    const dd = pad(date.getDate());
+    const hh = pad(date.getHours());
+    const min = pad(date.getMinutes());
+    const ss = pad(date.getSeconds());
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}:${ss}`;
+  };
+
+
+  /**
+   * Function to check if the date is today
+   * @param {Date} date
+   * @returns {Boolean} - The boolean value
+   */
+  const isToday = (date) => {
+    const today = new Date();
+    return date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear();
+  }
+
+
+  /**
+   * Function to get the date and time constraints for order pickup
+   * @returns {Object} - The object with the date and time constraints
+   */
+  const getDateTimeConstraints = () => {
+    const storeHours = [10, 20];
+
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate());
+
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 28);
+
+    const minTime = new Date();
+    minTime.setHours(storeHours[0], 0, 0, 0);
+
+    const minTimeToday = new Date();
+    minTimeToday.setMinutes(minTime.getMinutes() + 15);
+
+    const maxTime = new Date();
+    maxTime.setHours(storeHours[1], 0, 0, 0);
+
+    return { minDate, maxDate, minTime, minTimeToday, maxTime };
+  }
+
+
+  /**
+   * Function to handle min and max time based on date selection
+   * @param {String} time - The time in the format HH:MM
+   * @returns {void} - The function does not return a time
+   */
+  const handleTimeChange = (time) => {
+    console.log("time:", time)
+    const { minDate, maxDate, minTime, minTimeToday, maxTime } = getDateTimeConstraints();
+    console.log("minDate:", minDate)
+    console.log("maxDate:", maxDate)
+    console.log("minTime:", minTime)
+    console.log("maxTime:", maxTime)
+    console.log("minTimeToday:", minTimeToday)
+    // Split the time into hours and minutes
+    const [hours, minutes] = time.split(':');
+    console.log("hours:", hours)
+    console.log("minutes:", minutes)
+
+    const selectedTime = new Date(selectedDate);
+    selectedTime.setHours(parseInt(hours), parseInt(minutes));
+    console.log("selectedTime:", selectedTime)
+
+    if (isToday(selectedDate)) {
+      const now = new Date()
+      now.setMinutes(now.getMinutes() + 15);
+
+      if (selectedTime.getTime() < now.getTime()) {
+        setSelectedTime(now);
+      } else {
+        setSelectedTime(selectedTime);
+      }
+    } else {
+      setSelectedTime(selectedTime);
+    }
+  };
+
 
   /**
    * Function to update order status to "Completed"
@@ -274,7 +421,7 @@ function App() {
       }
     }
     fetchMenuItems().then();
-  }, [currentRestaurant, currentMenuItemId, menuItems]);
+  }, [currentRestaurant, currentMenuItemId]);
 
 
   /**
@@ -510,11 +657,20 @@ function App() {
                   className="App-current-order-cart-table"
                   menuItemsInCart={menuItemsInCart}
                   onRemoveFromCart={onRemoveFromCart}
+                  onCancelCheckout={onCancelCheckout}
                   onSubmitOrder={onSubmitOrder}
                   showCheckout={showCheckout}
                   toggleCheckout={toggleCheckout}
                   showConfirmation={showConfirmation}
                   toggleConfirmation={toggleConfirmation}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  selectedTime={selectedTime}
+                  setSelectedTime={setSelectedTime}
+                  getDateTimeConstraints={getDateTimeConstraints}
+                  handleTimeChange={handleTimeChange}
+                  asap={asap}
+                  setAsap={setAsap}
                   orders={orders}
                   currentCustomer={currentCustomer}
                   completeOrder={completeOrder}

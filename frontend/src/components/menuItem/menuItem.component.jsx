@@ -32,7 +32,7 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
 			<tr>
 				<td>{menuItem.name}</td>
 				<td>{"$" + menuItem.price}</td>
-				{/* <td>#</td>  >>> can add later if decide to have items stack up */}
+				<td>{menuItem.quantity}</td>
 				<td className="button-cell">
 					<RemoveFromCartButton
 						menuItem={menuItem}
@@ -44,6 +44,7 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
       <tr>
         <td>{menuItem.name}</td>
         <td>{"$" + menuItem.price}</td>
+        <td>{menuItem.quantity}</td>
       </tr>
 		: null
 	)
