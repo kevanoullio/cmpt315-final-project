@@ -76,20 +76,27 @@ const menuItemExists = async (menuItemID) => {
     return menuItem ? true : false;
 }
 
-// const itemsToOrder = await MenuItem.find({id: {$in: menuItems}})
 // Validates menu items existence and status.
 export const validateMenuItem = async (menuItems) => {
-    // await Tank.find({ size: 'small' }).where('createdDate').gt(oneYearAgo).exec();
-    const itemsToOrder = await MenuItem.find({id: {$in: menuItems}});
+    const itemsToOrder = await MenuItem.find({ id: { $in: menuItems } });
 
-    // Verify all requested items are found 
-    if (itemsToOrder.length !== menuItems.length) {
-        throw new Error("One or more menu items are not found.");
-    }
-    // Verify all requested items have sufficient status (available)
-    if (itemsToOrder.some(item => item.status !== 'in stock')) {
-        throw new Error("One or more menu items are sold out or not available.");
-    }
+    // Map for quick item lookup
+    const itemMap = itemsToOrder.reduce((map, item) => {
+        map[item.id] = item;
+        return map;
+    }, {});
 
-    return itemsToOrder.map(item => item._id);
+    // Verify all requested items are found and in stock
+    const orderedItemsIds = menuItems.map(itemId => {
+        const item = itemMap[itemId];
+        if (!item) {
+            throw new Error("One or more menu items are not found.");
+        }
+        if (item.status !== "in stock") {
+            throw new Error("One or more menu items are sold out or not available.");
+        }
+        return item._id;
+    });
+
+    return orderedItemsIds; // return array including duplicate items
 }
