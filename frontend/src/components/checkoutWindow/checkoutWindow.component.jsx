@@ -22,26 +22,20 @@ import "./checkoutWindow.styles.css";
  * @param {Date} selectedDate - The selected date
  * @param {Function} setSelectedDate - The function to set the selected date
  * @param {Date} selectedTime - The selected time
+ * @param {Function} getDateTimeConstraints - The function to get the date time constraints
  * @param {Function} handleTimeChange - The function to handle time change
- * @param {Date} minDate - The minimum date
- * @param {Date} maxDate - The maximum date
- * @param {Date} minTime - The minimum time
- * @param {Date} minTimeToday - The minimum time for today
- * @param {Date} maxTime - The maximum time
  * @param {Boolean} asap - The boolean for ASAP
  * @param {Function} setAsap - The function to set ASAP
  * @returns {JSX.Element} - The checkout window component
  */
 const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubmitOrder,
                           currentCustomer, menuItemsInCart, selectedDate, setSelectedDate,
-                          selectedTime, handleTimeChange, minDate, maxDate,
-                          minTime, minTimeToday, maxTime, asap, setAsap }) => {
+                          selectedTime, getDateTimeConstraints, handleTimeChange, asap, setAsap }) => {
 
   const isToday = selectedDate.toDateString() === new Date().toDateString();
+  const { minDate, maxDate, minTime, minTimeToday, maxTime } = getDateTimeConstraints();
 
   return (
-
-
     <Modal
       className="checkout-window"
       show={showCheckout}

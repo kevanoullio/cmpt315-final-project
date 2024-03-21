@@ -37,9 +37,8 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
  */
 const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelCheckout, onSubmitOrder,
                               showCheckout, toggleCheckout, showConfirmation, toggleConfirmation,
-                              selectedDate, setSelectedDate, selectedTime, handleTimeChange,
-                              minDate, maxDate, minTime, minTimeToday, maxTime, asap, setAsap,
-                              orders, currentCustomer, completeOrder }) => {
+                              selectedDate, setSelectedDate, selectedTime, getDateTimeConstraints,
+                              handleTimeChange, asap, setAsap, orders, currentCustomer, completeOrder }) => {
 
   // used for prev orders side menu
   const [showPrevOrders, setShowPrevOrders] = useState(false);
@@ -100,12 +99,8 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         selectedTime={selectedTime}
+        getDateTimeConstraints={getDateTimeConstraints}
         handleTimeChange={handleTimeChange}
-        minDate={minDate}
-        maxDate={maxDate}
-        minTime={minTime}
-        minTimeToday={minTimeToday}
-        maxTime={maxTime}
         asap={asap}
         setAsap={setAsap}
       />

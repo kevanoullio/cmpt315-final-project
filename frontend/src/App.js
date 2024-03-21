@@ -51,23 +51,6 @@ function App() {
   const toggleCheckout = () => setShowCheckout(!showCheckout);
   const toggleConfirmation = () => setShowConfirmation(!showConfirmation);
 
-  const storeHours = [10, 20];
-
-  const minDate = new Date();
-  // minDate.setDate(minDate.getDate());
-
-  const maxDate = new Date();
-  maxDate.setDate(maxDate.getDate() + 28);
-
-  const minTime = new Date();
-  minTime.setHours(storeHours[0]);
-
-  const minTimeToday = new Date();
-  minTimeToday.setMinutes(minTime.getMinutes() + 15);
-
-  const maxTime = new Date();
-  maxTime.setHours(storeHours[1], 0, 0, 0);
-
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [asap, setAsap] = useState(false);
@@ -327,22 +310,58 @@ function App() {
 
 
   /**
+   * Function to get the date and time constraints for order pickup
+   * @returns {Object} - The object with the date and time constraints
+   */
+  const getDateTimeConstraints = () => {
+    const storeHours = [10, 20];
+
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate());
+
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 28);
+
+    const minTime = new Date();
+    minTime.setHours(storeHours[0], 0, 0, 0);
+
+    const minTimeToday = new Date();
+    minTimeToday.setMinutes(minTime.getMinutes() + 15);
+
+    const maxTime = new Date();
+    maxTime.setHours(storeHours[1], 0, 0, 0);
+
+    return { minDate, maxDate, minTime, minTimeToday, maxTime };
+  }
+
+
+  /**
    * Function to handle min and max time based on date selection
    * @param {String} time - The time in the format HH:MM
    * @returns {void} - The function does not return a time
    */
   const handleTimeChange = (time) => {
+    console.log("time:", time)
+    const { minDate, maxDate, minTime, minTimeToday, maxTime } = getDateTimeConstraints();
+    console.log("minDate:", minDate)
+    console.log("maxDate:", maxDate)
+    console.log("minTime:", minTime)
+    console.log("maxTime:", maxTime)
+    console.log("minTimeToday:", minTimeToday)
     // Split the time into hours and minutes
     const [hours, minutes] = time.split(':');
+    console.log("hours:", hours)
+    console.log("minutes:", minutes)
 
     const selectedTime = new Date(selectedDate);
     selectedTime.setHours(parseInt(hours), parseInt(minutes));
+    console.log("selectedTime:", selectedTime)
 
     if (isToday(selectedDate)) {
       const now = new Date()
       now.setMinutes(now.getMinutes() + 15);
 
-      if (selectedTime < now) {
+      if (selectedTime.getTime() < now.getTime()) {
         setSelectedTime(now);
       } else {
         setSelectedTime(selectedTime);
@@ -648,12 +667,8 @@ function App() {
                   setSelectedDate={setSelectedDate}
                   selectedTime={selectedTime}
                   setSelectedTime={setSelectedTime}
+                  getDateTimeConstraints={getDateTimeConstraints}
                   handleTimeChange={handleTimeChange}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  minTime={minTime}
-                  minTimeToday={minTimeToday}
-                  maxTime={maxTime}
                   asap={asap}
                   setAsap={setAsap}
                   orders={orders}
