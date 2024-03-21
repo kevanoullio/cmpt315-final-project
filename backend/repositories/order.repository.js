@@ -113,11 +113,43 @@ export const deleteAllOrders = async () => {
 
 }
 
-// TODO: fetchOrdersByCustomer
+export const fetchOrdersByCustomer = async (customerId) => {
+    try {
+        const customerObjectId = await validateCustomer(customerId);
+        const orders = await Order.find({ customerId: customerObjectId })
+            .populate('menuItems');
+        return orders;
+    } catch (error) {
+        throw new Error("Error fetching orders by customer: " + error.message);
+    }
+};
 
-// TODO: fetchOrdersByRestaurant
+export const fetchOrdersByRestaurant = async (restaurantId) => {
+    try {
+        const restaurantObjectId = await validateRestaurant(restaurantId);
+        const orders = await Order.find({ restaurantId: restaurantObjectId })
+            .populate('menuItems');
+        return orders;
+    } catch (error) {
+        throw new Error("Error fetching orders by restaurant: " + error.message);
+    }
+};
 
-// TODO: schedulePickup
+export const schedulePickupTime = async (orderId, pickupTime) => {
+    try {
+        const updatedOrder = await Order.findOneAndUpdate(
+            { id: orderId },
+            { pickupTime: pickupTime },
+            { new: true }
+        ); 
+
+        if (!updatedOrder) throw new Error("Order not found");
+        
+        return updatedOrder;
+    } catch (error) {
+        throw new Error("Error scheduling pickup: " + error.message);
+    }
+}
 
 
 // ----------------------- Helper functions -----------------------
