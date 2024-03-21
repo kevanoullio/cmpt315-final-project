@@ -199,6 +199,7 @@ function App() {
       setMenuItemsInCart([]);
       toggleCheckout();
       toggleConfirmation();
+      fetchOrders();
     });
   }
 
@@ -218,6 +219,23 @@ function App() {
         menuItems: menuItemsInCart.map(menuItem => menuItem.id),
         pickupTime: "2024-03-15T14:30:00Z"
       });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /**
+   * Function to update order status to "Completed"
+   * @param {String} OrderID - id of the order to update, this is all we need, as ID is unique
+   * @returns {Void} - The function does not return a value
+   */
+  const completeOrder = async (orderID) => {
+    try {
+      const response = await axiosClient.patch(`/orders/${orderID}`, {
+        status: "completed"
+      });
+      fetchOrders();
       return response.data;
     } catch (error) {
       console.error(error);
@@ -499,6 +517,7 @@ function App() {
                   toggleConfirmation={toggleConfirmation}
                   orders={orders}
                   currentCustomer={currentCustomer}
+                  completeOrder={completeOrder}
                 />
               </div>
             </section>
