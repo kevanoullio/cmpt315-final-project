@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import BootstrapTable from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -22,18 +22,19 @@ import "./checkoutWindow.styles.css";
  * @param {Date} selectedDate - The selected date
  * @param {Function} setSelectedDate - The function to set the selected date
  * @param {Date} selectedTime - The selected time
- * @param {Function} getDateTimeConstraints - The function to get the date time constraints
- * @param {Function} handleTimeChange - The function to handle time change
+ * @param {Function} setSelectedTime - The function to set the selected time
+ * @param {Function} getDateConstraints - The function to get date constraints
+ * @param {Function} getTimeConstraints - The function to get time constraints
  * @param {Boolean} asap - The boolean for ASAP
  * @param {Function} setAsap - The function to set ASAP
  * @returns {JSX.Element} - The checkout window component
  */
 const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubmitOrder,
-                          currentCustomer, menuItemsInCart, selectedDate, setSelectedDate,
-                          selectedTime, getDateTimeConstraints, handleTimeChange, asap, setAsap }) => {
+  currentCustomer, menuItemsInCart, selectedDate, setSelectedDate, selectedTime, setSelectedTime,
+  getDateConstraints, getTimeConstraints, asap, setAsap }) => {
 
-  const isToday = selectedDate.toDateString() === new Date().toDateString();
-  const { minDate, maxDate, minTime, minTimeToday, maxTime } = getDateTimeConstraints();
+  const { minDate, maxDate } = getDateConstraints();
+  const { minTime, maxTime } = getTimeConstraints(selectedDate);
 
   return (
     <Modal
@@ -72,27 +73,15 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                 disabled={asap}
               />
               <br />
-              {isToday ? (
-                <TimePicker
-                  value={selectedTime}
-                  onChange={handleTimeChange}
-                  minTime={minTimeToday}
-                  maxTime={maxTime}
-                  format="h:mm a"
-                  // step={15}
-                  disabled={asap}
-                />
-              ) : (
-                <TimePicker
-                  value={selectedTime}
-                  onChange={handleTimeChange}
-                  minTime={minTime}
-                  maxTime={maxTime}
-                  format="h:mm a"
-                  // step={15}
-                  disabled={asap}
-                />
-              )}
+              <TimePicker
+                value={selectedTime}
+                onChange={selectedTime => setSelectedTime(selectedTime)}
+                minTime={minTime}
+                maxTime={maxTime}
+                format="hh:mm a"
+                disabled={asap}
+                disableClock={true}
+              />
               <Form>
                 {["checkbox"].map((type) => (
                   <div key={type} className="mb-3">

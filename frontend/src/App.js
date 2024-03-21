@@ -43,7 +43,6 @@ function App() {
   const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
 
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
-  const [menuItemIdCounter, setMenuItemIdCounter] = useState(0);
 
   const [showCheckout, setShowCheckout] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -54,6 +53,8 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [asap, setAsap] = useState(false);
+  const storeHours = [10, 20];
+  const cookTime = 15;
 
 
   useEffect(() => {
@@ -225,10 +226,6 @@ function App() {
    * @returns {void} - The function does not return a value
    */
   const onSubmitOrder = () => {
-    console.log("Submitting order...")
-    console.log("currentRestaurant:", currentRestaurant)
-    console.log("currentCustomer:", currentCustomer)
-    console.log("menuItemsInCart:", menuItemsInCart)
     checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
       toggleConfirmation();
       setMenuItemsInCart([]);
@@ -253,7 +250,7 @@ function App() {
     try {
       // Create the now and selected time
       const now = new Date();
-      now.setMinutes(now.getMinutes() + 15);
+      now.setMinutes(now.getMinutes() + cookTime);
       const selectedPickupTime = asap ? now :
         new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0));
 
@@ -261,8 +258,6 @@ function App() {
       const menuItemsInCartFlattened = menuItemsInCart.flatMap(menuItem =>
         Array.from({ length: menuItem.quantity }, () => menuItem)
       );
-
-      console.log("menuItemsInCartFlattened: ", menuItemsInCartFlattened)
 
       const response = await axiosClient.post("/orders", {
         customerId: currentCustomer.id,
@@ -278,9 +273,9 @@ function App() {
 
 
   /**
-   * Function to format the time
-   * @param {Date} date - The date
-   * @returns {String} - The formatted time
+   * Function to format the time from a Date object to a String
+   * @param {Date} date - The Date object to be formatted
+   * @returns {String} - The String representing the formatted time
    */
   const formatTime = (date) => {
     const pad = (num) => num.toString().padStart(2, '0');
@@ -297,9 +292,9 @@ function App() {
 
 
   /**
-   * Function to check if the date is today
-   * @param {Date} date
-   * @returns {Boolean} - The boolean value
+   * Function to check if the selected date is today
+   * @param {Date} date - The selected date to check
+   * @returns {Boolean} - The boolean value representing if the selected date is today
    */
   const isToday = (date) => {
     const today = new Date();
@@ -313,63 +308,49 @@ function App() {
    * Function to get the date and time constraints for order pickup
    * @returns {Object} - The object with the date and time constraints
    */
-  const getDateTimeConstraints = () => {
-    const storeHours = [10, 20];
-
+  const getDateConstraints = () => {
     const minDate = new Date();
-    minDate.setDate(minDate.getDate());
+    minDate.setHours(storeHours[0], 0, 0, 0);
 
     const maxDate = new Date();
     maxDate.setDate(maxDate.getDate() + 28);
+    maxDate.setHours(storeHours[1], 0, 0, 0)
 
-    const minTime = new Date();
-    minTime.setHours(storeHours[0], 0, 0, 0);
-
-    const minTimeToday = new Date();
-    minTimeToday.setMinutes(minTime.getMinutes() + 15);
-
-    const maxTime = new Date();
-    maxTime.setHours(storeHours[1], 0, 0, 0);
-
-    return { minDate, maxDate, minTime, minTimeToday, maxTime };
+    return { minDate, maxDate };
   }
 
 
   /**
-   * Function to handle min and max time based on date selection
-   * @param {String} time - The time in the format HH:MM
-   * @returns {void} - The function does not return a time
+   * Function to get the date and time constraints for order pickup
+   * @param {Date} selecteDate - The selected date
+   * @returns {Object} - The object with the date and time constraints
    */
-  const handleTimeChange = (time) => {
-    console.log("time:", time)
-    const { minDate, maxDate, minTime, minTimeToday, maxTime } = getDateTimeConstraints();
-    console.log("minDate:", minDate)
-    console.log("maxDate:", maxDate)
-    console.log("minTime:", minTime)
-    console.log("maxTime:", maxTime)
-    console.log("minTimeToday:", minTimeToday)
-    // Split the time into hours and minutes
-    const [hours, minutes] = time.split(':');
-    console.log("hours:", hours)
-    console.log("minutes:", minutes)
+  const getTimeConstraints = (selectedDate) => {
+    // Get the current hour and minutes
+    const currentHour = new Date().getHours();
+    const currentMinutes = new Date().getMinutes();
 
-    const selectedTime = new Date(selectedDate);
-    selectedTime.setHours(parseInt(hours), parseInt(minutes));
-    console.log("selectedTime:", selectedTime)
+    console.log("selectedDate:", selectedDate);
 
+    // Initialize the minTime and maxTime
+    const minTime = new Date(selectedDate.getDate());
+    const maxTime = new Date(selectedDate);
+
+    // Set the maxTime constrainst
+    maxTime.setHours(storeHours[1], 0, 0, 0);
+
+    // Set the minTime constraints for today and other days
     if (isToday(selectedDate)) {
-      const now = new Date()
-      now.setMinutes(now.getMinutes() + 15);
-
-      if (selectedTime.getTime() < now.getTime()) {
-        setSelectedTime(now);
-      } else {
-        setSelectedTime(selectedTime);
-      }
+      minTime.setHours(currentHour, currentMinutes + cookTime, 0, 0);
     } else {
-      setSelectedTime(selectedTime);
+      minTime.setHours(storeHours[0], 0, 0, 0);
     }
-  };
+
+    console.log("minTime:", minTime);
+    console.log("maxTime:", maxTime);
+
+    return { minTime, maxTime };
+  }
 
 
   /**
@@ -667,8 +648,8 @@ function App() {
                   setSelectedDate={setSelectedDate}
                   selectedTime={selectedTime}
                   setSelectedTime={setSelectedTime}
-                  getDateTimeConstraints={getDateTimeConstraints}
-                  handleTimeChange={handleTimeChange}
+                  getDateConstraints={getDateConstraints}
+                  getTimeConstraints={getTimeConstraints}
                   asap={asap}
                   setAsap={setAsap}
                   orders={orders}
