@@ -6,14 +6,15 @@ import MenuItemsTable from "./components/menuItemsTable/menuItemsTable.component
 import CurrentOrderCartTable
   from "./components/currentOrderCartTable/currentOrderCartTable.component";
 
-import SearchBar from "./components/searchBar/searchBar.component";
 import ManagerOrderTable from "./components/managerTable/managerOrdersTable.component";
 import ManagerMenuItemsTable from "./components/managerTable/managerMenuItemsTable.component";
+import MenuItemWindow from "./components/menuItemWindow/menuItemWindow.component";
+
+import SearchBar from "./components/searchBar/searchBar.component";
 import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import MenuItemWindow from "./components/menuItemWindow/menuItemWindow.component";
 
 
 /**
@@ -57,7 +58,7 @@ function App() {
   const storeHours = [10, 20];
   const cookTime = 15;
 
-  // for adding a new menu item 
+  // for adding a new menu item
   const [showAddItem, setShowAddItem] = useState(false);
   const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
 
@@ -150,7 +151,7 @@ function App() {
         status: menuItems.find(item => item.id === itemId).status === "sold-out" ? "in stock" : "sold-out"
       });
 
-      // Set currentMenuItemId 
+      // Set currentMenuItemId
       setCurrentMenuItemId(itemId);
       //update table
       fetchMenuItems();
@@ -337,8 +338,6 @@ function App() {
     const currentHour = new Date().getHours();
     const currentMinutes = new Date().getMinutes();
 
-    console.log("selectedDate:", selectedDate);
-
     // Initialize the minTime and maxTime
     const minTime = new Date(selectedDate.getDate());
     const maxTime = new Date(selectedDate);
@@ -352,9 +351,6 @@ function App() {
     } else {
       minTime.setHours(storeHours[0], 0, 0, 0);
     }
-
-    console.log("minTime:", minTime);
-    console.log("maxTime:", maxTime);
 
     return { minTime, maxTime };
   }
@@ -380,6 +376,7 @@ function App() {
 
   /**
     * Fetch MenuItems from the API/Database
+    * @returns {void} - The function does not return a value
     */
   const fetchMenuItems = async () => {
     try {
@@ -415,37 +412,40 @@ function App() {
 
   /**
     * Fetch Restaurants from the API/Database
+    * @returns {void} - The function does not return a value
     */
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        await axiosClient.get("/restaurants").then((res) => {
-          const allRestaurants = res.data;
-          setRestaurants(allRestaurants);
-        })
-      } catch (error) {
-        console.error(error);
-      }
+  const fetchRestaurants = async () => {
+    try {
+      await axiosClient.get("/restaurants").then((res) => {
+        const allRestaurants = res.data;
+        setRestaurants(allRestaurants);
+      })
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  useEffect(() => {
     fetchRestaurants().then();
   }, []);
 
 
   /**
     * Fetch managers from the API/Database
+    * @returns {void} - The function does not return a value
     */
-  useEffect(() => {
-    const fetchManagers = async () => {
-      try {
-        await axiosClient.get("/managers").then((res) => {
-          const allManagers = res.data;
-          setManagers(allManagers);
-        })
-      } catch (error) {
-        console.error(error);
-      }
+  const fetchManagers = async () => {
+    try {
+      await axiosClient.get("/managers").then((res) => {
+        const allManagers = res.data;
+        setManagers(allManagers);
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    };
+  useEffect(() => {
     fetchManagers();
   }, []);
 
@@ -454,22 +454,25 @@ function App() {
    * Fetch customers from the API/Database
    * @returns {void} - The function does not return a value
    */
+  const fetchCustomers = async () => {
+    try {
+      await axiosClient.get("/customers").then((res) => {
+        const allCustomers = res.data;
+        setCustomers(allCustomers);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        await axiosClient.get("/customers").then((res) => {
-          const allCustomers = res.data;
-          setCustomers(allCustomers);
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchCustomers();
   }, []);
 
+
   /**
   * Fetch Orders from the API/Database
+  * @returns {void} - The function does not return a value
   */
   const fetchOrders = async () => {
     try {
@@ -483,6 +486,7 @@ function App() {
   useEffect(() => {
     fetchOrders();
   }, []);
+
 
   // Reacts to changes in orders and currentManager to update the orders for the current restaurant
   useEffect(() => {
@@ -573,10 +577,10 @@ function App() {
     try {
       const response = await axiosClient.post(`/menuItmes/`, menuItemAttributes);
       if (response.status === 200) {
-        //TODO: add new menu item to restaurant's menu items array 
+        //TODO: add new menu item to restaurant's menu items array
 
 
-        // fetch menuItems again for a UI update 
+        // fetch menuItems again for a UI update
         // fetchMenuItems();
       } else {
         console.error("Failed to update or add menu item");
