@@ -13,6 +13,7 @@ import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import MenuItemWindow from "./components/menuItemWindow/menuItemWindow.component";
 
 
 /**
@@ -54,6 +55,10 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [asap, setAsap] = useState(false);
+
+  // for adding a new menu item 
+  const [showAddItem, setShowAddItem] = useState(false);
+  const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
 
 
   useEffect(() => {
@@ -144,8 +149,10 @@ function App() {
         status: menuItems.find(item => item.id === itemId).status === "sold-out" ? "in stock" : "sold-out"
       });
 
-      // Set currentMenuItemId to trigger useEffect to retrieve updated menuItems
+      // Set currentMenuItemId 
       setCurrentMenuItemId(itemId);
+      //update table
+      fetchMenuItems();
 
     } catch (error) {
         console.error("Error updating status:", error);
@@ -393,34 +400,35 @@ function App() {
   /**
     * Fetch MenuItems from the API/Database
     */
-  useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        if (currentRestaurant.name === "Select a restaurant") {
-          return;
-        }
-        if (currentRestaurant.id) {
-          await axiosClient.get(`/restaurants/menuItems/${currentRestaurant.id}`).then((res) => {
-
-            const allMenuItems = res.data;
-            // extract id, name, status, description, price
-            const extractedMenuItems = allMenuItems.map(menuItem => {
-              return {
-                id: menuItem.id,
-                name: menuItem.name,
-                status: menuItem.status,
-                description: menuItem.description,
-                price: menuItem.price
-              };
-            })
-            setMenuItems(extractedMenuItems);
-          })
-        }
-      } catch (error) {
-        console.error(error);
+  const fetchMenuItems = async () => {
+    try {
+      if (currentRestaurant.name === "Select a restaurant") {
+        return;
       }
+      if (currentRestaurant.id) {
+        await axiosClient.get(`/restaurants/menuItems/${currentRestaurant.id}`).then((res) => {
+
+          const allMenuItems = res.data;
+          // extract id, name, status, description, price
+          const extractedMenuItems = allMenuItems.map(menuItem => {
+            return {
+              id: menuItem.id,
+              name: menuItem.name,
+              status: menuItem.status,
+              description: menuItem.description,
+              price: menuItem.price
+            };
+          })
+          setMenuItems(extractedMenuItems);
+        })
+      }
+    } catch (error) {
+      console.error(error);
     }
-    fetchMenuItems().then();
+  };
+
+  useEffect(() => {
+    fetchMenuItems();
   }, [currentRestaurant, currentMenuItemId]);
 
 
@@ -580,6 +588,24 @@ function App() {
   };
 
 
+  const handleAddMenuItem = async (menuItemAttributes) => {
+    try {
+      const response = await axiosClient.post(`/menuItmes/`, menuItemAttributes);
+      if (response.status === 200) {
+        //TODO: add new menu item to restaurant's menu items array 
+
+
+        // fetch menuItems again for a UI update 
+        // fetchMenuItems();
+      } else {
+        console.error("Failed to update or add menu item");
+      }
+    } catch (error) {
+      console.error("Error updating menu item:", error);
+    }
+  };
+
+
   return (
     <div className="App-wrapper">
       <header>
@@ -704,6 +730,12 @@ function App() {
                   <ManagerMenuItemsTable
                     menuItems={menuItems}
                     onItemSelection={handleManagersMenuItemSelection} />
+                  <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                  <MenuItemWindow
+                    showMenuItem={showAddItem}
+                    toggleMenuItem={toggleAddMenuItem}
+                    onSubmit={handleAddMenuItem}
+                   />
                 </section>
               )}
             </div>
