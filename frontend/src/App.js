@@ -116,8 +116,8 @@ function App() {
     try {
       const response = await axiosClient.patch(`/orders/${orderId}`, { status: newStatus });
       if (response.status === 200) {
-        // // After successfully updating the order status, fetch orders again for a UI update
-        // fetchOrders();
+        // After successfully updating the order status, fetch orders again for a UI update
+        fetchOrders();
       } else {
         console.error("Failed to update order status");
       }
@@ -658,7 +658,7 @@ function App() {
 
 
         // fetch menuItems again for a UI update
-        // fetchMenuItems();
+        fetchMenuItems();
       } else {
         console.error("Failed to update or add menu item");
       }
