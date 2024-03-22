@@ -45,7 +45,7 @@ const PreviousOrder = ({ order, completeOrder }) => {
       <div className='status-button'>
         <h5 className='status' >Status: {order.status}</h5>
       </div>
-      { order.status === "awaiting-pickup" && (
+      { order.status === "awaiting pickup" && (
         <div className='order-button' >
           <Button onClick={() => setOpen(true)} >Complete Order</Button>
         </div>

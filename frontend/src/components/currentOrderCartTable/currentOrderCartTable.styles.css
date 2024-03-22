@@ -19,4 +19,5 @@
   /* change this if we remove the top bar */
   height: 60vh;
   overflow-y: scroll;
+  text-align: center;
 }
