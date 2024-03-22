@@ -6,14 +6,16 @@ import MenuItemsTable from "./components/menuItemsTable/menuItemsTable.component
 import CurrentOrderCartTable
   from "./components/currentOrderCartTable/currentOrderCartTable.component";
 
-import SearchBar from "./components/searchBar/searchBar.component";
 import ManagerOrderTable from "./components/managerTable/managerOrdersTable.component";
 import ManagerMenuItemsTable from "./components/managerTable/managerMenuItemsTable.component";
+import MenuItemWindow from "./components/menuItemWindow/menuItemWindow.component";
+
+import ConfirmationWindow from "./components/confirmationWindow/confirmationWindow.component";
+import SearchBar from "./components/searchBar/searchBar.component";
 import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import MenuItemWindow from "./components/menuItemWindow/menuItemWindow.component";
 
 
 /**
@@ -37,14 +39,13 @@ function App() {
   const [currentManager, setCurrentManager] = useState({});
   const [currentRestaurant, setCurrentRestaurant] = useState({ name: "Select a restaurant" });
   const [currentCustomer, setCurrentCustomer] = useState({});
-  const [currentMenuItemId, setCurrentMenuItemId] = useState(null);
+  const [currentRestaurantMenuItems, setCurrentRestaurantMenuItems] = useState([]);
   const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
   const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
   const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
 
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
-  const [menuItemIdCounter, setMenuItemIdCounter] = useState(0);
 
   const [showCheckout, setShowCheckout] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -52,48 +53,37 @@ function App() {
   const toggleCheckout = () => setShowCheckout(!showCheckout);
   const toggleConfirmation = () => setShowConfirmation(!showConfirmation);
 
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [asap, setAsap] = useState(false);
+  const storeHours = [10, 20];
+  const cookTime = 15;
 
-  // for adding a new menu item 
+  // for adding a new menu item
   const [showAddItem, setShowAddItem] = useState(false);
   const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
 
-
-  useEffect(() => {
-    setCurrentRestaurant(currentManager.restaurantId || { name: "Select a restaurant" });
-  }, [currentManager])
 
   /**
     * Function to handle view button click
     * @param {String} view - The view
     * @returns {void} - The function does not return a value
-    */
-  const onViewButtonClick = (view) => {
-    setView(view);
+  */
+  const onViewButtonClick = (newView) => {
+    if (newView !== view) {
+      setView(newView);
 
-    // reset the restaurant and restaurant orders back to empty because restaurant will depend on view
-    setCurrentRestaurant({ name: "Select a restaurant" });
-    setCurrentRestaurantOrders([]);
-    setMenuItems([]);
-    setCurrentCustomer({});
-    setCurrentManager({});
-    setMenuItemsInCart([]);
-  };
-
-
-  /**
-   * Sets the orders for a single specified restaurant.
-   * @param {*} orders a list of all the orders for all restaurants
-   * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for
-   */
-  const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
-    // Filter to get a list of orders for the specified restaurant
-    const restaurantOrders = orders.filter(order => order.restaurantId._id === currentRestaurantId._id);
-
-    // set the array to empty if there are no orders for the specified restaurant
-    setCurrentRestaurantOrders(restaurantOrders.length > 0 ? restaurantOrders : []);
+      // reset the restaurant and restaurant orders back to empty because restaurant will depend on view
+      setCurrentRestaurant({ name: "Select a restaurant" });
+      setCurrentRestaurantOrders([]);
+      setCurrentRestaurantMenuItems([]);
+      setCurrentCustomer({});
+      setCurrentManager({});
+      setMenuItemsInCart([]);
+    }
   };
 
 
@@ -149,8 +139,6 @@ function App() {
         status: menuItems.find(item => item.id === itemId).status === "sold-out" ? "in stock" : "sold-out"
       });
 
-      // Set currentMenuItemId 
-      setCurrentMenuItemId(itemId);
       //update table
       fetchMenuItems();
 
@@ -171,7 +159,7 @@ function App() {
 
     // Set the current customer
     setCurrentCustomer(selectedCustomer);
-  }
+  };
 
 
   /**
@@ -193,7 +181,7 @@ function App() {
       // Otherwise, add the item to the cart
       setMenuItemsInCart(prevItems => [...prevItems, { ...menuItem, quantity: 1 }]);
     }
-  }
+  };
 
 
   /**
@@ -214,7 +202,7 @@ function App() {
       // Otherwise, remove the item from the cart
       setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
     }
-  }
+  };
 
 
   /**
@@ -224,7 +212,7 @@ function App() {
   const onCancelCheckout = () => {
     toggleCheckout();
     setAsap(false);
-  }
+  };
 
 
   /**
@@ -232,10 +220,6 @@ function App() {
    * @returns {void} - The function does not return a value
    */
   const onSubmitOrder = () => {
-    console.log("Submitting order...")
-    console.log("currentRestaurant:", currentRestaurant)
-    console.log("currentCustomer:", currentCustomer)
-    console.log("menuItemsInCart:", menuItemsInCart)
     checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
       toggleConfirmation();
       setMenuItemsInCart([]);
@@ -246,7 +230,7 @@ function App() {
     .catch((error) => {
       console.error("Error submitting order:", error);
     });
-  }
+  };
 
 
   /**
@@ -258,25 +242,31 @@ function App() {
    */
   const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
     try {
-      // Create the now and selected time
-      const now = new Date();
-      now.setMinutes(now.getMinutes() + 15);
-      const selectedPickupTime = asap ? now :
-        new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0));
+      // Format the selectedTime to a Date object
+      const selectedTimeObject = new Date(selectedDate);
+
+      // Format the selected pickup date and time
+      const selectedPickupDateTime = new Date(selectedDate.setHours(selectedTimeObject.getHours(), selectedTimeObject.getMinutes(), 0, 0));
 
       // If any of the menuItems have quantity > 1, create a new array with each menuItem repeated by its quantity
       const menuItemsInCartFlattened = menuItemsInCart.flatMap(menuItem =>
         Array.from({ length: menuItem.quantity }, () => menuItem)
       );
 
-      console.log("menuItemsInCartFlattened: ", menuItemsInCartFlattened)
-
-      const response = await axiosClient.post("/orders", {
+      // Create the request body
+      let requestBody = {
         customerId: currentCustomer.id,
         restaurantId: currentRestaurant.id,
         menuItems: menuItemsInCartFlattened.map(menuItem => menuItem.id),
-        pickupTime: formatTime(selectedPickupTime)
-      });
+      };
+
+      // Add the pickup time to the request body if it is not ASAP
+      if (!asap) {
+        requestBody.pickupTime = formatTime(selectedPickupDateTime);
+      }
+
+      // Send a POST request to create a new order
+      const response = await axiosClient.post("/orders", requestBody);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -285,9 +275,9 @@ function App() {
 
 
   /**
-   * Function to format the time
-   * @param {Date} date - The date
-   * @returns {String} - The formatted time
+   * Function to format the time from a Date object to a String
+   * @param {Date} date - The Date object to be formatted
+   * @returns {String} - The String representing the formatted time
    */
   const formatTime = (date) => {
     const pad = (num) => num.toString().padStart(2, '0');
@@ -304,78 +294,65 @@ function App() {
 
 
   /**
-   * Function to check if the date is today
-   * @param {Date} date
-   * @returns {Boolean} - The boolean value
+   * Function to check if the selected date is today
+   * @param {Date} date - The selected date to check
+   * @returns {Boolean} - The boolean value representing if the selected date is today
    */
   const isToday = (date) => {
     const today = new Date();
     return date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
       date.getFullYear() === today.getFullYear();
-  }
+  };
 
 
   /**
    * Function to get the date and time constraints for order pickup
    * @returns {Object} - The object with the date and time constraints
    */
-  const getDateTimeConstraints = () => {
-    const storeHours = [10, 20];
-
+  const getDateConstraints = () => {
+    // Use the current date as minDate and format it to store opening hours
     const minDate = new Date();
-    minDate.setDate(minDate.getDate());
+    minDate.setHours(storeHours[0], 0, 0, 0);
 
+    // Set the maxDate to current date plus 4 weeks and format it to store closing hours
     const maxDate = new Date();
     maxDate.setDate(maxDate.getDate() + 28);
+    maxDate.setHours(storeHours[1], 0, 0, 0)
 
-    const minTime = new Date();
-    minTime.setHours(storeHours[0], 0, 0, 0);
-
-    const minTimeToday = new Date();
-    minTimeToday.setMinutes(minTime.getMinutes() + 15);
-
-    const maxTime = new Date();
-    maxTime.setHours(storeHours[1], 0, 0, 0);
-
-    return { minDate, maxDate, minTime, minTimeToday, maxTime };
-  }
+    return { minDate, maxDate };
+  };
 
 
   /**
-   * Function to handle min and max time based on date selection
-   * @param {String} time - The time in the format HH:MM
-   * @returns {void} - The function does not return a time
+   * Function to get the date and time constraints for order pickup
+   * @param {Date} selecteDate - The selected date
+   * @returns {Object} - The object with the date and time constraints
    */
-  const handleTimeChange = (time) => {
-    console.log("time:", time)
-    const { minDate, maxDate, minTime, minTimeToday, maxTime } = getDateTimeConstraints();
-    console.log("minDate:", minDate)
-    console.log("maxDate:", maxDate)
-    console.log("minTime:", minTime)
-    console.log("maxTime:", maxTime)
-    console.log("minTimeToday:", minTimeToday)
-    // Split the time into hours and minutes
-    const [hours, minutes] = time.split(':');
-    console.log("hours:", hours)
-    console.log("minutes:", minutes)
+  const getTimeConstraints = (selectedDate) => {
+    // Get the current date, hour, and minutes
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinutes = currentDate.getMinutes();
 
-    const selectedTime = new Date(selectedDate);
-    selectedTime.setHours(parseInt(hours), parseInt(minutes));
-    console.log("selectedTime:", selectedTime)
+    // Set the selected date to a Date object
+    const selectedDateObject = new Date(selectedDate);
 
+    // Initialize the minTime and maxTime
+    const minTime = new Date(selectedDateObject.getDate());
+    const maxTime = new Date(selectedDate);
+
+    // Set the maxTime constrainst
+    maxTime.setHours(storeHours[1], 0, 0, 0);
+
+    // Set the minTime constraints for today and other days
     if (isToday(selectedDate)) {
-      const now = new Date()
-      now.setMinutes(now.getMinutes() + 15);
-
-      if (selectedTime.getTime() < now.getTime()) {
-        setSelectedTime(now);
-      } else {
-        setSelectedTime(selectedTime);
-      }
+      minTime.setHours(currentHour, currentMinutes + cookTime, 0, 0);
     } else {
-      setSelectedTime(selectedTime);
+      minTime.setHours(storeHours[0], 0, 0, 0);
     }
+
+    return { minTime, maxTime };
   };
 
 
@@ -398,30 +375,23 @@ function App() {
 
 
   /**
-    * Fetch MenuItems from the API/Database
+    * Fetch all menu items from the API/Database at load up
+    * @returns {void} - The function does not return a value
     */
   const fetchMenuItems = async () => {
     try {
-      if (currentRestaurant.name === "Select a restaurant") {
-        return;
-      }
-      if (currentRestaurant.id) {
-        await axiosClient.get(`/restaurants/menuItems/${currentRestaurant.id}`).then((res) => {
-
-          const allMenuItems = res.data;
-          // extract id, name, status, description, price
-          const extractedMenuItems = allMenuItems.map(menuItem => {
-            return {
-              id: menuItem.id,
-              name: menuItem.name,
-              status: menuItem.status,
-              description: menuItem.description,
-              price: menuItem.price
-            };
-          })
-          setMenuItems(extractedMenuItems);
-        })
-      }
+      const response = await axiosClient.get(`/menuItems/`);
+      // extract id, name, status, description, price
+      const extractedMenuItems = response.data.map(menuItem => {
+        return {
+          id: menuItem.id,
+          name: menuItem.name,
+          status: menuItem.status,
+          description: menuItem.description,
+          price: menuItem.price
+        };
+      })
+      setMenuItems(extractedMenuItems);
     } catch (error) {
       console.error(error);
     }
@@ -429,66 +399,144 @@ function App() {
 
   useEffect(() => {
     fetchMenuItems();
-  }, [currentRestaurant, currentMenuItemId]);
-
-
-  /**
-    * Fetch Restaurants from the API/Database
-    */
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        await axiosClient.get("/restaurants").then((res) => {
-          const allRestaurants = res.data;
-          setRestaurants(allRestaurants);
-        })
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchRestaurants().then();
   }, []);
 
 
   /**
-    * Fetch managers from the API/Database
+    * Sets the current restaurant's menu items
+    * @param {Array} menuItems - The list of all menu items
+    * @param {Object} currentRestaurant - The current restaurant
+    * @returns {void} - The function does not return a value
     */
-  useEffect(() => {
-    const fetchManagers = async () => {
-      try {
-        await axiosClient.get("/managers").then((res) => {
-          const allManagers = res.data;
-          setManagers(allManagers);
-        })
-      } catch (error) {
-        console.error(error);
-      }
+  const getCurrentRestaurantMenuItems = (menuItems, currentRestaurant) => {
+    const restaurantMenuItems = menuItems.filter(menuItem => currentRestaurant.menuItems.includes(menuItem.id));
+    setCurrentRestaurantMenuItems(restaurantMenuItems);
+  };
 
-    };
+
+  /**
+   * UseEffect to set the current restaurant's menu items when the current restaurant changes
+   */
+  useEffect(() => {
+    if (menuItems && currentRestaurant && currentRestaurant.name && currentRestaurant.id) {
+      getCurrentRestaurantMenuItems(menuItems, currentRestaurant);
+    }
+  }, [menuItems, currentRestaurant]);
+
+
+  /**
+    * Fetch Restaurants from the API/Database
+    * @returns {void} - The function does not return a value
+    */
+  const fetchRestaurants = async () => {
+    try {
+      const response = await axiosClient.get("/restaurants");
+      setRestaurants(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /**
+   * UseEffect to fetch all restaurants from the database at load up
+   */
+  useEffect(() => {
+    fetchRestaurants();
+  }, []);
+
+
+  /**
+   * Function to handle logic when restaurant card is clicked
+   * @param {Object} restaurant - The restaurant object
+   * @returns {void} - The function does not return a value
+   */
+  const handleRestaurantClick = (restaurant) => {
+    if (menuItemsInCart.length > 0) {
+      setSelectedRestaurant(restaurant);
+      setShowConfirmationModal(true);
+    } else {
+    setCurrentRestaurant(restaurant);
+    }
+  };
+
+
+  /**
+   * Function to handle the confirmation of changing the restaurant
+   * @returns {void} - The function does not return a value
+   */
+  const handleConfirmChangeRestaurant = () => {
+    // Clear the cart and set the current restaurant
+    setMenuItemsInCart([]);
+    setCurrentRestaurant(selectedRestaurant);
+    setShowConfirmationModal(false);
+  };
+
+
+  /**
+   * Function to handle the cancelation of changing the restaurant
+   * @returns {void} - The function does not return a value
+   */
+  const handleCancelChangeRestaurant = () => {
+    // Clear the selected restaurant and hide the modal
+    setSelectedRestaurant(null);
+    setShowConfirmationModal(false);
+  }
+
+
+  /**
+   * UseEffect to set the current restaurant when the current manager changes
+   */
+  useEffect(() => {
+    if (currentManager && currentManager.restaurantId) {
+      setCurrentRestaurant(currentManager.restaurantId);
+    } else {
+      setCurrentRestaurant({ name: "Select a restaurant" });
+    }
+  }, [currentManager]);
+
+
+  /**
+    * Fetch managers from the API/Database to populate the dropdown
+    * @returns {void} - The function does not return a value
+    */
+  const fetchManagers = async () => {
+    try {
+      const response = await axiosClient.get("/managers");
+      setManagers(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /**
+   * UseEffect to fetch all managers from the database at load up
+   */
+  useEffect(() => {
     fetchManagers();
   }, []);
 
 
   /**
-   * Fetch customers from the API/Database
+   * Fetch customers from the API/Database to populate the dropdown
    * @returns {void} - The function does not return a value
    */
+  const fetchCustomers = async () => {
+    try {
+      const response = await axiosClient.get("/customers");
+      setCustomers(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        await axiosClient.get("/customers").then((res) => {
-          const allCustomers = res.data;
-          setCustomers(allCustomers);
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchCustomers();
   }, []);
 
+
   /**
-  * Fetch Orders from the API/Database
+  * Fetch Orders from the API/Database to populate the orders variable, which is later filtered
+  * @returns {void} - The function does not return a value
   */
   const fetchOrders = async () => {
     try {
@@ -503,6 +551,21 @@ function App() {
     fetchOrders();
   }, []);
 
+
+  /**
+   * Sets the orders for a single specified restaurant.
+   * @param {*} orders a list of all the orders for all restaurants
+   * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for
+   */
+  const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
+    // Filter to get a list of orders for the specified restaurant
+    const restaurantOrders = orders.filter(order => order.restaurantId._id === currentRestaurantId._id);
+
+    // set the array to empty if there are no orders for the specified restaurant
+    setCurrentRestaurantOrders(restaurantOrders.length > 0 ? restaurantOrders : []);
+  };
+
+
   // Reacts to changes in orders and currentManager to update the orders for the current restaurant
   useEffect(() => {
     if (orders && currentManager && currentManager.restaurantId) {
@@ -512,7 +575,7 @@ function App() {
 
 
   /**
-    * Function to filter the Restaurants based on the search input
+    * Function to filter the Restaurants based on the restaurant search input
     * @returns {void} - The function does not return a value
     */
   useEffect(() => {
@@ -534,26 +597,25 @@ function App() {
 
 
   /**
-   * Function to filter the MenuItems based on the search input
+   * Function to filter the currentRestaurantMenuItems based on the menu items search input
    * @returns {void} - The function does not return a value
    */
   useEffect(() => {
-    // If the search text is empty, set filteredMenuItems to all MenuItems
+    // If the search text is empty, set filteredMenuItems to all currentRestaurantMenuItems
     if (!menuItemSearchText) {
-      setFilteredMenuItems(menuItems);
+      setFilteredMenuItems(currentRestaurantMenuItems);
       return;
     }
 
-    // Filter the MenuItems based on the search input
-    const newFilteredMenuItems = menuItems.filter(menuItem =>
+    // Filter the currentRestaurantMenuItems based on the search input
+    const newFilteredMenuItems = currentRestaurantMenuItems.filter(menuItem =>
       menuItem.name.toLowerCase().includes(menuItemSearchText.toLowerCase())
       || menuItem.description.toLowerCase().includes(menuItemSearchText.toLowerCase())
-      // || menuItem.status.toLowerCase().includes(menuItemSearchText.toLowerCase())
     );
 
     // Update the filteredMenuItems state
     setFilteredMenuItems(newFilteredMenuItems);
-  }, [menuItems, menuItemSearchText]);
+  }, [currentRestaurantMenuItems, menuItemSearchText]);
 
 
   /**
@@ -592,11 +654,11 @@ function App() {
     try {
       const response = await axiosClient.post(`/menuItmes/`, menuItemAttributes);
       if (response.status === 200) {
-        //TODO: add new menu item to restaurant's menu items array 
+        //TODO: add new menu item to restaurant's menu items array
 
 
-        // fetch menuItems again for a UI update 
-        // fetchMenuItems();
+        // fetch menuItems again for a UI update
+        fetchMenuItems();
       } else {
         console.error("Failed to update or add menu item");
       }
@@ -652,9 +714,7 @@ function App() {
                   <RestaurantCard
                     key={restaurant._id}
                     restaurant={restaurant}
-                    onClick={() => {
-                      setCurrentRestaurant(restaurant);
-                    }}
+                    onClick={() => handleRestaurantClick(restaurant)}
                   />
                 ))}
               </div>
@@ -693,8 +753,8 @@ function App() {
                   setSelectedDate={setSelectedDate}
                   selectedTime={selectedTime}
                   setSelectedTime={setSelectedTime}
-                  getDateTimeConstraints={getDateTimeConstraints}
-                  handleTimeChange={handleTimeChange}
+                  getDateConstraints={getDateConstraints}
+                  getTimeConstraints={getTimeConstraints}
                   asap={asap}
                   setAsap={setAsap}
                   orders={orders}
@@ -728,7 +788,7 @@ function App() {
               {showManagerMenuItemsTable && (
                 <section className="App-manager-menuItems-table">
                   <ManagerMenuItemsTable
-                    menuItems={menuItems}
+                    menuItems={currentRestaurantMenuItems}
                     onItemSelection={handleManagersMenuItemSelection} />
                   <button onClick={toggleAddMenuItem}>Add Menu Item</button>
                   <MenuItemWindow
@@ -743,6 +803,14 @@ function App() {
           </>
         )}
       </main>
+      <ConfirmationWindow
+        className="App-confirm-change-restaurant"
+        show={showConfirmationModal}
+        title="Change Restaurant?"
+        body="This will empty your current order cart"
+        onConfirm={handleConfirmChangeRestaurant}
+        onCancel={handleCancelChangeRestaurant}
+      />
       <footer>
         <p>Thank you for choosing Restaurant Order Pickup Management System ||
           2024 &copy; Copyright</p>

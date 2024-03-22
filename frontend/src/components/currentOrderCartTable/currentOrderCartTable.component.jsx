@@ -23,12 +23,9 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
  * @param {Date} selectedDate - The selected date
  * @param {Function} setSelectedDate - The function to set the selected date
  * @param {Date} selectedTime - The selected time
- * @param {Function} handleTimeChange - The function to handle time change
- * @param {Date} minDate - The minimum date
- * @param {Date} maxDate - The maximum date
- * @param {Date} minTime - The minimum time
- * @param {Date} minTimeToday - The minimum time for today
- * @param {Date} maxTime - The maximum time
+ * @param {Function} setSelectedTime - The function to set the selected time
+ * @param {Function} getDateConstraints - The function to get date constraints
+ * @param {Function} getTimeConstraints - The function to get time constraints
  * @param {Boolean} asap - The boolean for ASAP
  * @param {Function} setAsap - The function to set ASAP
  * @param {Array<Object>} orders - The list of orders
@@ -36,9 +33,12 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
  * @returns {JSX.Element} - The menuItem table component
  */
 const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelCheckout, onSubmitOrder,
-                              showCheckout, toggleCheckout, showConfirmation, toggleConfirmation,
-                              selectedDate, setSelectedDate, selectedTime, getDateTimeConstraints,
-                              handleTimeChange, asap, setAsap, orders, currentCustomer, completeOrder }) => {
+  showCheckout, toggleCheckout, showConfirmation, toggleConfirmation, selectedDate, setSelectedDate,
+  selectedTime, setSelectedTime, getDateConstraints, getTimeConstraints, asap, setAsap,
+  orders, currentCustomer, completeOrder }) => {
+
+  const dateConstraints = getDateConstraints();
+  const timeConstraints = getTimeConstraints(selectedDate);
 
   // used for prev orders side menu
   const [showPrevOrders, setShowPrevOrders] = useState(false);
@@ -61,6 +61,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
               <th>Menu Item</th>
               <th>Price</th>
               <th>#</th>
+              <th>Subtotal</th>
               <th>Cart</th>
             </tr>
           </thead>
@@ -76,7 +77,7 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         </BootstrapTable>
       </div>
       <div className="subtotal-checkout-container">
-        <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
+        <h3>Order Total: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
         <Button
           variant="success"
           size="lg"
@@ -99,8 +100,9 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         selectedTime={selectedTime}
-        getDateTimeConstraints={getDateTimeConstraints}
-        handleTimeChange={handleTimeChange}
+        setSelectedTime={setSelectedTime}
+        dateConstraints={dateConstraints}
+        timeConstraints={timeConstraints}
         asap={asap}
         setAsap={setAsap}
       />

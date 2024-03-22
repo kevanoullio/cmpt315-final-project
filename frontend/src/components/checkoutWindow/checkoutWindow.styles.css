@@ -34,8 +34,13 @@
   border-color: darkgray;
 }
 
-.react-datepicker-wrapper {
+.react-datepicker-wrapper,
+.react-time-picker-wrapper {
   position: relative;
   z-index: 9999;
   background-color: white;
+}
+
+.checkout-table {
+  text-align: center;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import BootstrapTable from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import MenuItem from "../menuItem/menuItem.component";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-time-picker/dist/TimePicker.css";
+import 'react-clock/dist/Clock.css';
 import "./checkoutWindow.styles.css";
 
 /**
@@ -22,18 +23,19 @@ import "./checkoutWindow.styles.css";
  * @param {Date} selectedDate - The selected date
  * @param {Function} setSelectedDate - The function to set the selected date
  * @param {Date} selectedTime - The selected time
- * @param {Function} getDateTimeConstraints - The function to get the date time constraints
- * @param {Function} handleTimeChange - The function to handle time change
+ * @param {Function} setSelectedTime - The function to set the selected time
+ * @param {Function} getDateConstraints - The function to get date constraints
+ * @param {Function} getTimeConstraints - The function to get time constraints
  * @param {Boolean} asap - The boolean for ASAP
  * @param {Function} setAsap - The function to set ASAP
  * @returns {JSX.Element} - The checkout window component
  */
 const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubmitOrder,
-                          currentCustomer, menuItemsInCart, selectedDate, setSelectedDate,
-                          selectedTime, getDateTimeConstraints, handleTimeChange, asap, setAsap }) => {
+  currentCustomer, menuItemsInCart, selectedDate, setSelectedDate, selectedTime, setSelectedTime,
+  dateConstraints, timeConstraints, asap, setAsap }) => {
 
-  const isToday = selectedDate.toDateString() === new Date().toDateString();
-  const { minDate, maxDate, minTime, minTimeToday, maxTime } = getDateTimeConstraints();
+  const { minDate, maxDate } = dateConstraints;
+  const { minTime, maxTime } = timeConstraints;
 
   return (
     <Modal
@@ -72,27 +74,16 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                 disabled={asap}
               />
               <br />
-              {isToday ? (
-                <TimePicker
-                  value={selectedTime}
-                  onChange={handleTimeChange}
-                  minTime={minTimeToday}
-                  maxTime={maxTime}
-                  format="h:mm a"
-                  // step={15}
-                  disabled={asap}
-                />
-              ) : (
-                <TimePicker
-                  value={selectedTime}
-                  onChange={handleTimeChange}
-                  minTime={minTime}
-                  maxTime={maxTime}
-                  format="h:mm a"
-                  // step={15}
-                  disabled={asap}
-                />
-              )}
+              <TimePicker
+                value={selectedTime}
+                onChange={setSelectedTime}
+                minTime={minTime}
+                maxTime={maxTime}
+                format="HH:mm a"
+                hourPlaceholder="HH"
+                minutePlaceholder="mm"
+                disabled={asap}
+              />
               <Form>
                 {["checkbox"].map((type) => (
                   <div key={type} className="mb-3">
@@ -116,6 +107,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                     <th>Menu Item</th>
                     <th>Price</th>
                     <th>#</th>
+                    <th>Subtotal</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -124,7 +116,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                   ))}
                 </tbody>
               </BootstrapTable>
-              <h3>Subtotal: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
+              <h3>Order Total: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
             </div>
           </section>
         </div>
