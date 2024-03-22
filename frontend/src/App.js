@@ -173,7 +173,7 @@ function App() {
 
     // Set the current customer
     setCurrentCustomer(selectedCustomer);
-  }
+  };
 
 
   /**
@@ -195,7 +195,7 @@ function App() {
       // Otherwise, add the item to the cart
       setMenuItemsInCart(prevItems => [...prevItems, { ...menuItem, quantity: 1 }]);
     }
-  }
+  };
 
 
   /**
@@ -216,7 +216,7 @@ function App() {
       // Otherwise, remove the item from the cart
       setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
     }
-  }
+  };
 
 
   /**
@@ -226,7 +226,7 @@ function App() {
   const onCancelCheckout = () => {
     toggleCheckout();
     setAsap(false);
-  }
+  };
 
 
   /**
@@ -244,7 +244,7 @@ function App() {
     .catch((error) => {
       console.error("Error submitting order:", error);
     });
-  }
+  };
 
 
   /**
@@ -256,23 +256,31 @@ function App() {
    */
   const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
     try {
-      // Create the now and selected time
-      const now = new Date();
-      now.setMinutes(now.getMinutes() + cookTime);
-      const selectedPickupTime = asap ? now :
-        new Date(selectedDate.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0));
+      // Format the selectedTime to a Date object
+      const selectedTimeObject = new Date(selectedDate);
+
+      // Format the selected pickup date and time
+      const selectedPickupDateTime = new Date(selectedDate.setHours(selectedTimeObject.getHours(), selectedTimeObject.getMinutes(), 0, 0));
 
       // If any of the menuItems have quantity > 1, create a new array with each menuItem repeated by its quantity
       const menuItemsInCartFlattened = menuItemsInCart.flatMap(menuItem =>
         Array.from({ length: menuItem.quantity }, () => menuItem)
       );
 
-      const response = await axiosClient.post("/orders", {
+      // Create the request body
+      let requestBody = {
         customerId: currentCustomer.id,
         restaurantId: currentRestaurant.id,
         menuItems: menuItemsInCartFlattened.map(menuItem => menuItem.id),
-        pickupTime: formatTime(selectedPickupTime)
-      });
+      };
+
+      // Add the pickup time to the request body if it is not ASAP
+      if (!asap) {
+        requestBody.pickupTime = formatTime(selectedPickupDateTime);
+      }
+
+      // Send a POST request to create a new order
+      const response = await axiosClient.post("/orders", requestBody);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -309,7 +317,7 @@ function App() {
     return date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
       date.getFullYear() === today.getFullYear();
-  }
+  };
 
 
   /**
@@ -317,15 +325,17 @@ function App() {
    * @returns {Object} - The object with the date and time constraints
    */
   const getDateConstraints = () => {
+    // Use the current date as minDate and format it to store opening hours
     const minDate = new Date();
     minDate.setHours(storeHours[0], 0, 0, 0);
 
+    // Set the maxDate to current date plus 4 weeks and format it to store closing hours
     const maxDate = new Date();
     maxDate.setDate(maxDate.getDate() + 28);
     maxDate.setHours(storeHours[1], 0, 0, 0)
 
     return { minDate, maxDate };
-  }
+  };
 
 
   /**
@@ -334,12 +344,16 @@ function App() {
    * @returns {Object} - The object with the date and time constraints
    */
   const getTimeConstraints = (selectedDate) => {
-    // Get the current hour and minutes
-    const currentHour = new Date().getHours();
-    const currentMinutes = new Date().getMinutes();
+    // Get the current date, hour, and minutes
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinutes = currentDate.getMinutes();
+
+    // Set the selected date to a Date object
+    const selectedDateObject = new Date(selectedDate);
 
     // Initialize the minTime and maxTime
-    const minTime = new Date(selectedDate.getDate());
+    const minTime = new Date(selectedDateObject.getDate());
     const maxTime = new Date(selectedDate);
 
     // Set the maxTime constrainst
@@ -353,7 +367,7 @@ function App() {
     }
 
     return { minTime, maxTime };
-  }
+  };
 
 
   /**

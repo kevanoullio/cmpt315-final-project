@@ -37,6 +37,9 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
   selectedTime, setSelectedTime, getDateConstraints, getTimeConstraints, asap, setAsap,
   orders, currentCustomer, completeOrder }) => {
 
+  const dateConstraints = getDateConstraints();
+  const timeConstraints = getTimeConstraints(selectedDate);
+
   // used for prev orders side menu
   const [showPrevOrders, setShowPrevOrders] = useState(false);
   const [customerOrders, setCustomerOrders] = useState([]);
@@ -98,8 +101,8 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         setSelectedDate={setSelectedDate}
         selectedTime={selectedTime}
         setSelectedTime={setSelectedTime}
-        getDateConstraints={getDateConstraints}
-        getTimeConstraints={getTimeConstraints}
+        dateConstraints={dateConstraints}
+        timeConstraints={timeConstraints}
         asap={asap}
         setAsap={setAsap}
       />

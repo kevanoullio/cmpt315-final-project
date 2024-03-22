@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import MenuItem from "../menuItem/menuItem.component";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-time-picker/dist/TimePicker.css";
+import 'react-clock/dist/Clock.css';
 import "./checkoutWindow.styles.css";
 
 /**
@@ -31,10 +32,10 @@ import "./checkoutWindow.styles.css";
  */
 const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubmitOrder,
   currentCustomer, menuItemsInCart, selectedDate, setSelectedDate, selectedTime, setSelectedTime,
-  getDateConstraints, getTimeConstraints, asap, setAsap }) => {
+  dateConstraints, timeConstraints, asap, setAsap }) => {
 
-  const { minDate, maxDate } = getDateConstraints();
-  const { minTime, maxTime } = getTimeConstraints(selectedDate);
+  const { minDate, maxDate } = dateConstraints;
+  const { minTime, maxTime } = timeConstraints;
 
   return (
     <Modal
@@ -75,12 +76,13 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
               <br />
               <TimePicker
                 value={selectedTime}
-                onChange={selectedTime => setSelectedTime(selectedTime)}
-                minTime={"08:00:00"}
-                maxTime={"21:00:00"}
-                format="hh:mm a"
+                onChange={setSelectedTime}
+                minTime={minTime}
+                maxTime={maxTime}
+                format="HH:mm a"
+                hourPlaceholder="HH"
+                minutePlaceholder="mm"
                 disabled={asap}
-                disableClock={true}
               />
               <Form>
                 {["checkbox"].map((type) => (
