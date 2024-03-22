@@ -72,16 +72,18 @@ function App() {
     * @param {String} view - The view
     * @returns {void} - The function does not return a value
   */
-  const onViewButtonClick = (view) => {
-    setView(view);
+  const onViewButtonClick = (newView) => {
+    if (newView !== view) {
+      setView(newView);
 
-    // reset the restaurant and restaurant orders back to empty because restaurant will depend on view
-    setCurrentRestaurant({ name: "Select a restaurant" });
-    setCurrentRestaurantOrders([]);
-    setCurrentRestaurantMenuItems([]);
-    setCurrentCustomer({});
-    setCurrentManager({});
-    setMenuItemsInCart([]);
+      // reset the restaurant and restaurant orders back to empty because restaurant will depend on view
+      setCurrentRestaurant({ name: "Select a restaurant" });
+      setCurrentRestaurantOrders([]);
+      setCurrentRestaurantMenuItems([]);
+      setCurrentCustomer({});
+      setCurrentManager({});
+      setMenuItemsInCart([]);
+    }
   };
 
 
