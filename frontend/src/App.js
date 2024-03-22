@@ -39,7 +39,6 @@ function App() {
   const [currentManager, setCurrentManager] = useState({});
   const [currentRestaurant, setCurrentRestaurant] = useState({ name: "Select a restaurant" });
   const [currentCustomer, setCurrentCustomer] = useState({});
-  // const [currentMenuItemId, setCurrentMenuItemId] = useState(null);
   const [currentRestaurantMenuItems, setCurrentRestaurantMenuItems] = useState([]);
   const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
@@ -138,10 +137,8 @@ function App() {
         status: menuItems.find(item => item.id === itemId).status === "sold-out" ? "in stock" : "sold-out"
       });
 
-      // // Set currentMenuItemId
-      // setCurrentMenuItemId(itemId);
-      // //update table
-      // fetchMenuItems();
+      //update table
+      fetchMenuItems();
 
     } catch (error) {
         console.error("Error updating status:", error);
