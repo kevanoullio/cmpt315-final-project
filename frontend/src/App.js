@@ -63,15 +63,11 @@ function App() {
   const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
 
 
-  useEffect(() => {
-    setCurrentRestaurant(currentManager.restaurantId || { name: "Select a restaurant" });
-  }, [currentManager])
-
   /**
     * Function to handle view button click
     * @param {String} view - The view
     * @returns {void} - The function does not return a value
-    */
+  */
   const onViewButtonClick = (view) => {
     setView(view);
 
@@ -82,20 +78,6 @@ function App() {
     setCurrentCustomer({});
     setCurrentManager({});
     setMenuItemsInCart([]);
-  };
-
-
-  /**
-   * Sets the orders for a single specified restaurant.
-   * @param {*} orders a list of all the orders for all restaurants
-   * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for
-   */
-  const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
-    // Filter to get a list of orders for the specified restaurant
-    const restaurantOrders = orders.filter(order => order.restaurantId._id === currentRestaurantId._id);
-
-    // set the array to empty if there are no orders for the specified restaurant
-    setCurrentRestaurantOrders(restaurantOrders.length > 0 ? restaurantOrders : []);
   };
 
 
@@ -153,6 +135,10 @@ function App() {
 
       // Set currentMenuItemId
       setCurrentMenuItemId(itemId);
+
+      // Set the currentRestaurant based on the currentManager
+      setCurrentRestaurant(currentManager.restaurantId);
+
       //update table
       fetchMenuItems();
 
@@ -421,7 +407,7 @@ function App() {
 
   useEffect(() => {
     fetchMenuItems();
-  }, [currentRestaurant, currentMenuItemId]);
+  }, [currentMenuItemId]);
 
 
   /**
@@ -442,6 +428,37 @@ function App() {
   useEffect(() => {
     fetchRestaurants().then();
   }, []);
+
+
+  /**
+   * Function to handle logic when restaurant card is clicked
+   * @param {Object} restaurant - The restaurant object
+   * @returns {void} - The function does not return a value
+   */
+  const handleRestaurantClick = (restaurant) => {
+    if (menuItemsInCart.length > 0) {
+      if (window.confirm("Are you sure you want to change restaurants? Your current order cart will be cleared.")) {
+        setMenuItemsInCart([]);
+      }
+    }
+    setCurrentRestaurant(restaurant);
+  };
+
+  // UseEffect to fetch menu items when current restaurant changes
+  useEffect(() => {
+    if (currentRestaurant && currentRestaurant.id) {
+      fetchMenuItems();
+    }
+  }, [currentRestaurant]);
+
+  // UseEffect to set the current restaurant when the current manager changes
+  useEffect(() => {
+    if (currentManager && currentManager.restaurantId) {
+      setCurrentRestaurant(currentManager.restaurantId);
+    } else {
+      setCurrentRestaurant({ name: "Select a restaurant" });
+    }
+  }, [currentManager]);
 
 
   /**
@@ -470,10 +487,8 @@ function App() {
    */
   const fetchCustomers = async () => {
     try {
-      await axiosClient.get("/customers").then((res) => {
-        const allCustomers = res.data;
-        setCustomers(allCustomers);
-      });
+      const response = await axiosClient.get("/customers");
+      setCustomers(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -500,6 +515,20 @@ function App() {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+
+  /**
+   * Sets the orders for a single specified restaurant.
+   * @param {*} orders a list of all the orders for all restaurants
+   * @param {*} currentRestaurantId the id of the specified restaurant to get the orders for
+   */
+  const getOrdersForCurrentRestaurant = (orders, currentRestaurantId) => {
+    // Filter to get a list of orders for the specified restaurant
+    const restaurantOrders = orders.filter(order => order.restaurantId._id === currentRestaurantId._id);
+
+    // set the array to empty if there are no orders for the specified restaurant
+    setCurrentRestaurantOrders(restaurantOrders.length > 0 ? restaurantOrders : []);
+  };
 
 
   // Reacts to changes in orders and currentManager to update the orders for the current restaurant
@@ -547,7 +576,6 @@ function App() {
     const newFilteredMenuItems = menuItems.filter(menuItem =>
       menuItem.name.toLowerCase().includes(menuItemSearchText.toLowerCase())
       || menuItem.description.toLowerCase().includes(menuItemSearchText.toLowerCase())
-      // || menuItem.status.toLowerCase().includes(menuItemSearchText.toLowerCase())
     );
 
     // Update the filteredMenuItems state
@@ -651,9 +679,7 @@ function App() {
                   <RestaurantCard
                     key={restaurant._id}
                     restaurant={restaurant}
-                    onClick={() => {
-                      setCurrentRestaurant(restaurant);
-                    }}
+                    onClick={() => handleRestaurantClick(restaurant)}
                   />
                 ))}
               </div>
