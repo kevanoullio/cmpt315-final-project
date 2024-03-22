@@ -17,13 +17,19 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [status, setStatus] = useState(false);
+  const [available, setAvailable] = useState(false);
 
-  // Function to submit menu item (changes or add new menu item)
+  // Function to submit menu item (changes or add new menu item)  
   const onSubmitButtonClick = () => {
+    let itemStatus;
+    if (available) {
+      itemStatus = "in stock";
+    } else {
+      itemStatus = "sold-out";
+    }
     const menuItemAttributes = {
       name: name,
-      status: status,
+      status: itemStatus,
       description: description,
       price: price
     };
@@ -89,8 +95,8 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
                 <Form.Check
                   type="checkbox" // should not be a string because we want consistent wording in backend 
                   label="In Stock"
-                  checked={status}
-                  onChange={(e) => setStatus(e.target.checked)}
+                  checked={available}
+                  onChange={(e) => setAvailable(e.target.checked)}
                 />
               </Form.Group>
               </Form>

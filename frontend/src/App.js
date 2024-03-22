@@ -590,10 +590,12 @@ function App() {
 
   const handleAddMenuItem = async (menuItemAttributes) => {
     try {
-      const response = await axiosClient.post(`/menuItmes/`, menuItemAttributes);
+      const response = await axiosClient.post(`/menuItems/`, menuItemAttributes);
       if (response.status === 200) {
+        console.log(response.data);
         // Get the id of the newly created menu item
         const newMenuItemId = response.data.id;
+        console.log(newMenuItemId);
         // add new menu item to restaurant's menu items array 
         try {
           const response = await axiosClient.patch(`/restaurants/${currentManager.restaurantId}`, { menuItems: newMenuItemId });
@@ -607,10 +609,10 @@ function App() {
           console.error("Error updating restaurant menu items:", error);
         }
       } else {
-        console.error("Failed to update or add menu item");
+        console.error("Failed to update restaurant menu items");
       }
     } catch (error) {
-      console.error("Error updating menu item:", error);
+      console.error("Error creating menu item:", error);
     }
   };
 
