@@ -592,11 +592,20 @@ function App() {
     try {
       const response = await axiosClient.post(`/menuItmes/`, menuItemAttributes);
       if (response.status === 200) {
-        //TODO: add new menu item to restaurant's menu items array 
-
-
-        // fetch menuItems again for a UI update 
-        // fetchMenuItems();
+        // Get the id of the newly created menu item
+        const newMenuItemId = response.data.id;
+        // add new menu item to restaurant's menu items array 
+        try {
+          const response = await axiosClient.patch(`/restaurants/${currentManager.restaurantId}`, { menuItems: newMenuItemId });
+          if (response.status === 200) {
+            // fetch menuItems again for a UI update 
+            fetchMenuItems();
+          } else {
+            console.error("Failed to update restaurant menu items");
+          }
+        } catch (error) {
+          console.error("Error updating restaurant menu items:", error);
+        }
       } else {
         console.error("Failed to update or add menu item");
       }
@@ -730,7 +739,10 @@ function App() {
                   <ManagerMenuItemsTable
                     menuItems={menuItems}
                     onItemSelection={handleManagersMenuItemSelection} />
-                  <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                    {/* only show the button if a manager (and therefore a restaurant) have been selected */}
+                    {currentRestaurant.name !== "Select a restaurant" && (
+                      <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                    )}
                   <MenuItemWindow
                     showMenuItem={showAddItem}
                     toggleMenuItem={toggleAddMenuItem}

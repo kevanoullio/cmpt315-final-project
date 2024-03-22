@@ -7,10 +7,10 @@ import "./menuItemWindow.styles.css";
 
 /**
  * Function to render the menu item window component
- * @param {Boolean} showMenuItem - The boolean to show the checkout window
- * @param {Function} toggleMenuItem - The function to toggle the checkout window
+ * @param {Boolean} showMenuItem - The boolean to show the menu item window
+ * @param {Function} toggleMenuItem - The function to toggle the menu item window
 
- * @returns {JSX.Element} - The checkout window component
+ * @returns {JSX.Element} - The menu item window component
  */
 const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
   // variables to hold the menu item attributes
@@ -22,10 +22,10 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
   // Function to submit menu item (changes or add new menu item)
   const onSubmitButtonClick = () => {
     const menuItemAttributes = {
-      "name": name,
-      "status": status,
-      "description": description,
-      "price": price
+      name: name,
+      status: status,
+      description: description,
+      price: price
     };
     onSubmit(menuItemAttributes);
 
