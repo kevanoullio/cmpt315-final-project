@@ -410,19 +410,14 @@ function App() {
     * @returns {void} - The function does not return a value
     */
   const getCurrentRestaurantMenuItems = (menuItems, currentRestaurant) => {
-    try {
-      if (currentRestaurant.name === "Select a restaurant") {
-        return;
-      }
-      if (currentRestaurant.id) {
-        const restaurantMenuItems = menuItems.filter(menuItem => menuItem.restaurantId === currentRestaurant.id);
-        setCurrentRestaurantMenuItems(restaurantMenuItems);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    const restaurantMenuItems = menuItems.filter(menuItem => currentRestaurant.menuItems.includes(menuItem.id));
+    setCurrentRestaurantMenuItems(restaurantMenuItems);
   };
 
+
+  /**
+   * UseEffect to set the current restaurant's menu items when the current restaurant changes
+   */
   useEffect(() => {
     if (menuItems && currentRestaurant && currentRestaurant.name && currentRestaurant.id) {
       getCurrentRestaurantMenuItems(menuItems, currentRestaurant);
@@ -603,7 +598,7 @@ function App() {
 
 
   /**
-   * Function to filter the currentRestaurantMenuItems based on the menu times search input
+   * Function to filter the currentRestaurantMenuItems based on the menu items search input
    * @returns {void} - The function does not return a value
    */
   useEffect(() => {
@@ -794,7 +789,7 @@ function App() {
               {showManagerMenuItemsTable && (
                 <section className="App-manager-menuItems-table">
                   <ManagerMenuItemsTable
-                    menuItems={menuItems}
+                    menuItems={currentRestaurantMenuItems}
                     onItemSelection={handleManagersMenuItemSelection} />
                   <button onClick={toggleAddMenuItem}>Add Menu Item</button>
                   <MenuItemWindow
