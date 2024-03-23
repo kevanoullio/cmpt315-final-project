@@ -810,6 +810,8 @@ function App() {
                     menuItems={currentRestaurantMenuItems}
                     onItemSelection={handleManagersMenuItemSelection} />
                   { currentRestaurant.id && (
+                    // this will only show when current restaurant is selected
+                    // current restaurant should be updated when a manager is selected
                     <>
                       <button onClick={toggleAddMenuItem}>Add Menu Item</button>
                       <button onClick={toggleShowHours}>Change Restaurant Hours</button>
