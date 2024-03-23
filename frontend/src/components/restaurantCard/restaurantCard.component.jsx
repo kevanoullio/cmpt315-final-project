@@ -22,10 +22,12 @@ const RestaurantCard = ({ restaurant, onClick }) => (
         {restaurant.address}
         Restaurant description here
       </Card.Text>
-      {!isOpen(restaurant?.storeHours?.open, restaurant?.storeHours?.close) && (
+      {(restaurant.storeHours && !isOpen(restaurant?.storeHours?.open, restaurant?.storeHours?.close)) && (
         <p className="closedText">Restaurant is closed</p>
       )}
-      <p>{`Restaurant hours: ${restaurant?.storeHours?.open} to ${restaurant?.storeHours?.close}`}</p>
+      {restaurant.storeHours && (
+        <p>{`Restaurant hours: ${restaurant?.storeHours?.open} to ${restaurant?.storeHours?.close}`}</p>
+      )}
       {/* <Button variant="primary">Go somewhere</Button> */}
     </Card.Body>
   </Card>
