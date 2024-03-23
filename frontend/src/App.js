@@ -672,14 +672,11 @@ function App() {
     }
   };
 
-  const handleChangeHours = async (restaurantID, storeHours) => {
+  const handleChangeHours = async (storeHours) => {
     try {
-      const response = await axiosClient.patch(`/restaurants/${restaurantID}`, storeHours);
+      const response = await axiosClient.patch(`/restaurants/${currentRestaurant.id}`, {storeHours});
       if (response.status === 200) {
-        //TODO: add new menu item to restaurant's menu items array
-
-
-        // fetch menuItems again for a UI update
+        // fetch restaurants again for a UI update
         fetchRestaurants();
       } else {
         console.error("Failed to change restaurant hours");
