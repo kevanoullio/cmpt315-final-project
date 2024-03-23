@@ -1,6 +1,7 @@
 import React from "react";
 import Card from 'react-bootstrap/Card';
 import './restaurantCard.styles.css';
+import { isOpen } from "../utils";
 
 /**
  * Function to render the Restaurant component
@@ -21,6 +22,10 @@ const RestaurantCard = ({ restaurant, onClick }) => (
         {restaurant.address}
         Restaurant description here
       </Card.Text>
+      {!isOpen(restaurant?.storeHours?.open, restaurant?.storeHours?.close) && (
+        <p className="closedText">Restaurant is closed</p>
+      )}
+      <p>{`Restaurant hours: ${restaurant?.storeHours?.open} to ${restaurant?.storeHours?.close}`}</p>
       {/* <Button variant="primary">Go somewhere</Button> */}
     </Card.Body>
   </Card>
