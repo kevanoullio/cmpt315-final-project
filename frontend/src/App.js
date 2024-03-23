@@ -101,8 +101,8 @@ function App() {
 
     // Set the current manager
     setCurrentManager(selectedManager);
-    //set manager's restaurant id
-    console.log("selectedManager.restaurantId", selectedManager);
+    //set manager's restaurant
+    setSelectedRestaurant(selectedManager?.restaurantId ?? {});
   };
 
 
@@ -688,11 +688,6 @@ function App() {
       console.error("Error changing restaurant hours:", error);
     }
   };
-
-  useEffect( () => {
-    console.log("currentRestaurant", currentRestaurant);
-    console.log("restaurants", restaurants);
-  }, [currentRestaurant, restaurants]);
 
 
   return (
