@@ -28,6 +28,9 @@ const RestaurantCard = ({ restaurant, onClick }) => (
       {restaurant.storeHours && (
         <p>{`Restaurant hours: ${restaurant?.storeHours?.open} to ${restaurant?.storeHours?.close}`}</p>
       )}
+      {!restaurant.storeHours && (
+        <p>Restaurant hours: Open 24/7</p>
+      )}
       {/* <Button variant="primary">Go somewhere</Button> */}
     </Card.Body>
   </Card>
