@@ -2,6 +2,8 @@ import React from "react";
 import AddToCartButton from "../addToCartButton/addToCartButton.component";
 import RemoveFromCartButton from "../removeFromCartButton/removeFromCartButton.component";
 import "./menuItem.styles.css";
+import { isOpen } from "../utils";
+import { Button } from "react-bootstrap";
 
 /**
  * Function to render the MenuItem component
@@ -20,12 +22,18 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
 				<td>{menuItem.description}</td>
 				<td>{"$" + menuItem.price}</td>
 				<td className="button-cell">
-					<AddToCartButton
-						menuItem={menuItem}
-						currentRestaurant={currentRestaurant}
-						currentCustomer={currentCustomer}
-						onAddToCart={onAddToCart}
-					/>
+          { !currentRestaurant.storeHours || (currentRestaurant.storeHours && isOpen(currentRestaurant?.storeHours?.open, currentRestaurant?.storeHours?.close)) ? (
+            <AddToCartButton
+              menuItem={menuItem}
+              currentRestaurant={currentRestaurant}
+              currentCustomer={currentCustomer}
+              onAddToCart={onAddToCart}
+            />
+          ) : (
+            <Button disabled >
+              Closed
+            </Button>
+          )}
 				</td>
 			</tr>
 		: onAddToCart === undefined && onRemoveFromCart !== undefined ?
