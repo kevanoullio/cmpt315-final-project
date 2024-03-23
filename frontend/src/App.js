@@ -809,13 +809,17 @@ function App() {
                   <ManagerMenuItemsTable
                     menuItems={currentRestaurantMenuItems}
                     onItemSelection={handleManagersMenuItemSelection} />
-                  <button onClick={toggleAddMenuItem}>Add Menu Item</button>
-                  <button onClick={toggleShowHours}>Change Restaurant Hours</button>
+                  { currentRestaurant.id && (
+                    <>
+                      <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                      <button onClick={toggleShowHours}>Change Restaurant Hours</button>
+                    </>
+                  )}
                   <MenuItemWindow
                     showMenuItem={showAddItem}
                     toggleMenuItem={toggleAddMenuItem}
                     onSubmit={handleAddMenuItem}
-                   />
+                  />
                   <ChangeHoursWindow
                     showHours={showHours}
                     toggleHours={toggleShowHours}
