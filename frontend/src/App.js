@@ -16,6 +16,7 @@ import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import ChangeHoursWindow from "./components/restaurantHoursWindow/hoursWindow.component";
 
 
 /**
@@ -64,7 +65,9 @@ function App() {
 
   // for adding a new menu item
   const [showAddItem, setShowAddItem] = useState(false);
+  const [showHours, setShowHours] = useState(false);
   const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
+  const toggleShowHours = () => setShowHours(!showHours);
 
 
   /**
@@ -98,6 +101,8 @@ function App() {
 
     // Set the current manager
     setCurrentManager(selectedManager);
+    //set manager's restaurant id
+    console.log("selectedManager.restaurantId", selectedManager);
   };
 
 
@@ -667,6 +672,28 @@ function App() {
     }
   };
 
+  const handleChangeHours = async (restaurantID, storeHours) => {
+    try {
+      const response = await axiosClient.patch(`/restaurants/${restaurantID}`, storeHours);
+      if (response.status === 200) {
+        //TODO: add new menu item to restaurant's menu items array
+
+
+        // fetch menuItems again for a UI update
+        fetchRestaurants();
+      } else {
+        console.error("Failed to change restaurant hours");
+      }
+    } catch (error) {
+      console.error("Error changing restaurant hours:", error);
+    }
+  };
+
+  useEffect( () => {
+    console.log("currentRestaurant", currentRestaurant);
+    console.log("restaurants", restaurants);
+  }, [currentRestaurant, restaurants]);
+
 
   return (
     <div className="App-wrapper">
@@ -791,11 +818,17 @@ function App() {
                     menuItems={currentRestaurantMenuItems}
                     onItemSelection={handleManagersMenuItemSelection} />
                   <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                  <button onClick={toggleShowHours}>Change Restaurant Hours</button>
                   <MenuItemWindow
                     showMenuItem={showAddItem}
                     toggleMenuItem={toggleAddMenuItem}
                     onSubmit={handleAddMenuItem}
                    />
+                  <ChangeHoursWindow
+                    showHours={showHours}
+                    toggleHours={toggleShowHours}
+                    onSubmit={handleChangeHours}
+                  />
                 </section>
               )}
             </div>
