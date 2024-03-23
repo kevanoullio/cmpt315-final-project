@@ -17,11 +17,45 @@ const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit 
   const [open, setOpen] = useState("");
   const [close, setClose] = useState("");
 
+  const isValidTime = (time) => {
+    // Regular expression to match the "hh:mm" format
+    const regex = /^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/;
+
+    // Test the format
+    if (regex.test(time)) {
+      // Extract hours and minutes
+      const parts = time.split(':');
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+
+      // Check the range of hours and minutes
+      if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  const removeLeadingZeroes = (time) => {
+    // First, split the time string by the colon to separate hours and minutes
+    let [hours, minutes] = time.split(':');
+
+    // Parse the hours string to an integer, which automatically removes leading zeros
+    hours = parseInt(hours, 10);
+
+    // Reconstruct the time string. This step converts hours back to a string without leading zeros.
+    // We're not changing minutes, so it will preserve any leading zero as required.
+    const adjustedTime = `${hours}:${minutes}`;
+
+    return adjustedTime;
+  }
+
   // Function to submit menu item (changes or add new menu item)
   const onSubmitButtonClick = () => {
     const hoursAttributes = {
-      "open": open,
-      "close": close
+      "open": removeLeadingZeroes(open),
+      "close": removeLeadingZeroes(close)
     };
     onSubmit(hoursAttributes);
 
@@ -92,7 +126,7 @@ const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit 
           variant="success"
           onClick={onSubmitButtonClick}
           // disable if no changes during edit or if not all fields filled out during add
-          disabled={!open || !close}
+          disabled={!isValidTime(open) || !isValidTime(close)}
         >
           Submit
         </Button>
