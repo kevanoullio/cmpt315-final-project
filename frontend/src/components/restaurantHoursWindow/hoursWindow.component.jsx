@@ -12,7 +12,7 @@ import "./hoursWindow.styles.css";
 
  * @returns {JSX.Element} - The checkout window component
  */
-const ChangeHoursWindow = ({ showHours, toggleHours, onSubmit }) => {
+const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit }) => {
   // variables to hold the menu item attributes
   const [open, setOpen] = useState("");
   const [close, setClose] = useState("");
@@ -50,6 +50,11 @@ const ChangeHoursWindow = ({ showHours, toggleHours, onSubmit }) => {
       <Modal.Body>
         <div className="menu-item-container">
           <section className="menu-item-left-section">
+            {currentRestaurant.storeHours ? (
+              <p>{`Current Hours: ${currentRestaurant?.storeHours?.open} to ${currentRestaurant?.storeHours?.close}`}</p>
+            ) : (
+              <p>Hours currently not set, this means open 24/7</p>
+            )}
             <Form>
               <Form.Group controlId="form-name">
                 <Form.Label>Open time</Form.Label>

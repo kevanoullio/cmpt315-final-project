@@ -101,8 +101,6 @@ function App() {
 
     // Set the current manager
     setCurrentManager(selectedManager);
-    //set manager's restaurant
-    setSelectedRestaurant(selectedManager?.restaurantId ?? {});
   };
 
 
@@ -437,6 +435,10 @@ function App() {
     try {
       const response = await axiosClient.get("/restaurants");
       setRestaurants(response.data);
+      //set current restaurant if selected
+      if (currentRestaurant.id) {
+        setCurrentRestaurant(response.data.find( restaurant => restaurant.id === currentRestaurant.id))
+      }
     } catch (error) {
       console.error(error);
     }
@@ -678,6 +680,7 @@ function App() {
       if (response.status === 200) {
         // fetch restaurants again for a UI update
         fetchRestaurants();
+        fetchManagers();
       } else {
         console.error("Failed to change restaurant hours");
       }
@@ -823,6 +826,7 @@ function App() {
                     onSubmit={handleAddMenuItem}
                   />
                   <ChangeHoursWindow
+                    currentRestaurant={currentRestaurant}
                     showHours={showHours}
                     toggleHours={toggleShowHours}
                     onSubmit={handleChangeHours}
