@@ -14,7 +14,7 @@ const menuItemSchema = new mongoose.Schema(
         },
         status: { 
             type: String,
-            required: [true, "Status is required"] // sold out or available 
+            required: [true, "Status is required"] // sold out or in stock  
         },
         description: {
             type: String,

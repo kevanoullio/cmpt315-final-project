@@ -29,6 +29,24 @@ export const updateRestaurantsInRepository = async (restaurantID, query) => {
     }
 }
 
+export const updateMenuItemsForRestaurantInRepository = async (restaurantID, newMenuItemId) => {
+    let exists = await restaurantExists(restaurantID);
+    if (!exists) {
+        return -1;
+    }
+    try {
+        const restaurant = await Restaurant.findOneAndUpdate(
+          { id: restaurantID },
+          { $push: { menuItems: newMenuItemId } },
+          { new: true }
+        ).lean();
+        return restaurant;
+    } catch (e) {
+        throw Error(`Error while updating restaurant: ${e}`);
+    }
+}
+
+
 export const deleteRestaurantFromRepository = async (restaurantID) => {
     try {
         const restaurant = await Restaurant.findOneAndDelete({id: restaurantID});
