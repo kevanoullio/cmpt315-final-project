@@ -16,6 +16,7 @@ import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import ChangeHoursWindow from "./components/restaurantHoursWindow/hoursWindow.component";
 
 
 /**
@@ -64,7 +65,9 @@ function App() {
 
   // for adding a new menu item
   const [showAddItem, setShowAddItem] = useState(false);
+  const [showHours, setShowHours] = useState(false);
   const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
+  const toggleShowHours = () => setShowHours(!showHours);
 
 
   /**
@@ -432,6 +435,10 @@ function App() {
     try {
       const response = await axiosClient.get("/restaurants");
       setRestaurants(response.data);
+      //set current restaurant if selected
+      if (currentRestaurant.id) {
+        setCurrentRestaurant(response.data.find( restaurant => restaurant.id === currentRestaurant.id))
+      }
     } catch (error) {
       console.error(error);
     }
@@ -667,6 +674,21 @@ function App() {
     }
   };
 
+  const handleChangeHours = async (storeHours) => {
+    try {
+      const response = await axiosClient.patch(`/restaurants/${currentRestaurant.id}`, {storeHours});
+      if (response.status === 200) {
+        // fetch restaurants again for a UI update
+        fetchRestaurants();
+        fetchManagers();
+      } else {
+        console.error("Failed to change restaurant hours");
+      }
+    } catch (error) {
+      console.error("Error changing restaurant hours:", error);
+    }
+  };
+
 
   return (
     <div className="App-wrapper">
@@ -790,12 +812,25 @@ function App() {
                   <ManagerMenuItemsTable
                     menuItems={currentRestaurantMenuItems}
                     onItemSelection={handleManagersMenuItemSelection} />
-                  <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                  { currentRestaurant.id && (
+                    // this will only show when current restaurant is selected
+                    // current restaurant should be updated when a manager is selected
+                    <>
+                      <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                      <button onClick={toggleShowHours}>Change Restaurant Hours</button>
+                    </>
+                  )}
                   <MenuItemWindow
                     showMenuItem={showAddItem}
                     toggleMenuItem={toggleAddMenuItem}
                     onSubmit={handleAddMenuItem}
-                   />
+                  />
+                  <ChangeHoursWindow
+                    currentRestaurant={currentRestaurant}
+                    showHours={showHours}
+                    toggleHours={toggleShowHours}
+                    onSubmit={handleChangeHours}
+                  />
                 </section>
               )}
             </div>

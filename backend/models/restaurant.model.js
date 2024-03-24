@@ -28,7 +28,21 @@ const restaurantSchema = new mongoose.Schema(
             type: Number,
             ref: "MenuItem",
             required: false
-        }]
+        }],
+        storeHours: {
+          open: { type: String, required: false },
+          close: { type: String, required: false },
+        }
+        //might wanna include string time validation later: https://stackoverflow.com/a/77139480
+        /*
+        ex. postman patch to add hours:
+        {
+          "storeHours": {
+              "open": "7:30",
+              "close": "20:30"
+          }
+        }
+        */
     },
     {
         timestamps: true
