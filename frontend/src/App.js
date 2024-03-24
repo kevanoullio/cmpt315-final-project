@@ -76,7 +76,7 @@ function App() {
     if (newView !== view) {
       setView(newView);
 
-      // reset the restaurant and restaurant orders back to empty because restaurant will depend on view
+      // reset variables back to empty because they will depend on view
       setCurrentRestaurant({ name: "Select a restaurant" });
       setCurrentRestaurantOrders([]);
       setCurrentRestaurantMenuItems([]);
@@ -415,7 +415,7 @@ function App() {
 
 
   /**
-   * UseEffect to set the current restaurant's menu items when the current restaurant changes
+   * UseEffect to set the current restaurant's menu items when the current restaurant or list of menu items changes
    */
   useEffect(() => {
     if (menuItems && currentRestaurant && currentRestaurant.name && currentRestaurant.id) {
@@ -638,12 +638,18 @@ function App() {
   }
 
 
+  /**
+   * Function to show the table for the orders for the manager's restaurant 
+   */
   const handleManagerOrderTable = () => {
     setShowManagerOrderTable(true);
     setShowManagerMenuItemsTable(false);
   };
 
 
+  /**
+   * Function to show the table for the menu items for the manager's restaurant 
+   */
   const handleManagerMenuItems = () => {
     setShowManagerOrderTable(false);
     setShowManagerMenuItemsTable(true);
@@ -653,17 +659,17 @@ function App() {
   const handleAddMenuItem = async (menuItemAttributes) => {
     try {
       const response = await axiosClient.post(`/menuItems/`, menuItemAttributes);
-      if (response.status === 200) {
-        console.log(response.data);
+      if (response.status === 201) {
         // Get the id of the newly created menu item
-        const newMenuItemId = response.data.id;
-        console.log(newMenuItemId);
+        const newMenuItemId = response.data.id; 
         // add new menu item to restaurant's menu items array 
         try {
-          const response = await axiosClient.patch(`/restaurants/${currentManager.restaurantId}`, { menuItems: newMenuItemId });
+          const response = await axiosClient.patch(`/restaurants/${currentManager.restaurantId.id}/addMenuItem`, {newMenuItemId});
           if (response.status === 200) {
-            // fetch menuItems again for a UI update 
+            // update list of all menu items  
             fetchMenuItems();
+            // update currentRestaurant to the same restaurant but with the updated array of menuItems 
+            setCurrentRestaurant(response.data); 
           } else {
             console.error("Failed to update restaurant menu items");
           }

@@ -9,7 +9,7 @@ import "./menuItemWindow.styles.css";
  * Function to render the menu item window component
  * @param {Boolean} showMenuItem - The boolean to show the menu item window
  * @param {Function} toggleMenuItem - The function to toggle the menu item window
-
+ * @param {Function} onSubmit - The function to submit the addition, deletion, or update of a menu item
  * @returns {JSX.Element} - The menu item window component
  */
 const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
@@ -19,7 +19,7 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
   const [price, setPrice] = useState("");
   const [available, setAvailable] = useState(false);
 
-  // Function to submit menu item (changes or add new menu item)  
+  // Function to submit menu item (update or add menu item)  
   const onSubmitButtonClick = () => {
     let itemStatus;
     if (available) {
@@ -35,12 +35,24 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
     };
     onSubmit(menuItemAttributes);
 
+    // Reset the variables
+    setName("");
+    setDescription("");
+    setPrice("");
+    setAvailable(false);
+
     // Close the window
     toggleMenuItem();
   };
 
   // Function to cancel adding or editing menu item 
   const onCancel = () => {
+    // Reset the variables
+    setName("");
+    setDescription("");
+    setPrice("");
+    setAvailable(false);
+
     // Close the window
     toggleMenuItem();
   };
