@@ -1,7 +1,7 @@
 import Express from "express";
 import {
   createManager,
-  deleteManager,
+  deleteManager, getBusiestTimeForEachMonth,
   getGrossSales,
   getManager,
   getManagers, getMostSoldItem,
@@ -36,5 +36,6 @@ managerRouter.delete("/:managerID", deleteManager);
 
 managerRouter.get("/:managerID/gross-sales", getGrossSales);
 managerRouter.get("/:managerID/most-sold-item", getMostSoldItem);
+managerRouter.get("/:managerID/busiest-time", getBusiestTimeForEachMonth);
 
 export default managerRouter;

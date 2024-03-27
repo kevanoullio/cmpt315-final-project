@@ -17,7 +17,7 @@ const AppTable = ({tableHeaders, tableRow}) => {
     <tr>
       {
         tableHeaders.map((tableHeader, index) => (
-          <th key={index}>{tableHeader}</th>
+          <th key={index} className="text-center" >{tableHeader}</th>
         ))
       }
     </tr>
@@ -28,7 +28,7 @@ const AppTable = ({tableHeaders, tableRow}) => {
         <tr key={index}>
           {
             row.map((cell, index) => (
-              <td key={index}>{cell}</td>
+              <td key={index} className="text-center" >{cell}</td>
             ))
           }
         </tr>

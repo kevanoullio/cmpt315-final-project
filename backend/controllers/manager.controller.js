@@ -178,13 +178,60 @@ export const getMostSoldItem = async (req, res) => {
   }
 }
 
+export const getBusiestTimeForEachMonth = async (req, res) => {
+  // Returns {month: "January", hour: 12 am, numOrders: 2}
+  try {
+    const {managerID} = req.params;
+    const [manager] = await getManagersFromRepository({id: managerID});
+    const managerOrders = await fetchOrdersByRestaurant(manager.restaurantId.id);
+
+    let busiestTime = {};
+    for (let order of managerOrders) {
+      const month = order.pickupTime.toLocaleString('default', {month: 'long'});
+      if (!busiestTime[month]) {
+        busiestTime[month] = {};
+      }
+      const hour = order.pickupTime.getUTCHours();
+      if (!busiestTime[month][hour]) {
+        busiestTime[month][hour] = 0;
+      }
+      busiestTime[month][hour]++;
+    }
+
+    const result = Object.keys(busiestTime).map((key) => {
+      let maxHour = 0;
+      let maxOrders = 0;
+      const month = busiestTime[key];
+      for (const hour in month) {
+        if (month[hour] > maxOrders) {
+          maxHour = hour;
+          maxOrders = month[hour];
+        }
+      }
+      // convert hour to AM/PM
+      if (maxHour > 12) {
+        maxHour = maxHour - 12 + " p.m.";
+      }
+      else if (maxHour === 12) {
+        maxHour = maxHour + " p.m.";
+      }
+      else {
+        maxHour = maxHour + " a.m.";
+      }
+
+      return {month: key, hour: maxHour, numOrders: maxOrders};
+    });
+
+    res.status(200).send(sortByMonth(result));
+  } catch (e) {
+    console.log("Error occurred while calculating busiest time: ", e);
+    res.status(400).send("Get failed");
+  }
+}
+
 
 const sortByMonth = (toSort) => {
   return toSort.sort((a, b) => {
     return months.indexOf(a.month) - months.indexOf(b.month);
   });
 }
-
-// result.sort((a, b) => {
-//   return months.indexOf(a.month) - months.indexOf(b.month);
-// });

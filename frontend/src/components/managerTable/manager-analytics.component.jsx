@@ -7,6 +7,7 @@ const ManagerAnalytics = ({currentManager}) => {
   const [selectedOption, setSelectedOption] = useState();
   const [grossSales, setGrossSales] = useState([]);
   const [mostSoldItem, setMostSoldItem] = useState([]);
+  const [busiestTimeOfDay, setBusiestTimeOfDay] = useState([]);
   const options = [
     "Monthly gross sales",
     "Most sold item",
@@ -25,6 +26,11 @@ const ManagerAnalytics = ({currentManager}) => {
       if (selectedOption === "Most sold item") {
         const response = await axiosClient.get(`/managers/${currentManager.id}/most-sold-item`);
         setMostSoldItem(response.data);
+      }
+
+      if (selectedOption === "Busiest time of day") {
+        const response = await axiosClient.get(`/managers/${currentManager.id}/busiest-time`);
+        setBusiestTimeOfDay(response.data);
       }
     }
 
@@ -59,6 +65,11 @@ const ManagerAnalytics = ({currentManager}) => {
                   tableRow={mostSoldItem.map(mostSold => [mostSold.month, mostSold.item, mostSold.amount])}/>
       }
 
+      {
+        selectedOption === "Busiest time of day" &&
+        <AppTable tableHeaders={["Month", "Hour", "Number of Orders"]}
+                  tableRow={busiestTimeOfDay.map(busiestTime => [busiestTime.month, busiestTime.hour, busiestTime.numOrders])}/>
+      }
     </>
   )
 };
