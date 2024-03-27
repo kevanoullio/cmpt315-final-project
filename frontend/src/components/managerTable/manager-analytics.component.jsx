@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Form} from "react-bootstrap";
 import BootstrapTable from "react-bootstrap/Table";
 import axiosClient from "../../axios";
+import AppTable from "./AppTable.component";
 
 const ManagerAnalytics = ({currentManager}) => {
   const [selectedOption, setSelectedOption] = useState();
@@ -30,29 +31,6 @@ const ManagerAnalytics = ({currentManager}) => {
   if (currentManager.id === undefined)
     return <h5 className="text-center">Select a manager</h5>
 
-  let finalView = null;
-  if (selectedOption === "Monthly gross sales") {
-    finalView = (
-      <BootstrapTable className="bootstrap-table" striped bordered hover>
-        <thead className="custom-header">
-        <tr>
-          <th>Month</th>
-          <th>Gross Sale</th>
-        </tr>
-        </thead>
-        <tbody>
-        {
-          grossSales.map((sale, index) => (
-            <tr key={index}>
-              <td>{sale.month}</td>
-              <td>{sale.grossSale}</td>
-            </tr>
-          ))
-        }
-        </tbody>
-      </BootstrapTable>
-    )
-  }
   return (
     <>
       <div className="mb-3">
@@ -64,7 +42,10 @@ const ManagerAnalytics = ({currentManager}) => {
         </Form.Select>
       </div>
 
-      {finalView}
+      {selectedOption === "Monthly gross sales" &&
+        <AppTable tableHeaders={["Month", "Gross Sale"]}
+                  tableRow={grossSales.map(sale => [sale.month, sale.grossSale])}/>}
+
     </>
   )
 };
