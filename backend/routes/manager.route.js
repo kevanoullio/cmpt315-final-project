@@ -4,7 +4,7 @@ import {
   deleteManager,
   getGrossSales,
   getManager,
-  getManagers,
+  getManagers, getMostSoldItem,
   updateManager
 } from "../controllers/manager.controller.js";
 
@@ -35,5 +35,6 @@ managerRouter.patch("/:managerID", updateManager);
 managerRouter.delete("/:managerID", deleteManager);
 
 managerRouter.get("/:managerID/gross-sales", getGrossSales);
+managerRouter.get("/:managerID/most-sold-item", getMostSoldItem);
 
 export default managerRouter;

@@ -72,7 +72,7 @@
     "restaurantId": 1,
     "menuItems": [
       3,
-      4
+      2
     ],
     "pickupTime": "2024-02-15T12:30:00Z"
   },
@@ -86,5 +86,16 @@
       4
     ],
     "pickupTime": "2024-01-15T12:30:00Z"
+  },
+  {
+    "id": 9,
+    "status": "ordered",
+    "customerId": 1,
+    "restaurantId": 1,
+    "menuItems": [
+      3,
+      3
+    ],
+    "pickupTime": "2024-03-15T12:30:00Z"
   }
 ]

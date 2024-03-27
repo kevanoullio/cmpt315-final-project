@@ -8,6 +8,9 @@ import {
 } from "../repositories/manager.repository.js";
 import {fetchOrdersByRestaurant} from "../repositories/order.repository.js";
 
+const months = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
+
 export const getManagers = async (req, res) => {
   try {
     const managers = await getManagersFromRepository();
@@ -96,16 +99,92 @@ export const getGrossSales = async (req, res) => {
       return {month: key, grossSale: grossSales[key].toFixed(2)}
     });
 
-    // Sort by month
-    const months = ["January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"];
-    result.sort((a, b) => {
-      return months.indexOf(a.month) - months.indexOf(b.month);
-    });
-
-    res.status(200).send(result);
+    res.status(200).send(sortByMonth(result));
   } catch (e) {
     console.log("Error occurred while calculating gross sales: ", e);
     res.status(400).send("Get failed");
   }
 }
+
+export const getMostSoldItem = async (req, res) => {
+  try {
+    const {managerID} = req.params;
+    const [manager] = await getManagersFromRepository({id: managerID});
+    const managerOrders = await fetchOrdersByRestaurant(manager.restaurantId.id);
+
+    // Find most sold item in each month
+    let mostSoldItems = {};
+    for (let order of managerOrders) {
+      const month = order.pickupTime.toLocaleString('default', {month: 'long'});
+      if (!mostSoldItems[month]) {
+        // object to store each item and its count
+        // an object of object
+        mostSoldItems[month] = {};
+      }
+      const menuItems = order.menuItems;
+      for (const menuItem of menuItems) {
+        // if the item does not exist in the month, add it
+        if (!mostSoldItems[month][menuItem.name]) {
+          mostSoldItems[month][menuItem.name] = 0;
+        }
+        // increment the count
+        mostSoldItems[month][menuItem.name]++;
+      }
+    }
+    /*
+     At this point, mostSoldItems is an object of objects that looks like:
+     {
+        March: {
+          'Pepperoni Pizza': 1,
+          'Margherita Pizza': 1,
+          'Vegetarian Pizza': 2,
+          'Meat Lovers Pizza': 2
+        },
+        February: {
+          'Vegetarian Pizza': 1,
+          'Meat Lovers Pizza': 1
+        },
+        January: {
+          'Vegetarian Pizza': 1,
+          'Meat Lovers Pizza': 1
+        }
+     }
+     For each month, the menu item that has the highest count will be returned
+     If there are multiple items with the same count, they will all be returned in a
+     single string
+     The amount will also be returned
+    */
+    const result = Object.keys(mostSoldItems).map((key) => {
+      let mostSoldItem = "";
+      let amount = 0;
+      const month = mostSoldItems[key];
+      for (const item in month) {
+        if (month[item] > amount) {
+          mostSoldItem = item;
+          amount = month[item];
+        }
+        else if (month[item] === amount) {
+          mostSoldItem += ", " + item;
+        }
+      }
+      return {month: key, item: mostSoldItem, amount: amount};
+    });
+
+    console.log(result);
+    res.status(200).send(sortByMonth(result));
+  } catch (e) {
+    console.log("Error occurred while calculating gross sales: ", e);
+    res.status(400).send("Get failed");
+  }
+}
+
+
+const sortByMonth = (toSort) => {
+  return toSort.sort((a, b) => {
+    return months.indexOf(a.month) - months.indexOf(b.month);
+  });
+}
+
+// result.sort((a, b) => {
+//   return months.indexOf(a.month) - months.indexOf(b.month);
+// });
