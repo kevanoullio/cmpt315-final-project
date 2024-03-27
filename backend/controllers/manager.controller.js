@@ -96,7 +96,8 @@ export const getGrossSales = async (req, res) => {
     }
     // Convert to array
     const result = Object.keys(grossSales).map((key) => {
-      return {month: key, grossSale: grossSales[key].toFixed(2)}
+      // add $ to the grossSale
+      return {month: key, grossSale: `$ ${grossSales[key].toFixed(2)}` }
     });
 
     res.status(200).send(sortByMonth(result));
