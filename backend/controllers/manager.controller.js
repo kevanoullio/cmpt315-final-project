@@ -1,65 +1,111 @@
 // Code adapted from https://github.com/mrchenliang/learning-node
 
-import { getManagersFromRepository, updateManagersInRepository, deleteManagerFromRepository, createManagerInRepository } from "../repositories/manager.repository.js";
+import {
+  getManagersFromRepository,
+  updateManagersInRepository,
+  deleteManagerFromRepository,
+  createManagerInRepository
+} from "../repositories/manager.repository.js";
+import {fetchOrdersByRestaurant} from "../repositories/order.repository.js";
 
 export const getManagers = async (req, res) => {
   try {
     const managers = await getManagersFromRepository();
     res.status(200).send(managers);
   } catch (e) {
-    console.log("Failed to get managers: ", e); 
+    console.log("Failed to get managers: ", e);
     res.status(400).send("Get failed");
   }
 }
 
 export const getManager = async (req, res) => {
   try {
-    const { managerID } = req.params;
-    const manager = await getManagersFromRepository({ id: managerID });
+    const {managerID} = req.params;
+    const manager = await getManagersFromRepository({id: managerID});
     res.status(200).send(manager);
   } catch (e) {
-    console.log("Failed to get manager: ", e); 
+    console.log("Failed to get manager: ", e);
     res.status(400).send("Get failed");
   }
 }
 
 export const createManager = async (req, res) => {
   try {
-    const manager = await createManagerInRepository( req.body );
+    const manager = await createManagerInRepository(req.body);
     res.status(201).send(manager);
   } catch (e) {
-    console.log("Failed to create manager: ", e); 
+    console.log("Failed to create manager: ", e);
     res.status(400).send('Create failed. You likely did not include all required fields: [name, email, address, restaurantId]');
   }
 }
 
 export const updateManager = async (req, res) => {
   try {
-    const { managerID } = req.params;
+    const {managerID} = req.params;
     const manager = await updateManagersInRepository(managerID, req);
     // returns -1 if it does not exist in database
     if (manager === -1) {
       res.status(400).send("The manager you are trying to update with managerID " + managerID + " likely does not exist.")
-    } else {
+    }
+    else {
       res.status(200).send(manager);
     }
   } catch (e) {
-    console.log("Failed to update manager: ", e); 
+    console.log("Failed to update manager: ", e);
     res.status(400).send("Update failed");
   }
 }
 
 export const deleteManager = async (req, res) => {
-  const { managerID } = req.params;
+  const {managerID} = req.params;
   try {
     const manager = await deleteManagerFromRepository(managerID);
     if (manager) {
-      res.status(200).send("The following manager was deleted: "+ manager);
-    } else {
-      res.status(400).send("The manager you are trying to delete with managerID "+ managerID +" likely does not exist or was already deleted.");
+      res.status(200).send("The following manager was deleted: " + manager);
+    }
+    else {
+      res.status(400).send("The manager you are trying to delete with managerID " + managerID + " likely does not exist or was already deleted.");
     }
   } catch (e) {
-    console.log("Failed to delete manager: ", e); 
+    console.log("Failed to delete manager: ", e);
     res.status(400).send("Manager delete failed.");
+  }
+}
+
+export const getGrossSales = async (req, res) => {
+  try {
+    const {managerID} = req.params;
+    // Get manager, and get all the orders from the restaurant (manager's restaurant)
+    const [manager] = await getManagersFromRepository({id: managerID});
+    const managerOrders = await fetchOrdersByRestaurant(manager.restaurantId.id);
+
+    let grossSales = {};
+    for (let order of managerOrders) {
+      // get month E.g. August
+      const month = order.pickupTime.toLocaleString('default', {month: 'long'});
+      if (!grossSales[month]) { // add month to grossSales if it does not exist
+        grossSales[month] = 0;
+      }
+      const menuItems = order.menuItems;
+      for (const menuItem of menuItems) { // add up the price of each menuItem
+        grossSales[month] += menuItem.price;
+      }
+    }
+    // Convert to array
+    const result = Object.keys(grossSales).map((key) => {
+      return {month: key, grossSale: grossSales[key].toFixed(2)}
+    });
+
+    // Sort by month
+    const months = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+    result.sort((a, b) => {
+      return months.indexOf(a.month) - months.indexOf(b.month);
+    });
+
+    res.status(200).send(result);
+  } catch (e) {
+    console.log("Error occurred while calculating gross sales: ", e);
+    res.status(400).send("Get failed");
   }
 }

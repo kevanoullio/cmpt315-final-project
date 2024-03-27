@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axiosClient from "./axios";
 
 import RestaurantCard from "./components/restaurantCard/restaurantCard.component";
@@ -7,16 +7,19 @@ import CurrentOrderCartTable
   from "./components/currentOrderCartTable/currentOrderCartTable.component";
 
 import ManagerOrderTable from "./components/managerTable/managerOrdersTable.component";
-import ManagerMenuItemsTable from "./components/managerTable/managerMenuItemsTable.component";
+import ManagerMenuItemsTable
+  from "./components/managerTable/managerMenuItemsTable.component";
 import MenuItemWindow from "./components/menuItemWindow/menuItemWindow.component";
 
-import ConfirmationWindow from "./components/confirmationWindow/confirmationWindow.component";
+import ConfirmationWindow
+  from "./components/confirmationWindow/confirmationWindow.component";
 import SearchBar from "./components/searchBar/searchBar.component";
 import DropDown from "./components/dropDown/dropDown.component";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import ChangeHoursWindow from "./components/restaurantHoursWindow/hoursWindow.component";
+import ManagerAnalytics from "./components/managerTable/manager-analytics.component";
 
 
 /**
@@ -24,7 +27,8 @@ import ChangeHoursWindow from "./components/restaurantHoursWindow/hoursWindow.co
  * @returns {JSX.Element} App component
  */
 function App() {
-  const [view, setView] = useState("customer"); // Set default view to customer
+  //TODO: Change to customer
+  const [view, setView] = useState("manager"); // Set default view to customer
   const [restaurantSearchText, setRestaurantSearchText] = useState("");
   const [menuItemSearchText, setMenuItemSearchText] = useState("");
 
@@ -38,13 +42,19 @@ function App() {
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
 
   const [currentManager, setCurrentManager] = useState({});
-  const [currentRestaurant, setCurrentRestaurant] = useState({ name: "Select a restaurant" });
+  const [currentRestaurant, setCurrentRestaurant] = useState({name: "Select a restaurant"});
   const [currentCustomer, setCurrentCustomer] = useState({});
   const [currentRestaurantMenuItems, setCurrentRestaurantMenuItems] = useState([]);
   const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
-  const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
+  //TODO: Uncomment
+  // const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
+  // const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
+  // const [showManagerAnalytics, setShowManagerAnalytics] = useState(false);
+
+  const [showManagerOrderTable, setShowManagerOrderTable] = useState(false);
   const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
+  const [showManagerAnalytics, setShowManagerAnalytics] = useState(true);
 
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
 
@@ -71,16 +81,16 @@ function App() {
 
 
   /**
-    * Function to handle view button click
-    * @param {String} view - The view
-    * @returns {void} - The function does not return a value
-  */
+   * Function to handle view button click
+   * @param {String} view - The view
+   * @returns {void} - The function does not return a value
+   */
   const onViewButtonClick = (newView) => {
     if (newView !== view) {
       setView(newView);
 
       // reset variables back to empty because they will depend on view
-      setCurrentRestaurant({ name: "Select a restaurant" });
+      setCurrentRestaurant({name: "Select a restaurant"});
       setCurrentRestaurantOrders([]);
       setCurrentRestaurantMenuItems([]);
       setCurrentCustomer({});
@@ -91,10 +101,10 @@ function App() {
 
 
   /**
-    * Function to handle the selected manager from the dropdown
-    * @param {*} manager - the selected manager's ID
-    * @returns {void} - The function does not return a value
-    */
+   * Function to handle the selected manager from the dropdown
+   * @param {*} manager - the selected manager's ID
+   * @returns {void} - The function does not return a value
+   */
   const handleManagerSelection = (selectedManagerId) => {
     // Find the manager with the given ID
     const selectedManager = managers.find(manager => manager.id === selectedManagerId);
@@ -105,23 +115,24 @@ function App() {
 
 
   /**
-  * Updates the status of an order and fetches the updated list of orders.
-  *
-  * This function sends a PATCH request to the server to update the status of a specific order
-  * identified by its orderId. Upon successful update, it fetches the updated list of orders
-  * to ensure the UI reflects the latest data. If the request fails to update the order status
-  * or encounters an error, it logs the error message to the console.
-  *
-  * @param {string|number} orderId The unique identifier of the order to update.
-  * @param {string} newStatus The new status to be assigned to the order.
-  */
+   * Updates the status of an order and fetches the updated list of orders.
+   *
+   * This function sends a PATCH request to the server to update the status of a specific order
+   * identified by its orderId. Upon successful update, it fetches the updated list of orders
+   * to ensure the UI reflects the latest data. If the request fails to update the order status
+   * or encounters an error, it logs the error message to the console.
+   *
+   * @param {string|number} orderId The unique identifier of the order to update.
+   * @param {string} newStatus The new status to be assigned to the order.
+   */
   const managerUpdateOrderStatus = async (orderId, newStatus) => {
     try {
-      const response = await axiosClient.patch(`/orders/${orderId}`, { status: newStatus });
+      const response = await axiosClient.patch(`/orders/${orderId}`, {status: newStatus});
       if (response.status === 200) {
         // After successfully updating the order status, fetch orders again for a UI update
         fetchOrders();
-      } else {
+      }
+      else {
         console.error("Failed to update order status");
       }
     } catch (error) {
@@ -138,7 +149,7 @@ function App() {
     try {
       // Send a PATCH request to change the status to its opposite value
       await axiosClient.patch(`/menuItems/${itemId}`, {
-         // Find the current status and change it
+        // Find the current status and change it
         status: menuItems.find(item => item.id === itemId).status === "sold-out" ? "in stock" : "sold-out"
       });
 
@@ -146,7 +157,7 @@ function App() {
       fetchMenuItems();
 
     } catch (error) {
-        console.error("Error updating status:", error);
+      console.error("Error updating status:", error);
     }
   };
 
@@ -166,10 +177,10 @@ function App() {
 
 
   /**
-    * Function to handle adding a menuItem to the cart
-    * @param {Object} menuItem - The menuItem to add to the cart
-    * @returns {void} - The function does not return a value
-    */
+   * Function to handle adding a menuItem to the cart
+   * @param {Object} menuItem - The menuItem to add to the cart
+   * @returns {void} - The function does not return a value
+   */
   const onAddToCart = (menuItem) => {
     // Check if the item is already in the cart
     const existingItem = menuItemsInCart.find(item => item.id === menuItem.id);
@@ -178,20 +189,21 @@ function App() {
     if (existingItem) {
       // If the item is already in the cart, increment its quantity
       setMenuItemsInCart(prevItems => prevItems.map(item =>
-        item.id === menuItem.id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === menuItem.id ? {...item, quantity: item.quantity + 1} : item
       ));
-    } else {
+    }
+    else {
       // Otherwise, add the item to the cart
-      setMenuItemsInCart(prevItems => [...prevItems, { ...menuItem, quantity: 1 }]);
+      setMenuItemsInCart(prevItems => [...prevItems, {...menuItem, quantity: 1}]);
     }
   };
 
 
   /**
-    * Function to handle removing a menuItem from the cart
-    * @param {Object} menuItem - The menuItem to remove from the cart
-    * @returns {void} - The function does not return a value
-    */
+   * Function to handle removing a menuItem from the cart
+   * @param {Object} menuItem - The menuItem to remove from the cart
+   * @returns {void} - The function does not return a value
+   */
   const onRemoveFromCart = (menuItem) => {
     // Check if the item has a quantity greater than 1
     const existingItem = menuItemsInCart.find(item => item.id === menuItem.id);
@@ -199,9 +211,10 @@ function App() {
     if (existingItem && existingItem.quantity > 1) {
       // If the item has a quantity greater than 1, decrement the quantity
       setMenuItemsInCart(prevItems => prevItems.map(item =>
-        item.id === menuItem.id ? { ...item, quantity: item.quantity - 1 } : item
+        item.id === menuItem.id ? {...item, quantity: item.quantity - 1} : item
       ));
-    } else {
+    }
+    else {
       // Otherwise, remove the item from the cart
       setMenuItemsInCart(prevItems => prevItems.filter(item => item.id !== menuItem.id));
     }
@@ -230,9 +243,9 @@ function App() {
       setAsap(false);
       fetchOrders();
     })
-    .catch((error) => {
-      console.error("Error submitting order:", error);
-    });
+      .catch((error) => {
+        console.error("Error submitting order:", error);
+      });
   };
 
 
@@ -253,7 +266,7 @@ function App() {
 
       // If any of the menuItems have quantity > 1, create a new array with each menuItem repeated by its quantity
       const menuItemsInCartFlattened = menuItemsInCart.flatMap(menuItem =>
-        Array.from({ length: menuItem.quantity }, () => menuItem)
+        Array.from({length: menuItem.quantity}, () => menuItem)
       );
 
       // Create the request body
@@ -323,7 +336,7 @@ function App() {
     maxDate.setDate(maxDate.getDate() + 28);
     maxDate.setHours(storeHours[1], 0, 0, 0)
 
-    return { minDate, maxDate };
+    return {minDate, maxDate};
   };
 
 
@@ -351,11 +364,12 @@ function App() {
     // Set the minTime constraints for today and other days
     if (isToday(selectedDate)) {
       minTime.setHours(currentHour, currentMinutes + cookTime, 0, 0);
-    } else {
+    }
+    else {
       minTime.setHours(storeHours[0], 0, 0, 0);
     }
 
-    return { minTime, maxTime };
+    return {minTime, maxTime};
   };
 
 
@@ -378,9 +392,9 @@ function App() {
 
 
   /**
-    * Fetch all menu items from the API/Database at load up
-    * @returns {void} - The function does not return a value
-    */
+   * Fetch all menu items from the API/Database at load up
+   * @returns {void} - The function does not return a value
+   */
   const fetchMenuItems = async () => {
     try {
       const response = await axiosClient.get(`/menuItems/`);
@@ -406,11 +420,11 @@ function App() {
 
 
   /**
-    * Sets the current restaurant's menu items
-    * @param {Array} menuItems - The list of all menu items
-    * @param {Object} currentRestaurant - The current restaurant
-    * @returns {void} - The function does not return a value
-    */
+   * Sets the current restaurant's menu items
+   * @param {Array} menuItems - The list of all menu items
+   * @param {Object} currentRestaurant - The current restaurant
+   * @returns {void} - The function does not return a value
+   */
   const getCurrentRestaurantMenuItems = (menuItems, currentRestaurant) => {
     const restaurantMenuItems = menuItems.filter(menuItem => currentRestaurant.menuItems.includes(menuItem.id));
     setCurrentRestaurantMenuItems(restaurantMenuItems);
@@ -428,16 +442,16 @@ function App() {
 
 
   /**
-    * Fetch Restaurants from the API/Database
-    * @returns {void} - The function does not return a value
-    */
+   * Fetch Restaurants from the API/Database
+   * @returns {void} - The function does not return a value
+   */
   const fetchRestaurants = async () => {
     try {
       const response = await axiosClient.get("/restaurants");
       setRestaurants(response.data);
       //set current restaurant if selected
       if (currentRestaurant.id) {
-        setCurrentRestaurant(response.data.find( restaurant => restaurant.id === currentRestaurant.id))
+        setCurrentRestaurant(response.data.find(restaurant => restaurant.id === currentRestaurant.id))
       }
     } catch (error) {
       console.error(error);
@@ -461,8 +475,9 @@ function App() {
     if (menuItemsInCart.length > 0) {
       setSelectedRestaurant(restaurant);
       setShowConfirmationModal(true);
-    } else {
-    setCurrentRestaurant(restaurant);
+    }
+    else {
+      setCurrentRestaurant(restaurant);
     }
   };
 
@@ -496,16 +511,17 @@ function App() {
   useEffect(() => {
     if (currentManager && currentManager.restaurantId) {
       setCurrentRestaurant(currentManager.restaurantId);
-    } else {
-      setCurrentRestaurant({ name: "Select a restaurant" });
+    }
+    else {
+      setCurrentRestaurant({name: "Select a restaurant"});
     }
   }, [currentManager]);
 
 
   /**
-    * Fetch managers from the API/Database to populate the dropdown
-    * @returns {void} - The function does not return a value
-    */
+   * Fetch managers from the API/Database to populate the dropdown
+   * @returns {void} - The function does not return a value
+   */
   const fetchManagers = async () => {
     try {
       const response = await axiosClient.get("/managers");
@@ -542,9 +558,9 @@ function App() {
 
 
   /**
-  * Fetch Orders from the API/Database to populate the orders variable, which is later filtered
-  * @returns {void} - The function does not return a value
-  */
+   * Fetch Orders from the API/Database to populate the orders variable, which is later filtered
+   * @returns {void} - The function does not return a value
+   */
   const fetchOrders = async () => {
     try {
       const response = await axiosClient.get("/orders");
@@ -582,9 +598,9 @@ function App() {
 
 
   /**
-    * Function to filter the Restaurants based on the restaurant search input
-    * @returns {void} - The function does not return a value
-    */
+   * Function to filter the Restaurants based on the restaurant search input
+   * @returns {void} - The function does not return a value
+   */
   useEffect(() => {
     // If the search text is empty, set filteredRestaurants to all Restaurants
     if (!restaurantSearchText) {
@@ -594,7 +610,7 @@ function App() {
 
     // Filter the Restaurants based on the search input
     const newFilteredRestaurants = restaurants.filter(restaurant =>
-      restaurant.name.toLowerCase().includes(restaurantSearchText.toLowerCase())
+        restaurant.name.toLowerCase().includes(restaurantSearchText.toLowerCase())
       // || restaurant.description.toLowerCase().includes(restaurantSearchText.toLowerCase())
     );
 
@@ -646,44 +662,55 @@ function App() {
 
 
   /**
-   * Function to show the table for the orders for the manager's restaurant 
+   * Function to show the table for the orders for the manager's restaurant
    */
   const handleManagerOrderTable = () => {
     setShowManagerOrderTable(true);
+
     setShowManagerMenuItemsTable(false);
+    setShowManagerAnalytics(false)
   };
 
 
   /**
-   * Function to show the table for the menu items for the manager's restaurant 
+   * Function to show the table for the menu items for the manager's restaurant
    */
   const handleManagerMenuItems = () => {
-    setShowManagerOrderTable(false);
     setShowManagerMenuItemsTable(true);
+
+    setShowManagerOrderTable(false);
+    setShowManagerAnalytics(false)
   };
 
+  const handleManagerAnalytics = () => {
+    setShowManagerAnalytics(true);
 
+    setShowManagerOrderTable(false);
+    setShowManagerMenuItemsTable(false);
+  };
   const handleAddMenuItem = async (menuItemAttributes) => {
     try {
       const response = await axiosClient.post(`/menuItems/`, menuItemAttributes);
       if (response.status === 201) {
         // Get the id of the newly created menu item
-        const newMenuItemId = response.data.id; 
-        // add new menu item to restaurant's menu items array 
+        const newMenuItemId = response.data.id;
+        // add new menu item to restaurant's menu items array
         try {
           const response = await axiosClient.patch(`/restaurants/${currentManager.restaurantId.id}/addMenuItem`, {newMenuItemId});
           if (response.status === 200) {
-            // update list of all menu items  
+            // update list of all menu items
             fetchMenuItems();
-            // update currentRestaurant to the same restaurant but with the updated array of menuItems 
-            setCurrentRestaurant(response.data); 
-          } else {
+            // update currentRestaurant to the same restaurant but with the updated array of menuItems
+            setCurrentRestaurant(response.data);
+          }
+          else {
             console.error("Failed to update restaurant menu items");
           }
         } catch (error) {
           console.error("Error updating restaurant menu items:", error);
         }
-      } else {
+      }
+      else {
         console.error("Failed to update restaurant menu items");
       }
     } catch (error) {
@@ -698,7 +725,8 @@ function App() {
         // fetch restaurants again for a UI update
         fetchRestaurants();
         fetchManagers();
-      } else {
+      }
+      else {
         console.error("Failed to change restaurant hours");
       }
     } catch (error) {
@@ -806,52 +834,59 @@ function App() {
         )}
         {view === "manager" && (
           <>
-          <section>
-            <div className="App-manager-restaurant-name">
-              {currentRestaurant.name === "Select a restaurant" ? null : (
-                <h3>{currentRestaurant.name}</h3>
-            )}
-            </div>
-            <div>
-              <div className="App-manager-table-buttons">
-                <button onClick={handleManagerOrderTable}>Orders</button>
-                <button onClick={handleManagerMenuItems}>Menu Items</button>
+            <section>
+              <div className="App-manager-restaurant-name">
+                {currentRestaurant.name === "Select a restaurant" ? null : (
+                  <h3>{currentRestaurant.name}</h3>
+                )}
               </div>
-              {showManagerOrderTable && (
-                <section className="App-manager-order-table">
-                  <ManagerOrderTable
-                    orders={currentRestaurantOrders}
-                    onUpdateOrderStatus={managerUpdateOrderStatus}/>
-                </section>
-              )}
-              {showManagerMenuItemsTable && (
-                <section className="App-manager-menuItems-table">
-                  <ManagerMenuItemsTable
-                    menuItems={currentRestaurantMenuItems}
-                    onItemSelection={handleManagersMenuItemSelection} />
-                  { currentRestaurant.id && (
-                    // this will only show when current restaurant is selected
-                    // current restaurant should be updated when a manager is selected
-                    <>
-                      <button onClick={toggleAddMenuItem}>Add Menu Item</button>
-                      <button onClick={toggleShowHours}>Change Restaurant Hours</button>
-                    </>
-                  )}
-                  <MenuItemWindow
-                    showMenuItem={showAddItem}
-                    toggleMenuItem={toggleAddMenuItem}
-                    onSubmit={handleAddMenuItem}
-                  />
-                  <ChangeHoursWindow
-                    currentRestaurant={currentRestaurant}
-                    showHours={showHours}
-                    toggleHours={toggleShowHours}
-                    onSubmit={handleChangeHours}
-                  />
-                </section>
-              )}
-            </div>
-          </section>
+              <div>
+                <div className="App-manager-table-buttons">
+                  <button onClick={handleManagerOrderTable}>Orders</button>
+                  <button onClick={handleManagerMenuItems}>Menu Items</button>
+                  <button onClick={handleManagerAnalytics}>Analytics</button>
+                </div>
+                {showManagerOrderTable && (
+                  <section className="App-manager-order-table">
+                    <ManagerOrderTable
+                      orders={currentRestaurantOrders}
+                      onUpdateOrderStatus={managerUpdateOrderStatus}/>
+                  </section>
+                )}
+                {showManagerMenuItemsTable && (
+                  <section className="App-manager-menuItems-table">
+                    <ManagerMenuItemsTable
+                      menuItems={currentRestaurantMenuItems}
+                      onItemSelection={handleManagersMenuItemSelection}/>
+                    {currentRestaurant.id && (
+                      // this will only show when current restaurant is selected
+                      // current restaurant should be updated when a manager is selected
+                      <>
+                        <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                        <button onClick={toggleShowHours}>Change Restaurant Hours</button>
+                      </>
+                    )}
+                    <MenuItemWindow
+                      showMenuItem={showAddItem}
+                      toggleMenuItem={toggleAddMenuItem}
+                      onSubmit={handleAddMenuItem}
+                    />
+                    <ChangeHoursWindow
+                      currentRestaurant={currentRestaurant}
+                      showHours={showHours}
+                      toggleHours={toggleShowHours}
+                      onSubmit={handleChangeHours}
+                    />
+                  </section>
+                )}
+
+                {showManagerAnalytics && (
+                  <section className="App-manager-analytics">
+                    <ManagerAnalytics currentManager={currentManager}/>
+                  </section>
+                )}
+              </div>
+            </section>
           </>
         )}
       </main>
