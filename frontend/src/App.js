@@ -27,8 +27,7 @@ import ManagerAnalytics from "./components/managerTable/manager-analytics.compon
  * @returns {JSX.Element} App component
  */
 function App() {
-  //TODO: Change to customer
-  const [view, setView] = useState("manager"); // Set default view to customer
+  const [view, setView] = useState("customer"); // Set default view to customer
   const [restaurantSearchText, setRestaurantSearchText] = useState("");
   const [menuItemSearchText, setMenuItemSearchText] = useState("");
 
@@ -47,14 +46,9 @@ function App() {
   const [currentRestaurantMenuItems, setCurrentRestaurantMenuItems] = useState([]);
   const [currentRestaurantOrders, setCurrentRestaurantOrders] = useState([]);
 
-  //TODO: Uncomment
-  // const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
-  // const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
-  // const [showManagerAnalytics, setShowManagerAnalytics] = useState(false);
-
-  const [showManagerOrderTable, setShowManagerOrderTable] = useState(false);
+  const [showManagerOrderTable, setShowManagerOrderTable] = useState(true);
   const [showManagerMenuItemsTable, setShowManagerMenuItemsTable] = useState(false);
-  const [showManagerAnalytics, setShowManagerAnalytics] = useState(true);
+  const [showManagerAnalytics, setShowManagerAnalytics] = useState(false);
 
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
 
