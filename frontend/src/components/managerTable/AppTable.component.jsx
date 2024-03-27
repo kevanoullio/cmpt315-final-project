@@ -10,14 +10,12 @@ import React from "react";
  * @constructor
  */
 const AppTable = ({tableHeaders, tableRow}) => {
-  console.log("Table Headers: ", tableHeaders)
-  console.log("Table Row: ", JSON.stringify(tableRow))
   return <BootstrapTable className="bootstrap-table" striped bordered hover>
     <thead className="custom-header">
     <tr>
       {
         tableHeaders.map((tableHeader, index) => (
-          <th key={index} className="text-center" >{tableHeader}</th>
+          <th key={index} className="text-center">{tableHeader}</th>
         ))
       }
     </tr>
@@ -28,7 +26,7 @@ const AppTable = ({tableHeaders, tableRow}) => {
         <tr key={index}>
           {
             row.map((cell, index) => (
-              <td key={index} className="text-center" >{cell}</td>
+              <td key={index} className="text-center">{cell}</td>
             ))
           }
         </tr>
