@@ -681,7 +681,10 @@ function App() {
 
   const handleManagerAnalytics = () => {
     setShowManagerAnalytics(true);
- 
+    setShowManagerOrderTable(false);
+    setShowManagerMenuItemsTable(false);
+  };
+
   const handleEditMenuItem = async (menuItem) => {
     try {
       const { id, ...editAttributes } = menuItem;
@@ -701,9 +704,6 @@ function App() {
   };
 
 
-    setShowManagerOrderTable(false);
-    setShowManagerMenuItemsTable(false);
-  };
   const handleAddMenuItem = async (menuItemAttributes) => {
     try {
       const { id, ...addAttributes } = menuItemAttributes;
@@ -875,7 +875,7 @@ function App() {
                     <ManagerMenuItemsTable
                       menuItems={currentRestaurantMenuItems}
                       onItemSelection={handleManagersMenuItemSelection}
-                    onEditSelection={handleManagerEditSelection} />
+                      onEditSelection={handleManagerEditSelection} />
                     {currentRestaurant.id && (
                       // this will only show when current restaurant is selected
                       // current restaurant should be updated when a manager is selected
