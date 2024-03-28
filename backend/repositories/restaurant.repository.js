@@ -47,6 +47,23 @@ export const updateMenuItemsForRestaurantInRepository = async (restaurantID, new
 }
 
 
+export const deleteMenuItemFromRestaurantInRepository = async (restaurantID, menuItemId) => {
+    let exists = await restaurantExists(restaurantID);
+    if (!exists) {
+        return -1;
+    }
+    try {
+        const restaurant = await Restaurant.findOneAndUpdate(
+          { id: restaurantID },
+          { $pull: { menuItems: menuItemId } }, 
+          { new: true }
+        ).lean();
+        return restaurant;
+    } catch (e) {
+        throw Error(`Error while updating restaurant's menu items: ${e}`);
+    }
+}
+
 export const deleteRestaurantFromRepository = async (restaurantID) => {
     try {
         const restaurant = await Restaurant.findOneAndDelete({id: restaurantID});

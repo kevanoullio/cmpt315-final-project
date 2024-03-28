@@ -7,6 +7,7 @@ import {
     deleteRestaurantFromRepository,
     createRestaurantInRepository,
     getAllMenuItems,
+    deleteMenuItemFromRestaurantInRepository
 } from "../repositories/restaurant.repository.js";
 
 export const getRestaurants = async (req, res) => {
@@ -62,6 +63,24 @@ export const updateMenuItemArray = async (req, res) => {
         const {restaurantID} = req.params; 
         const { newMenuItemId } = req.body; 
         const restaurant = await updateMenuItemsForRestaurantInRepository(restaurantID, newMenuItemId);
+        // returns -1 if it does not exist in database
+        if (restaurant === -1) {
+            res.status(400).send("The restaurant you are trying to update with restaurantID " + restaurantID + " likely does not exist.")
+        }
+        else {
+            res.status(200).send(restaurant);
+        }
+    } catch (e) {
+        console.log("Failed to update restaurant's menu items: ", e);
+        res.status(400).send("Update failed");
+    }
+}
+
+export const deleteMenuItemFromArray = async (req, res) => {
+    try {
+        const {restaurantID} = req.params; 
+        const { menuItemId } = req.body; 
+        const restaurant = await deleteMenuItemFromRestaurantInRepository(restaurantID, menuItemId);
         // returns -1 if it does not exist in database
         if (restaurant === -1) {
             res.status(400).send("The restaurant you are trying to update with restaurantID " + restaurantID + " likely does not exist.")
