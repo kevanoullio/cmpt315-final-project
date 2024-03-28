@@ -672,9 +672,7 @@ function App() {
       const response = await axiosClient.patch(`/menuItems/${id}`, editAttributes);
       if (response.status === 200) {
             // update list of all menu items  
-            fetchMenuItems();
-            // update currentRestaurant to the same restaurant but with the updated array of menuItems 
-            setCurrentRestaurant(response.data); 
+            fetchMenuItems(); 
       }
     } catch (error) {
       console.error("Error editing menu item:", error);

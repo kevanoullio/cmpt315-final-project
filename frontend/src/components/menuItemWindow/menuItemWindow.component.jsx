@@ -14,12 +14,6 @@ import "./menuItemWindow.styles.css";
  */
 const MenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit}) => {
   // variables to hold the menu item attributes
-  // const [id, setId] = useState(menuItemToEdit ? menuItemToEdit.id : "");
-  // const [name, setName] = useState(menuItemToEdit ? menuItemToEdit.name : "Enter name");
-  // const [description, setDescription] = useState(menuItemToEdit ? menuItemToEdit.description : "Enter description");
-  // const [price, setPrice] = useState(menuItemToEdit ? menuItemToEdit.price : "Enter price without dollar sign");
-  // const [available, setAvailable] = useState(menuItemToEdit ? menuItemToEdit.status === "in stock" : false);
-
   const [id, setId] = useState("");
   const [name, setName] = useState("Enter name");
   const [description, setDescription] = useState("Enter description");
