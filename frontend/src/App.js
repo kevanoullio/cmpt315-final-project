@@ -64,7 +64,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [asap, setAsap] = useState(false);
-  const storeHours = [10, 20];
+  const [storeHours, setStoreHours] = useState([0, 23]);
   const cookTime = 15;
 
   const toggleShowHours = () => setShowHours(!showHours);
@@ -439,6 +439,18 @@ function App() {
 
 
   /**
+   * UseEffect to set the current restaurant's store hours when the current restaurant changes
+   * @returns {void} - The function does not return a value
+   */
+  useEffect(() => {
+    if (currentRestaurant && currentRestaurant.id) {
+      setStoreHours(currentRestaurant.storeHours);
+    }
+    console.log("store hours", storeHours);
+  }, [currentRestaurant]);
+
+
+  /**
    * Fetch Restaurants from the API/Database
    * @returns {void} - The function does not return a value
    */
@@ -690,8 +702,8 @@ function App() {
       const { id, ...editAttributes } = menuItem;
       const response = await axiosClient.patch(`/menuItems/${id}`, editAttributes);
       if (response.status === 200) {
-            // update list of all menu items  
-            fetchMenuItems(); 
+            // update list of all menu items
+            fetchMenuItems();
       }
     } catch (error) {
       console.error("Error editing menu item:", error);

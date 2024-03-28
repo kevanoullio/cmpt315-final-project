@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import BootstrapTable from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -36,6 +36,12 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
 
   const { minDate, maxDate } = dateConstraints;
   const { minTime, maxTime } = timeConstraints;
+
+  const formatTime = (time) => {
+    const hours = time.getHours().toString().padStart(2, '0');
+    const minutes = time.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
 
   return (
     <Modal
@@ -77,8 +83,8 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
               <TimePicker
                 value={selectedTime}
                 onChange={setSelectedTime}
-                minTime={minTime}
-                maxTime={maxTime}
+                minTime={formatTime(minTime)}
+                maxTime={formatTime(maxTime)}
                 format="HH:mm a"
                 hourPlaceholder="HH"
                 minutePlaceholder="mm"
