@@ -7,10 +7,14 @@ import BootstrapTable from "react-bootstrap/Table";
  * @param {Array<Object>} menuItems - The list of menuItems
  * @returns {JSX.Element} - The menuItem table component
  */
-const MenuItemTable = ({ menuItems, onItemSelection }) => {
+const MenuItemTable = ({ menuItems, onItemSelection, onEditDeleteSelection }) => {
     const handleStatusButtonClick = (itemId) => {
         onItemSelection(itemId);
-      };
+    };
+
+    const handleEditDeleteButtonClick = (item) => {
+        onEditDeleteSelection(item);
+    };
 
     // Render the menuItem table
     return (
@@ -21,6 +25,7 @@ const MenuItemTable = ({ menuItems, onItemSelection }) => {
                 <th>Item Description</th>
                 <th>Price</th>
                 <th>Status</th>
+                <th>Edit/Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,10 +36,18 @@ const MenuItemTable = ({ menuItems, onItemSelection }) => {
                     <td>{"$" + item.price}</td>
                     <td>
                     <Button
-                        variant={item.status === "sold-out" ? "danger" : "primary"}
+                        variant={item.status === "sold-out" ? "danger" : "success"}
                         onClick={() => handleStatusButtonClick(item.id)}
                       >
                         {item.status === "sold-out" ? "Sold Out" : "In Stock"}
+                    </Button>
+                    </td>
+                    <td>
+                    <Button
+                        variant= "primary"
+                        onClick={() => handleEditDeleteButtonClick(item)}
+                      >
+                        Edit/Delete
                     </Button>
                     </td>
                 </tr>

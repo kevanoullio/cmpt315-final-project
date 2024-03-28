@@ -12,22 +12,19 @@ import "./menuItemWindow.styles.css";
  * @param {Function} onSubmit - The function to submit the addition, deletion, or update of a menu item
  * @returns {JSX.Element} - The menu item window component
  */
-const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
+const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit }) => {
   // variables to hold the menu item attributes
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [available, setAvailable] = useState(false);
+  const [id, setId] = useState(menuItemToEdit ? menuItemToEdit.id : "");
+  const [name, setName] = useState(menuItemToEdit ? menuItemToEdit.name : "");
+  const [description, setDescription] = useState(menuItemToEdit ? menuItemToEdit.description : "");
+  const [price, setPrice] = useState(menuItemToEdit ? menuItemToEdit.price : "");
+  const [available, setAvailable] = useState(menuItemToEdit ? menuItemToEdit.status === "in stock" : false);
 
   // Function to submit menu item (update or add menu item)  
   const onSubmitButtonClick = () => {
-    let itemStatus;
-    if (available) {
-      itemStatus = "in stock";
-    } else {
-      itemStatus = "sold-out";
-    }
+    let itemStatus = available ? "in stock" : "sold-out";
     const menuItemAttributes = {
+      id: id,
       name: name,
       status: itemStatus,
       description: description,
@@ -36,6 +33,7 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
     onSubmit(menuItemAttributes);
 
     // Reset the variables
+    setId("");
     setName("");
     setDescription("");
     setPrice("");
@@ -48,6 +46,7 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
   // Function to cancel adding or editing menu item 
   const onCancel = () => {
     // Reset the variables
+    setId("");
     setName("");
     setDescription("");
     setPrice("");
@@ -67,7 +66,7 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Add or Edit Menu Item</Modal.Title> 
+        <Modal.Title>{menuItemToEdit ? "Edit or Delete Menu Item" : "Add Menu Item"}</Modal.Title> 
       </Modal.Header>
       <Modal.Body>
         <div className="menu-item-container">
@@ -130,7 +129,7 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit }) => {
           // disable if no changes during edit or if not all fields filled out during add 
           disabled={!name || !description || !price}
         >
-          Submit
+          {menuItemToEdit ? "Update" : "Add"}
         </Button>
       </Modal.Footer>
     </Modal>
