@@ -3,9 +3,10 @@
 import {
     getRestaurantsFromRepository,
     updateRestaurantsInRepository,
+    updateMenuItemsForRestaurantInRepository,
     deleteRestaurantFromRepository,
     createRestaurantInRepository,
-    getAllMenuItems
+    getAllMenuItems,
 } from "../repositories/restaurant.repository.js";
 
 export const getRestaurants = async (req, res) => {
@@ -52,6 +53,24 @@ export const updateRestaurant = async (req, res) => {
         }
     } catch (e) {
         console.log("Failed to update restaurant: ", e);
+        res.status(400).send("Update failed");
+    }
+}
+
+export const updateMenuItemArray = async (req, res) => {
+    try {
+        const {restaurantID} = req.params; 
+        const { newMenuItemId } = req.body; 
+        const restaurant = await updateMenuItemsForRestaurantInRepository(restaurantID, newMenuItemId);
+        // returns -1 if it does not exist in database
+        if (restaurant === -1) {
+            res.status(400).send("The restaurant you are trying to update with restaurantID " + restaurantID + " likely does not exist.")
+        }
+        else {
+            res.status(200).send(restaurant);
+        }
+    } catch (e) {
+        console.log("Failed to update restaurant's menu items: ", e);
         res.status(400).send("Update failed");
     }
 }
