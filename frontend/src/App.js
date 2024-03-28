@@ -68,9 +68,9 @@ function App() {
 
   // for adding, editing, and deleting a menu item as a manager
   const [showAddItem, setShowAddItem] = useState(false);
-  const [showEditDeleteItem, setShowEditDeleteItem] = useState(false);
+  const [showEditItem, setShowEditItem] = useState(false);
   const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
-  const toggleEditDeleteMenuItem = () => setShowEditDeleteItem(!showEditDeleteItem);
+  const toggleEditMenuItem = () => setShowEditItem(!showEditItem);
   const [menuItemToEdit, setMenuItemToEdit] = useState(null);
 
   /**
@@ -665,10 +665,8 @@ function App() {
     setShowManagerMenuItemsTable(true);
   };
 
-
-  // RIGHT NOW THIS ONLY HANDLES EDIT --- NEED A FLAG FOR DELETE? 
-  // TODO: handle delete as well 
-  const handleEditDeleteMenuItem = async (menuItem) => {
+ 
+  const handleEditMenuItem = async (menuItem) => {
     try {
       const { id, ...editAttributes } = menuItem;
       const response = await axiosClient.patch(`/menuItems/${id}`, editAttributes);
@@ -683,9 +681,9 @@ function App() {
     }
   }
 
-  const handleManagerEditDeleteSelection = (menuItem) => {
+  const handleManagerEditSelection = (menuItem) => {
     setMenuItemToEdit(menuItem);
-    toggleEditDeleteMenuItem();
+    toggleEditMenuItem();
   };
 
 
@@ -856,7 +854,7 @@ function App() {
                   <ManagerMenuItemsTable
                     menuItems={currentRestaurantMenuItems}
                     onItemSelection={handleManagersMenuItemSelection} 
-                    onEditDeleteSelection={handleManagerEditDeleteSelection} />
+                    onEditSelection={handleManagerEditSelection} />
                   { currentRestaurant.id && (
                     // this will only show when current restaurant is selected
                     // current restaurant should be updated when a manager is selected
@@ -871,9 +869,9 @@ function App() {
                     onSubmit={handleAddMenuItem}
                   />
                   <MenuItemWindow
-                    showMenuItem={showEditDeleteItem}
-                    toggleMenuItem={toggleEditDeleteMenuItem}
-                    onSubmit={handleEditDeleteMenuItem}
+                    showMenuItem={showEditItem}
+                    toggleMenuItem={toggleEditMenuItem}
+                    onSubmit={handleEditMenuItem}
                     menuItemToEdit={menuItemToEdit}
                   />
                   <ChangeHoursWindow

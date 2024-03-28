@@ -15,9 +15,9 @@ import "./menuItemWindow.styles.css";
 const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit }) => {
   // variables to hold the menu item attributes
   const [id, setId] = useState(menuItemToEdit ? menuItemToEdit.id : "");
-  const [name, setName] = useState(menuItemToEdit ? menuItemToEdit.name : "");
-  const [description, setDescription] = useState(menuItemToEdit ? menuItemToEdit.description : "");
-  const [price, setPrice] = useState(menuItemToEdit ? menuItemToEdit.price : "");
+  const [name, setName] = useState(menuItemToEdit ? menuItemToEdit.name : "Enter name");
+  const [description, setDescription] = useState(menuItemToEdit ? menuItemToEdit.description : "Enter description");
+  const [price, setPrice] = useState(menuItemToEdit ? menuItemToEdit.price : "Enter price without dollar sign");
   const [available, setAvailable] = useState(menuItemToEdit ? menuItemToEdit.status === "in stock" : false);
 
   // Function to submit menu item (update or add menu item)  
@@ -76,7 +76,7 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter name"
+                  placeholder={name}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -86,7 +86,7 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter description"
+                  placeholder={description}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
@@ -96,7 +96,7 @@ const MenuItemWindow = ({ showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit
                 <Form.Label>Price</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter price without dollar sign" // TODO: handle this better (maybe show $ before text field?)
+                  placeholder={price} // TODO: handle this better (maybe show $ before text field?)
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                 />
