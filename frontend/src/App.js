@@ -67,12 +67,15 @@ function App() {
   const storeHours = [10, 20];
   const cookTime = 15;
 
-  // for adding a new menu item
-  const [showAddItem, setShowAddItem] = useState(false);
-  const [showHours, setShowHours] = useState(false);
-  const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
   const toggleShowHours = () => setShowHours(!showHours);
+  const [showHours, setShowHours] = useState(false);
 
+  // for adding, editing, and deleting a menu item as a manager
+  const [showAddItem, setShowAddItem] = useState(false);
+  const [showEditItem, setShowEditItem] = useState(false);
+  const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
+  const toggleEditMenuItem = () => setShowEditItem(!showEditItem);
+  const [menuItemToEdit, setMenuItemToEdit] = useState(null);
 
   /**
    * Function to handle view button click
@@ -678,13 +681,33 @@ function App() {
 
   const handleManagerAnalytics = () => {
     setShowManagerAnalytics(true);
-
     setShowManagerOrderTable(false);
     setShowManagerMenuItemsTable(false);
   };
+
+  const handleEditMenuItem = async (menuItem) => {
+    try {
+      const { id, ...editAttributes } = menuItem;
+      const response = await axiosClient.patch(`/menuItems/${id}`, editAttributes);
+      if (response.status === 200) {
+            // update list of all menu items  
+            fetchMenuItems(); 
+      }
+    } catch (error) {
+      console.error("Error editing menu item:", error);
+    }
+  }
+
+  const handleManagerEditSelection = (menuItem) => {
+    setMenuItemToEdit(menuItem);
+    toggleEditMenuItem();
+  };
+
+
   const handleAddMenuItem = async (menuItemAttributes) => {
     try {
-      const response = await axiosClient.post(`/menuItems/`, menuItemAttributes);
+      const { id, ...addAttributes } = menuItemAttributes;
+      const response = await axiosClient.post(`/menuItems/`, addAttributes);
       if (response.status === 201) {
         // Get the id of the newly created menu item
         const newMenuItemId = response.data.id;
@@ -851,7 +874,8 @@ function App() {
                   <section className="App-manager-menuItems-table">
                     <ManagerMenuItemsTable
                       menuItems={currentRestaurantMenuItems}
-                      onItemSelection={handleManagersMenuItemSelection}/>
+                      onItemSelection={handleManagersMenuItemSelection}
+                      onEditSelection={handleManagerEditSelection} />
                     {currentRestaurant.id && (
                       // this will only show when current restaurant is selected
                       // current restaurant should be updated when a manager is selected
@@ -865,7 +889,13 @@ function App() {
                       toggleMenuItem={toggleAddMenuItem}
                       onSubmit={handleAddMenuItem}
                     />
-                    <ChangeHoursWindow
+                    <MenuItemWindow
+                    showMenuItem={showEditItem}
+                    toggleMenuItem={toggleEditMenuItem}
+                    onSubmit={handleEditMenuItem}
+                    menuItemToEdit={menuItemToEdit}
+                  />
+                  <ChangeHoursWindow
                       currentRestaurant={currentRestaurant}
                       showHours={showHours}
                       toggleHours={toggleShowHours}
