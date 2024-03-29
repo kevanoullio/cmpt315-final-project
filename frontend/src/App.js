@@ -571,9 +571,8 @@ function App() {
         if (partOrder !== 0) return partOrder;
 
         // If the status is the same, then sort by time
-        return b.createdAt.localeCompare(a.createdAt);
+        return a.pickupTime.localeCompare(b.pickupTime);
       }));
-      console.log("orders", orders)
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
