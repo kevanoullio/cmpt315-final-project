@@ -573,7 +573,6 @@ function App() {
         // If the status is the same, then sort by time
         return a.createdAt.localeCompare(b.createdAt);
       }));
-      console.log("orders", orders)
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
