@@ -76,6 +76,8 @@ function App() {
   const toggleAddMenuItem = () => setShowAddItem(!showAddItem);
   const toggleEditMenuItem = () => setShowEditItem(!showEditItem);
   const [menuItemToEdit, setMenuItemToEdit] = useState(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [deleteMenuItemId, setDeleteMenuItemId] = useState(null);
 
   /**
    * Function to handle view button click
@@ -735,6 +737,27 @@ function App() {
     }
   };
 
+  
+  const handleCancelDeleteMenuItem = () => {
+    setShowDeleteConfirmation(false);
+    if (deleteMenuItemId !== null) {
+      setDeleteMenuItemId(null);
+    }
+  };
+
+  const handleConfirmDeleteMenuItem = async () => {
+    if (deleteMenuItemId !== null) {
+      await handleManagerDeleteSelection(deleteMenuItemId);
+      setDeleteMenuItemId(null);
+      setShowDeleteConfirmation(false);
+    }
+  };
+
+  const openDeleteConfirmation = (menuItemId) => {
+    setDeleteMenuItemId(menuItemId);
+    setShowDeleteConfirmation(true);
+  };
+
 
   const handleAddMenuItem = async (menuItemAttributes) => {
     try {
@@ -908,7 +931,7 @@ function App() {
                       menuItems={currentRestaurantMenuItems}
                       onItemSelection={handleManagersMenuItemSelection}
                       onEditSelection={handleManagerEditSelection}
-                      onDeleteSelection={handleManagerDeleteSelection} />
+                      onDeleteSelection={openDeleteConfirmation} />
                     {currentRestaurant.id && (
                       // this will only show when current restaurant is selected
                       // current restaurant should be updated when a manager is selected
@@ -954,6 +977,14 @@ function App() {
         body="This will empty your current order cart"
         onConfirm={handleConfirmChangeRestaurant}
         onCancel={handleCancelChangeRestaurant}
+      />
+      <ConfirmationWindow
+        className="App-confirm-delete-menuItem"
+        show={showDeleteConfirmation}
+        title="Delete?"
+        body="Are you sure that you would like to delete this menu item?"
+        onConfirm={handleConfirmDeleteMenuItem}
+        onCancel={handleCancelDeleteMenuItem}
       />
       <footer>
         <p>Thank you for choosing Restaurant Order Pickup Management System ||
