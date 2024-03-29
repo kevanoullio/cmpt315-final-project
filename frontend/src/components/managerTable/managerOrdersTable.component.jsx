@@ -2,7 +2,7 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge'; // Import Badge for colored status labels
-import './managerTable.style.css'
+import './managerTable.style.css';
 
 function TableOfOrders({ orders, onUpdateOrderStatus }) {
 
@@ -20,7 +20,7 @@ function TableOfOrders({ orders, onUpdateOrderStatus }) {
 
   // Helper function to determine the variant of the badge based on the order status
   const getBadgeVariant = (status) => {
-    switch(status) {
+    switch (status) {
       case "ordered": return "primary";
       case "in-progress": return "warning";
       case "awaiting pickup": return "info";
