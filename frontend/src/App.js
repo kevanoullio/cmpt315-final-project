@@ -558,6 +558,7 @@ function App() {
     fetchCustomers();
   }, []);
 
+  const statusOrder = ["ordered", "in-progress", "awaiting pickup", "completed"];
 
   /**
    * Fetch Orders from the API/Database to populate the orders variable, which is later filtered
@@ -566,7 +567,14 @@ function App() {
   const fetchOrders = async () => {
     try {
       const response = await axiosClient.get("/orders");
-      setOrders(response.data);
+      setOrders(response.data.sort((a, b) => {
+        // Sort by status first
+        const partOrder = statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+        if (partOrder !== 0) return partOrder;
+
+        // If the status is the same, then sort by time
+        return a.pickupTime.localeCompare(b.pickupTime);
+      }));
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -906,7 +914,7 @@ function App() {
         )}
         {view === "manager" && (
           <>
-            <section>
+            <section className="mangerView">
               <div className="App-manager-restaurant-name">
                 {currentRestaurant.name === "Select a restaurant" ? null : (
                   <h3>{currentRestaurant.name}</h3>
@@ -922,7 +930,9 @@ function App() {
                   <section className="App-manager-order-table">
                     <ManagerOrderTable
                       orders={currentRestaurantOrders}
-                      onUpdateOrderStatus={managerUpdateOrderStatus}/>
+                      onUpdateOrderStatus={managerUpdateOrderStatus}
+                      getOrders={fetchOrders}
+                    />
                   </section>
                 )}
                 {showManagerMenuItemsTable && (
