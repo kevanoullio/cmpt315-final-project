@@ -707,6 +707,35 @@ function App() {
   };
 
 
+  const handleManagerDeleteSelection = async (menuItemId) => {
+    try {
+      const response = await axiosClient.delete(`/menuItems/${menuItemId}`);
+      if (response.status === 200) {
+        // remove menu item id from restaurant's menu items array
+        try {
+          const response = await axiosClient.patch(`/restaurants/${currentManager.restaurantId.id}/deleteMenuItem`, {menuItemId});
+          if (response.status === 200) {
+            // update list of all menu items
+            fetchMenuItems();
+            // update currentRestaurant to the same restaurant but with the updated array of menuItems
+            setCurrentRestaurant(response.data);
+          }
+          else {
+            console.error("Failed to update restaurant menu items");
+          }
+        } catch (error) {
+          console.error("Error updating restaurant menu items:", error);
+        }
+      }
+      else {
+        console.error("Failed to update restaurant menu items");
+      }
+    } catch (error) {
+      console.error("Error deleting menu item:", error);
+    }
+  };
+
+
   const handleAddMenuItem = async (menuItemAttributes) => {
     try {
       const { id, ...addAttributes } = menuItemAttributes;
@@ -878,7 +907,8 @@ function App() {
                     <ManagerMenuItemsTable
                       menuItems={currentRestaurantMenuItems}
                       onItemSelection={handleManagersMenuItemSelection}
-                      onEditSelection={handleManagerEditSelection} />
+                      onEditSelection={handleManagerEditSelection}
+                      onDeleteSelection={handleManagerDeleteSelection} />
                     {currentRestaurant.id && (
                       // this will only show when current restaurant is selected
                       // current restaurant should be updated when a manager is selected

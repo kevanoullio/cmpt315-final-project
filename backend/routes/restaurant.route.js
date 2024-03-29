@@ -5,7 +5,8 @@ import {
     getRestaurant,
     getRestaurants,
     updateRestaurant,
-    updateMenuItemArray
+    updateMenuItemArray,
+    deleteMenuItemFromArray
 } from "../controllers/restaurant.controller.js";
 
 const restaurantRouter = Express.Router();
@@ -35,6 +36,7 @@ restaurantRouter.post("/", createRestaurant);
 restaurantRouter.patch("/:restaurantID", updateRestaurant);
 
 restaurantRouter.patch("/:restaurantID/addMenuItem", updateMenuItemArray);
+restaurantRouter.patch("/:restaurantID/deleteMenuItem", deleteMenuItemFromArray);
 
 // example delete: localhost:8080/restaurants/3
 restaurantRouter.delete("/:restaurantID", deleteRestaurant);
