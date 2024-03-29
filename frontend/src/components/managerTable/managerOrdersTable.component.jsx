@@ -71,8 +71,20 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
           {orders.length > 0 ? orders.map(order => (
             <tr key={order.id}>
               <td>{order.id}</td>
-              <td>{order.menuItems.map(item => item.name).join(', ')}</td>
-              <td>{new Date(order.pickupTime).toLocaleString()}</td>
+              <td>
+                <div className="orderItems" >
+                  {order.menuItems.map(item => item.name).join(', ')}
+                  <br/>
+                  {`Subtotal: $${order.menuItems.reduce((acc, item) => acc + item.price, 0).toFixed(2)}`}
+                </div>
+              </td>
+              <td>
+                <div className="orderTime">
+                  {new Date(order.pickupTime).toLocaleString().split(",")[0]}
+                  <br/>
+                  {new Date(order.pickupTime).toLocaleString().split(",")[1]}
+                </div>
+              </td>
               <td>
                 <Badge bg={getBadgeVariant(order.status.toLowerCase())}>
                   {order.status}
