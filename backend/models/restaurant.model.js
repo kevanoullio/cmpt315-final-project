@@ -38,7 +38,7 @@ const restaurantSchema = new mongoose.Schema(
         ex. postman patch to add hours:
         {
           "storeHours": {
-              "open": "7:30",
+              "open": "07:30",
               "close": "20:30"
           }
         }

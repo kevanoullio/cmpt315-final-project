@@ -5,7 +5,12 @@
         "address": "101 5th Ave Edmonton, AB",
         "phone": "7804445656",
         "email": "pizzapalace@email.com",
-        "menuItems": [1, 2, 3, 4, 5, 6]
+        "menuItems": [1, 2, 3, 4, 5, 6],
+        "storeHours": {
+            "open": "07:30",
+            "close": "20:30"
+        }
+
     },
     {
         "id": 2,
@@ -13,7 +18,11 @@
         "address": "405 99 St Edmonton, AB",
         "phone": "7804448989",
         "email": "burgerparlor@email.com",
-        "menuItems": [7, 8, 9, 10, 11, 12]
+        "menuItems": [7, 8, 9, 10, 11, 12],
+        "storeHours": {
+            "open": "09:00",
+            "close": "20:00"
+        }
     },
     {
         "id": 3,
@@ -21,7 +30,11 @@
         "address": "701 10th St Edmonton, AB",
         "phone": "7805551212",
         "email": "sushihaven@email.com",
-        "menuItems": [13, 14, 15, 16, 17, 18]
+        "menuItems": [13, 14, 15, 16, 17, 18],
+        "storeHours": {
+            "open": "11:00",
+            "close": "21:00"
+        }
     },
     {
         "id": 4,
