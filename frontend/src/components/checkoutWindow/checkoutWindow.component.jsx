@@ -37,12 +37,6 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
   const { minDate, maxDate } = dateConstraints;
   const { minTime, maxTime } = timeConstraints;
 
-  const formatTime = (time) => {
-    const hours = time.getHours().toString().padStart(2, '0');
-    const minutes = time.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  };
-
   return (
     <Modal
       className="checkout-window"
@@ -83,8 +77,8 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
               <TimePicker
                 value={selectedTime}
                 onChange={setSelectedTime}
-                minTime={formatTime(minTime)}
-                maxTime={formatTime(maxTime)}
+                minTime={minTime}
+                maxTime={maxTime}
                 format="HH:mm a"
                 hourPlaceholder="HH"
                 minutePlaceholder="mm"

@@ -7,7 +7,7 @@
         "email": "pizzapalace@email.com",
         "menuItems": [1, 2, 3, 4, 5, 6],
         "storeHours": {
-            "open": "7:30",
+            "open": "07:30",
             "close": "20:30"
         }
 
@@ -20,7 +20,7 @@
         "email": "burgerparlor@email.com",
         "menuItems": [7, 8, 9, 10, 11, 12],
         "storeHours": {
-            "open": "9:00",
+            "open": "09:00",
             "close": "20:00"
         }
     },

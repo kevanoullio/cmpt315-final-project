@@ -64,7 +64,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [asap, setAsap] = useState(false);
-  const [storeHours, setStoreHours] = useState([0, 23]);
+  const [storeHours, setStoreHours] = useState(["00:00", "23:59"]);
   const cookTime = 15;
 
   const toggleShowHours = () => setShowHours(!showHours);
@@ -326,12 +326,14 @@ function App() {
   const getDateConstraints = () => {
     // Use the current date as minDate and format it to store opening hours
     const minDate = new Date();
-    minDate.setHours(storeHours[0], 0, 0, 0);
+    const [openHour, openMinutes] = storeHours[0].split(":").map(Number);
+    minDate.setHours(openHour, openMinutes, 0, 0);
 
     // Set the maxDate to current date plus 4 weeks and format it to store closing hours
     const maxDate = new Date();
+    const [closeHour, closeMinutes] = storeHours[1].split(":").map(Number);
     maxDate.setDate(maxDate.getDate() + 28);
-    maxDate.setHours(storeHours[1], 0, 0, 0)
+    maxDate.setHours(closeHour, closeMinutes, 0, 0)
 
     return {minDate, maxDate};
   };
@@ -345,27 +347,13 @@ function App() {
   const getTimeConstraints = (selectedDate) => {
     // Get the current date, hour, and minutes
     const currentDate = new Date();
-    const currentHour = currentDate.getHours();
-    const currentMinutes = currentDate.getMinutes();
-
-    // Set the selected date to a Date object
-    const selectedDateObject = new Date(selectedDate);
 
     // Initialize the minTime and maxTime
-    const minTime = new Date(selectedDateObject.getDate());
-    const maxTime = new Date(selectedDate);
-
-    // Set the maxTime constrainst
-    maxTime.setHours(storeHours[1], 0, 0, 0);
-
-    // Set the minTime constraints for today and other days
+    let minTime = storeHours[0];
+    const maxTime = storeHours[1];
     if (isToday(selectedDate)) {
-      minTime.setHours(currentHour, currentMinutes + cookTime, 0, 0);
+      minTime = currentDate.getHours() + ":" + (currentDate.getMinutes() + cookTime);
     }
-    else {
-      minTime.setHours(storeHours[0], 0, 0, 0);
-    }
-
     return {minTime, maxTime};
   };
 
@@ -444,9 +432,12 @@ function App() {
    */
   useEffect(() => {
     if (currentRestaurant && currentRestaurant.id) {
-      setStoreHours(currentRestaurant.storeHours);
+      if (currentRestaurant.storeHours && currentRestaurant.storeHours.open && currentRestaurant.storeHours.close) {
+        setStoreHours([currentRestaurant.storeHours.open, currentRestaurant.storeHours.close]);
+      } else {
+        setStoreHours(["00:00", "23:59"]);
+      }
     }
-    console.log("store hours", storeHours);
   }, [currentRestaurant]);
 
 
