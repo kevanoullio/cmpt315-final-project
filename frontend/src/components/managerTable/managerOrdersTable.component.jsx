@@ -1,10 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge'; // Import Badge for colored status labels
+import Modal from 'react-bootstrap/Modal';
 import './managerTable.style.css';
+import axiosClient from "../../axios";
 
-function TableOfOrders({ orders, onUpdateOrderStatus }) {
+function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
+  const [open, setOpen] = useState(false);
+  const [order, setOrder] = useState(null);
+
+  const onDelete = (order) => {
+    setOrder(order);
+    setOpen(true);
+  }
+
+  const onDeleteConfirm = () => {
+    deleteOrder();
+    setOpen(false);
+  }
+
+  const deleteOrder = async () => {
+    try {
+      const response = await axiosClient.delete(`/orders/${order.id}`);
+      getOrders();
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Function to get the next status based on the current status
   const getNextStatus = (currentStatus) => {
@@ -40,9 +64,10 @@ function TableOfOrders({ orders, onUpdateOrderStatus }) {
             <th>Preferred Pickup</th>
             <th>Status</th>
             <th>Update Status</th>
+            <th>Delete</th>
           </tr>
-        </thead> {/* className="orderTableBody" */}
-        <tbody >
+        </thead>
+        <tbody>
           {orders.length > 0 ? orders.map(order => (
             <tr key={order.id}>
               <td>{order.id}</td>
@@ -55,21 +80,43 @@ function TableOfOrders({ orders, onUpdateOrderStatus }) {
               </td>
               <td>
                 <Button
-                  variant="outline-primary"
+                  variant="primary"
                   onClick={() => handleStatusUpdateClick(order)}
                   disabled={order.status === "completed"} // Disable button if order is completed
                 >
                   Forward Status
                 </Button>
               </td>
+              <td>
+                <Button
+                  variant="outline-danger"
+                  onClick={() => onDelete(order)}
+                >
+                  Delete
+                </Button>
+              </td>
             </tr>
           )) : (
             <tr>
-              <td colSpan="5" className="text-center">No orders found</td>
+              <td colSpan="6" className="text-center">No orders found</td>
             </tr>
           )}
         </tbody>
       </Table>
+      <Modal show={open} onHide={() => setOpen(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Complete Order?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>This will delete this order for the customer as well</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={() => onDeleteConfirm()}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

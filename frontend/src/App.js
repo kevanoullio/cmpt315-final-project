@@ -899,7 +899,9 @@ function App() {
                   <section className="App-manager-order-table">
                     <ManagerOrderTable
                       orders={currentRestaurantOrders}
-                      onUpdateOrderStatus={managerUpdateOrderStatus}/>
+                      onUpdateOrderStatus={managerUpdateOrderStatus}
+                      getOrders={fetchOrders}
+                    />
                   </section>
                 )}
                 {showManagerMenuItemsTable && (
