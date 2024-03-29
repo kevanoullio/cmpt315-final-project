@@ -1,0 +1,9 @@
+.orderTableBody {
+  height: 40vh;
+}
+
+.table-responsive {
+  max-height: 75vh;
+  overflow-y: auto;
+}
+/* //style={{ maxHeight: "75vh", overflowY: "auto" }} */

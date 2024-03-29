@@ -2,6 +2,7 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge'; // Import Badge for colored status labels
+import './managerTable.style.css'
 
 function TableOfOrders({ orders, onUpdateOrderStatus }) {
 
@@ -11,7 +12,7 @@ function TableOfOrders({ orders, onUpdateOrderStatus }) {
     const currentIndex = statusFlow.indexOf(currentStatus);
     return currentIndex === statusFlow.length - 1 ? currentStatus : statusFlow[currentIndex + 1];
   };
-  
+
   const handleStatusUpdateClick = (order) => {
     const nextStatus = getNextStatus(order.status);
     onUpdateOrderStatus(order.id, nextStatus);
@@ -30,44 +31,46 @@ function TableOfOrders({ orders, onUpdateOrderStatus }) {
 
   // Render the table
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>Order No.</th>
-          <th>Items</th>
-          <th>Preferred Pickup</th>
-          <th>Status</th>
-          <th>Update Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {orders.length > 0 ? orders.map(order => (
-          <tr key={order.id}>
-            <td>{order.id}</td>
-            <td>{order.menuItems.map(item => item.name).join(', ')}</td>
-            <td>{new Date(order.pickupTime).toLocaleString()}</td>
-            <td>
-              <Badge bg={getBadgeVariant(order.status.toLowerCase())}>
-                {order.status}
-              </Badge>
-            </td>
-            <td>
-              <Button
-                variant="outline-primary"
-                onClick={() => handleStatusUpdateClick(order)}
-                disabled={order.status === "completed"} // Disable button if order is completed
-              >
-                Forward Status
-              </Button>
-            </td>
-          </tr>
-        )) : (
+    <div className="table-responsive" >
+      <Table striped bordered hover >
+        <thead>
           <tr>
-            <td colSpan="5" className="text-center">No orders found</td>
+            <th>Order No.</th>
+            <th>Items</th>
+            <th>Preferred Pickup</th>
+            <th>Status</th>
+            <th>Update Status</th>
           </tr>
-        )}
-      </tbody>
-    </Table>
+        </thead> {/* className="orderTableBody" */}
+        <tbody >
+          {orders.length > 0 ? orders.map(order => (
+            <tr key={order.id}>
+              <td>{order.id}</td>
+              <td>{order.menuItems.map(item => item.name).join(', ')}</td>
+              <td>{new Date(order.pickupTime).toLocaleString()}</td>
+              <td>
+                <Badge bg={getBadgeVariant(order.status.toLowerCase())}>
+                  {order.status}
+                </Badge>
+              </td>
+              <td>
+                <Button
+                  variant="outline-primary"
+                  onClick={() => handleStatusUpdateClick(order)}
+                  disabled={order.status === "completed"} // Disable button if order is completed
+                >
+                  Forward Status
+                </Button>
+              </td>
+            </tr>
+          )) : (
+            <tr>
+              <td colSpan="5" className="text-center">No orders found</td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
+    </div>
   );
 }
 

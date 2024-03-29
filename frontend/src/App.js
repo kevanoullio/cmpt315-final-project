@@ -883,7 +883,7 @@ function App() {
         )}
         {view === "manager" && (
           <>
-            <section>
+            <section className="mangerView">
               <div className="App-manager-restaurant-name">
                 {currentRestaurant.name === "Select a restaurant" ? null : (
                   <h3>{currentRestaurant.name}</h3>

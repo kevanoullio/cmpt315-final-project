@@ -9,6 +9,10 @@
   background-color: lightgray;
 }
 
+.mangerView {
+  height: 85vh;
+}
+
 header,
 footer {
   display: flex;
@@ -68,7 +72,7 @@ main {
   height: 75vh;
 }
 
-.App-view-buttons, 
+.App-view-buttons,
 .App-manager-table-buttons {
   display: flex;
   justify-content: center;
