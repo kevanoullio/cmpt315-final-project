@@ -18,6 +18,6 @@
 .cart-table {
   /* change this if we remove the top bar */
   height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   text-align: center;
 }

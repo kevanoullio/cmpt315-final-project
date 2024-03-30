@@ -3,24 +3,34 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-import "./menuItemWindow.styles.css";
 
 /**
  * Function to render the menu item window component
  * @param {Boolean} showMenuItem - The boolean to show the menu item window
  * @param {Function} toggleMenuItem - The function to toggle the menu item window
- * @param {Function} onSubmit - The function to submit the addition, deletion, or update of a menu item
+ * @param {Function} onSubmit - The function to submit the update of a menu item
  * @returns {JSX.Element} - The menu item window component
  */
-const MenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit}) => {
+const EditMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit}) => {
   // variables to hold the menu item attributes
-  const [id, setId] = useState("");
-  const [name, setName] = useState("Enter name");
-  const [description, setDescription] = useState("Enter description");
-  const [price, setPrice] = useState("Enter price without dollar sign");
-  const [available, setAvailable] = useState(false);
+  const [id, setId] = useState(menuItemToEdit ? menuItemToEdit.id : "");
+  const [name, setName] = useState(menuItemToEdit ? menuItemToEdit.name: "");
+  const [description, setDescription] = useState(menuItemToEdit ? menuItemToEdit.description : "");
+  const [price, setPrice] = useState(menuItemToEdit ? menuItemToEdit.price : "");
+  const [available, setAvailable] = useState(menuItemToEdit ? menuItemToEdit.status === "in stock" : true);
 
-  // Function to submit menu item (update or add menu item)
+  useEffect(() => {
+    if (menuItemToEdit) {
+      setId(menuItemToEdit.id);
+      setName(menuItemToEdit.name);
+      setDescription(menuItemToEdit.description);
+      setPrice(menuItemToEdit.price);
+      setAvailable(menuItemToEdit.status === "in stock");
+    }
+  }
+  , [menuItemToEdit]);
+
+  // Function to submit update of menu item
   const onSubmitButtonClick = () => {
     let itemStatus = available ? "in stock" : "sold-out";
     const menuItemAttributes = {
@@ -31,42 +41,21 @@ const MenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit}
       price: price
     };
     onSubmit(menuItemAttributes);
-
-    // Reset the variables
-    setId("");
-    setName("");
-    setDescription("");
-    setPrice("");
-    setAvailable(false);
-
     // Close the window
     toggleMenuItem();
   };
 
-  // Function to cancel adding or editing menu item
+  // Function to cancel editing menu item
   const onCancel = () => {
-    // Reset the variables
-    setId("");
-    setName("");
-    setDescription("");
-    setPrice("");
-    setAvailable(false);
-
+    // Revert any changes made while in the window so that if the window is opened again immediately it won't show the unsaved changes 
+    setId(menuItemToEdit.id);
+    setName(menuItemToEdit.name);
+    setDescription(menuItemToEdit.description);
+    setPrice(menuItemToEdit.price);
+    setAvailable(menuItemToEdit.status === "in stock");
     // Close the window
     toggleMenuItem();
   };
-
-
-  useEffect(() => {
-      if (menuItemToEdit) {
-        setId(menuItemToEdit.id);
-        setName(menuItemToEdit.name);
-        setDescription(menuItemToEdit.description);
-        setPrice(menuItemToEdit.price);
-        setAvailable(menuItemToEdit.status === "in stock");
-      }
-    }
-    , [menuItemToEdit]);
 
   return (
     <Modal
@@ -78,7 +67,7 @@ const MenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit}
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>{menuItemToEdit ? "Edit or Delete Menu Item" : "Add Menu Item"}</Modal.Title>
+        <Modal.Title>Edit Menu Item</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="menu-item-container">
@@ -103,11 +92,18 @@ const MenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit}
               </Form.Group>
 
               <Form.Group controlId="form-price">
-                <Form.Label>Price</Form.Label>
+                <Form.Label>Price: numbers only (decimal point optional)</Form.Label>
                 <Form.Control
                   type="text"
                   value={price}
-                  onChange={(e) => setPrice(e.target.value)}
+                  onChange={(e) => {
+                    const inputPrice = e.target.value;
+                    // Check if the input is a valid number
+                    if (/^\d*\.?\d*$/.test(inputPrice)) {
+                      setPrice(inputPrice);
+                    }
+                  }}
+                  pattern="^\d*\.?\d*$" // Only allow numbers (decimal point optional)
                 />
               </Form.Group>
 
@@ -135,14 +131,14 @@ const MenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit}
           className="submit-button"
           variant="success"
           onClick={onSubmitButtonClick}
-          // disable if no changes during edit or if not all fields filled out during add
+          // disable if no changes during edit
           disabled={!name || !description || !price}
         >
-          {menuItemToEdit ? "Update" : "Add"}
+          Update
         </Button>
       </Modal.Footer>
     </Modal>
   )
 }
 
-export default MenuItemWindow;
+export default EditMenuItemWindow;

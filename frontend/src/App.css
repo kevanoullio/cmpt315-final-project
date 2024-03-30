@@ -1,7 +1,3 @@
-::-webkit-scrollbar {
-  display: none;
-}
-
 .App-wrapper {
   display: flex;
   flex-direction: column;
@@ -57,19 +53,14 @@ main {
 
 .App-menu-list {
   /* change this if we remove the top bar */
-  height: 75vh;
-  overflow-y: scroll;
+  max-height: 75vh;
+  overflow-y: auto;
 }
 
 .App-current-order {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.current-order-table {
-  /* change this if we remove the top bar */
-  height: 75vh;
 }
 
 .App-view-buttons,
