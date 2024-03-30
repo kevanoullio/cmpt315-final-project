@@ -53,7 +53,7 @@ main {
 
 .App-menu-list {
   /* change this if we remove the top bar */
-  height: 75vh;
+  max-height: 75vh;
   overflow-y: scroll;
 }
 
@@ -65,7 +65,7 @@ main {
 
 .current-order-table {
   /* change this if we remove the top bar */
-  height: 75vh;
+  max-height: 75vh;
 }
 
 .App-view-buttons,
