@@ -9,7 +9,8 @@ import CurrentOrderCartTable
 import ManagerOrderTable from "./components/managerTable/managerOrdersTable.component";
 import ManagerMenuItemsTable
   from "./components/managerTable/managerMenuItemsTable.component";
-import MenuItemWindow from "./components/menuItemWindow/menuItemWindow.component";
+import EditMenuItemWindow from "./components/menuItemWindow/edit.component";
+import AddMenuItemWindow from "./components/menuItemWindow/add.component";
 
 import ConfirmationWindow
   from "./components/confirmationWindow/confirmationWindow.component";
@@ -712,6 +713,7 @@ function App() {
             fetchMenuItems();
       }
     } catch (error) {
+      window.alert("Failed to update menu item, please try again.");
       console.error("Error editing menu item:", error);
     }
   }
@@ -734,16 +736,20 @@ function App() {
             fetchMenuItems();
           }
           else {
-            console.error("Failed to update restaurant menu items");
+            window.alert("Failed to update restaurant's menu items while deleting the menu item, please try again.");
+            console.error("Failed to update restaurant's menu items");
           }
         } catch (error) {
+          window.alert("Failed to update restaurant's menu items while deleting the menu item, please try again.");
           console.error("Error updating restaurant menu items:", error);
         }
       }
       else {
-        console.error("Failed to update restaurant menu items");
+        window.alert("Failed to delete menu item, please try again.");
+        console.error("Failed to delete menu item");
       }
     } catch (error) {
+      window.alert("Failed to delete menu item, please try again.");
       console.error("Error deleting menu item:", error);
     }
   };
@@ -772,8 +778,7 @@ function App() {
 
   const handleAddMenuItem = async (menuItemAttributes) => {
     try {
-      const { id, ...addAttributes } = menuItemAttributes;
-      const response = await axiosClient.post(`/menuItems/`, addAttributes);
+      const response = await axiosClient.post(`/menuItems/`, menuItemAttributes);
       if (response.status === 201) {
         // Get the id of the newly created menu item
         const newMenuItemId = response.data.id;
@@ -785,16 +790,20 @@ function App() {
             fetchMenuItems();
           }
           else {
+            window.alert("Failed to update restaurant's menu items while creating menu item, please try again.");
             console.error("Failed to update restaurant menu items");
           }
         } catch (error) {
+          window.alert("Failed to update restaurant's menu items while creating menu item, please try again.");
           console.error("Error updating restaurant menu items:", error);
         }
       }
       else {
-        console.error("Failed to update restaurant menu items");
+        window.alert("Failed to create menu item, please try again.");
+        console.error("Failed to create menu item");
       }
     } catch (error) {
+      window.alert("Failed to create menu item, please try again.");
       console.error("Error creating menu item:", error);
     }
   };
@@ -808,9 +817,11 @@ function App() {
         fetchManagers();
       }
       else {
+        window.alert("Failed to update restaurant's hours, please try again.");
         console.error("Failed to change restaurant hours");
       }
     } catch (error) {
+      window.alert("Failed to update restaurant's hours, please try again.");
       console.error("Error changing restaurant hours:", error);
     }
   };
@@ -943,6 +954,14 @@ function App() {
                 <div className="App-manager-table-buttons">
                   <button onClick={handleManagerOrderTable}>Orders</button>
                   <button onClick={handleManagerMenuItems}>Menu Items</button>
+                  {currentRestaurant.id && (
+                    // this will only show when current restaurant is selected
+                    // current restaurant is updated when a manager is selected
+                    <>
+                      <button onClick={toggleAddMenuItem}>Add Menu Item</button>
+                      <button onClick={toggleShowHours}>Change Restaurant Hours</button>
+                    </>
+                  )}
                   <button onClick={handleManagerAnalytics}>Analytics</button>
                 </div>
                 {showManagerOrderTable && (
@@ -960,31 +979,13 @@ function App() {
                       menuItems={filteredMenuItems}
                       onItemSelection={handleManagersMenuItemSelection}
                       onEditSelection={handleManagerEditSelection}
-                      onDeleteSelection={openDeleteConfirmation} />
-                    {currentRestaurant.id && (
-                      // this will only show when current restaurant is selected
-                      // current restaurant should be updated when a manager is selected
-                      <>
-                        <button onClick={toggleAddMenuItem}>Add Menu Item</button>
-                        <button onClick={toggleShowHours}>Change Restaurant Hours</button>
-                      </>
-                    )}
-                    <MenuItemWindow
-                      showMenuItem={showAddItem}
-                      toggleMenuItem={toggleAddMenuItem}
-                      onSubmit={handleAddMenuItem}
+                      onDeleteSelection={openDeleteConfirmation} 
                     />
-                    <MenuItemWindow
-                    showMenuItem={showEditItem}
-                    toggleMenuItem={toggleEditMenuItem}
-                    onSubmit={handleEditMenuItem}
-                    menuItemToEdit={menuItemToEdit}
-                  />
-                  <ChangeHoursWindow
-                      currentRestaurant={currentRestaurant}
-                      showHours={showHours}
-                      toggleHours={toggleShowHours}
-                      onSubmit={handleChangeHours}
+                    <EditMenuItemWindow
+                      showMenuItem={showEditItem}
+                      toggleMenuItem={toggleEditMenuItem}
+                      onSubmit={handleEditMenuItem}
+                      menuItemToEdit={menuItemToEdit}
                     />
                   </section>
                 )}
@@ -999,6 +1000,17 @@ function App() {
           </>
         )}
       </main>
+      <ChangeHoursWindow
+        currentRestaurant={currentRestaurant}
+        showHours={showHours}
+        toggleHours={toggleShowHours}
+        onSubmit={handleChangeHours}
+      />
+      <AddMenuItemWindow
+        showMenuItem={showAddItem}
+        toggleMenuItem={toggleAddMenuItem}
+        onSubmit={handleAddMenuItem}
+      />
       <ConfirmationWindow
         className="App-confirm-change-restaurant"
         show={showConfirmationModal}
