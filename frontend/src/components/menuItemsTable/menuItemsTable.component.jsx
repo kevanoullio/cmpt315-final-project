@@ -14,27 +14,29 @@ import "./menuItemsTable.styles.css";
 const MenuItemTable = ({ menuItems, currentRestaurant, currentCustomer, onAddToCart }) => {
   // Render the menuItem table
   return (
-    <BootstrapTable className="bootstrap-table" striped bordered hover>
-      <thead className="custom-header">
-        <tr>
-          <th>Menu Item</th>
-          <th>Item Description</th>
-          <th>Price</th>
-          <th>Add To Cart</th>
-        </tr>
-      </thead>
-      <tbody>
-        {menuItems && menuItems.map((menuItem, index) => (
-          <MenuItem
-            key={index}
-            menuItem={menuItem}
-            currentRestaurant={currentRestaurant}
-            currentCustomer={currentCustomer}
-            onAddToCart={onAddToCart}
-          />
-        ))}
-      </tbody>
-    </BootstrapTable>
+    <div className="table-responsive" >
+      <BootstrapTable className="bootstrap-table" striped bordered hover>
+        <thead className="custom-header">
+          <tr>
+            <th>Menu Item</th>
+            <th>Item Description</th>
+            <th>Price</th>
+            <th>Add To Cart</th>
+          </tr>
+        </thead>
+        <tbody>
+          {menuItems && menuItems.map((menuItem, index) => (
+            <MenuItem
+              key={index}
+              menuItem={menuItem}
+              currentRestaurant={currentRestaurant}
+              currentCustomer={currentCustomer}
+              onAddToCart={onAddToCart}
+            />
+          ))}
+        </tbody>
+      </BootstrapTable>
+    </div>
   );
 };
 
