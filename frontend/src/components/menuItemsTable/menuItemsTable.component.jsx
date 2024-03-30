@@ -11,7 +11,7 @@ import "./menuItemsTable.styles.css";
  * @param {Function} onAddToCart - The function to add a menuItem to the cart
  * @returns {JSX.Element} - The menuItem table component
  */
-const MenuItemTable = ({ menuItems, currentRestaurant, currentCustomer, onAddToCart }) => {
+const MenuItemsTable = ({ menuItems, currentRestaurant, currentCustomer, onAddToCart }) => {
   // Render the menuItem table
   return (
     <BootstrapTable className="bootstrap-table" striped bordered hover>
@@ -38,4 +38,4 @@ const MenuItemTable = ({ menuItems, currentRestaurant, currentCustomer, onAddToC
   );
 };
 
-export default MenuItemTable;
+export default MenuItemsTable;

@@ -85,7 +85,10 @@ function App() {
    * @returns {void} - The function does not return a value
    */
   const onViewButtonClick = (newView) => {
+    console.log(`before: ${storeHours}`)
     if (newView !== view) {
+      console.log(`view: ${view}`)
+      console.log(`new view: ${newView}`)
       setView(newView);
 
       // reset variables back to empty because they will depend on view
@@ -96,6 +99,7 @@ function App() {
       setCurrentManager({});
       setMenuItemsInCart([]);
     }
+    console.log(`after: ${storeHours}`)
   };
 
 
@@ -276,7 +280,9 @@ function App() {
       };
 
       // Add the pickup time to the request body if it is not ASAP
-      if (!asap) {
+      if (asap) {
+        requestBody.pickupTime = formatTime(new Date("1970-01-01T00:00:00Z"));
+      } else if (!asap) {
         requestBody.pickupTime = formatTime(selectedPickupDateTime);
       }
 
@@ -422,6 +428,7 @@ function App() {
    * UseEffect to set the current restaurant's menu items when the current restaurant or list of menu items changes
    */
   useEffect(() => {
+    console.log("useEffect to get current restaurant menu items")
     if (menuItems && currentRestaurant && currentRestaurant.name && currentRestaurant.id) {
       getCurrentRestaurantMenuItems(menuItems, currentRestaurant);
     }
@@ -436,8 +443,10 @@ function App() {
     if (currentRestaurant && currentRestaurant.id) {
       if (currentRestaurant.storeHours && currentRestaurant.storeHours.open && currentRestaurant.storeHours.close) {
         setStoreHours([currentRestaurant.storeHours.open, currentRestaurant.storeHours.close]);
+        console.log(`store hours: ${storeHours}`)
       } else {
         setStoreHours(["00:00", "23:59"]);
+        console.log(`store hours: ${storeHours}`)
       }
     }
   }, [currentRestaurant]);
@@ -451,10 +460,6 @@ function App() {
     try {
       const response = await axiosClient.get("/restaurants");
       setRestaurants(response.data);
-      //set current restaurant if selected
-      if (currentRestaurant.id) {
-        setCurrentRestaurant(response.data.find(restaurant => restaurant.id === currentRestaurant.id))
-      }
     } catch (error) {
       console.error(error);
     }
@@ -558,13 +563,13 @@ function App() {
     fetchCustomers();
   }, []);
 
-  const statusOrder = ["ordered", "in-progress", "awaiting pickup", "completed"];
 
   /**
    * Fetch Orders from the API/Database to populate the orders variable, which is later filtered
    * @returns {void} - The function does not return a value
-   */
-  const fetchOrders = async () => {
+  */
+ const fetchOrders = async () => {
+    const statusOrder = ["ordered", "in-progress", "awaiting pickup", "completed"];
     try {
       const response = await axiosClient.get("/orders");
       setOrders(response.data.sort((a, b) => {
@@ -727,8 +732,6 @@ function App() {
           if (response.status === 200) {
             // update list of all menu items
             fetchMenuItems();
-            // update currentRestaurant to the same restaurant but with the updated array of menuItems
-            setCurrentRestaurant(response.data);
           }
           else {
             console.error("Failed to update restaurant menu items");
@@ -745,7 +748,7 @@ function App() {
     }
   };
 
-  
+
   const handleCancelDeleteMenuItem = () => {
     setShowDeleteConfirmation(false);
     if (deleteMenuItemId !== null) {
@@ -780,8 +783,6 @@ function App() {
           if (response.status === 200) {
             // update list of all menu items
             fetchMenuItems();
-            // update currentRestaurant to the same restaurant but with the updated array of menuItems
-            setCurrentRestaurant(response.data);
           }
           else {
             console.error("Failed to update restaurant menu items");
@@ -822,8 +823,26 @@ function App() {
       </header>
       <section className="App-view-container">
         <div className="App-view-buttons">
-          <button onClick={() => onViewButtonClick("manager")}>Manager View</button>
-          <button onClick={() => onViewButtonClick("customer")}>Customer View</button>
+          <button
+            style={{
+              backgroundColor: view === "manager" ? "lightblue" : "white",
+              color: view === "manager" ? "white" : "black"
+            }}
+            onClick={() => onViewButtonClick("manager")}
+            disabled={view === "manager"}
+          >
+            Manager View
+          </button>
+          <button
+            style={{
+              backgroundColor: view === "customer" ? "lightblue" : "white",
+              color: view === "customer" ? "white" : "black"
+            }}
+            onClick={() => onViewButtonClick("customer")}
+            disabled={view === "customer"}
+          >
+            Customer View
+          </button>
         </div>
         <section className="App-view-dropdowns">
           {view === "manager" && (
@@ -938,7 +957,7 @@ function App() {
                 {showManagerMenuItemsTable && (
                   <section className="App-manager-menuItems-table">
                     <ManagerMenuItemsTable
-                      menuItems={currentRestaurantMenuItems}
+                      menuItems={filteredMenuItems}
                       onItemSelection={handleManagersMenuItemSelection}
                       onEditSelection={handleManagerEditSelection}
                       onDeleteSelection={openDeleteConfirmation} />

@@ -1,4 +1,4 @@
-// import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from 'react-bootstrap/Button';
 import BootstrapTable from "react-bootstrap/Table";
 import './managerTable.style.css';
@@ -8,7 +8,7 @@ import './managerTable.style.css';
  * @param {Array<Object>} menuItems - The list of menuItems
  * @returns {JSX.Element} - The menuItem table component
  */
-const MenuItemTable = ({ menuItems, onItemSelection, onEditSelection, onDeleteSelection }) => {
+const ManagerMenuItemsTable = ({ menuItems, onItemSelection, onEditSelection, onDeleteSelection }) => {
   const handleStatusButtonClick = (itemId) => {
     onItemSelection(itemId);
   };
@@ -73,4 +73,4 @@ const MenuItemTable = ({ menuItems, onItemSelection, onEditSelection, onDeleteSe
   );
 };
 
-export default MenuItemTable;
+export default ManagerMenuItemsTable;
