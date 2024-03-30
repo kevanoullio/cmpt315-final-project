@@ -63,12 +63,6 @@ main {
   align-items: center;
 }
 
-.current-order-table {
-  /* change this if we remove the top bar */
-  max-height: 75vh;
-  overflow-y: auto;
-}
-
 .App-view-buttons,
 .App-manager-table-buttons {
   display: flex;
