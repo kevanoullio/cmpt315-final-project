@@ -357,7 +357,10 @@ function App() {
     let minTime = storeHours[0];
     const maxTime = storeHours[1];
     if (isToday(selectedDate)) {
-      minTime = currentDate.getHours() + ":" + (currentDate.getMinutes() + cookTime);
+      const newMinutes = (currentDate.getMinutes() + cookTime) % 60;
+      const addHours = Math.floor((currentDate.getMinutes() + cookTime) / 60);
+      const newHours = (currentDate.getHours() + addHours) % 24;
+      minTime = newHours + ":" + newMinutes;
     }
     return {minTime, maxTime};
   };
