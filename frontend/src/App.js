@@ -86,10 +86,7 @@ function App() {
    * @returns {void} - The function does not return a value
    */
   const onViewButtonClick = (newView) => {
-    console.log(`before: ${storeHours}`)
     if (newView !== view) {
-      console.log(`view: ${view}`)
-      console.log(`new view: ${newView}`)
       setView(newView);
 
       // reset variables back to empty because they will depend on view
@@ -100,7 +97,6 @@ function App() {
       setCurrentManager({});
       setMenuItemsInCart([]);
     }
-    console.log(`after: ${storeHours}`)
   };
 
 
@@ -429,7 +425,6 @@ function App() {
    * UseEffect to set the current restaurant's menu items when the current restaurant or list of menu items changes
    */
   useEffect(() => {
-    console.log("useEffect to get current restaurant menu items")
     if (menuItems && currentRestaurant && currentRestaurant.name && currentRestaurant.id) {
       getCurrentRestaurantMenuItems(menuItems, currentRestaurant);
     }
@@ -444,10 +439,8 @@ function App() {
     if (currentRestaurant && currentRestaurant.id) {
       if (currentRestaurant.storeHours && currentRestaurant.storeHours.open && currentRestaurant.storeHours.close) {
         setStoreHours([currentRestaurant.storeHours.open, currentRestaurant.storeHours.close]);
-        console.log(`store hours: ${storeHours}`)
       } else {
         setStoreHours(["00:00", "23:59"]);
-        console.log(`store hours: ${storeHours}`)
       }
     }
   }, [currentRestaurant]);
@@ -979,7 +972,7 @@ function App() {
                       menuItems={filteredMenuItems}
                       onItemSelection={handleManagersMenuItemSelection}
                       onEditSelection={handleManagerEditSelection}
-                      onDeleteSelection={openDeleteConfirmation} 
+                      onDeleteSelection={openDeleteConfirmation}
                     />
                     <EditMenuItemWindow
                       showMenuItem={showEditItem}
