@@ -277,7 +277,9 @@ function App() {
       };
 
       // Add the pickup time to the request body if it is not ASAP
-      if (!asap) {
+      if (asap) {
+        requestBody.pickupTime = formatTime(new Date("1970-01-01T00:00:00Z"));
+      } else if (!asap) {
         requestBody.pickupTime = formatTime(selectedPickupDateTime);
       }
 
@@ -355,7 +357,10 @@ function App() {
     let minTime = storeHours[0];
     const maxTime = storeHours[1];
     if (isToday(selectedDate)) {
-      minTime = currentDate.getHours() + ":" + (currentDate.getMinutes() + cookTime);
+      const newMinutes = (currentDate.getMinutes() + cookTime) % 60;
+      const addHours = Math.floor((currentDate.getMinutes() + cookTime) / 60);
+      const newHours = (currentDate.getHours() + addHours) % 24;
+      minTime = newHours + ":" + newMinutes;
     }
     return {minTime, maxTime};
   };
@@ -452,10 +457,6 @@ function App() {
     try {
       const response = await axiosClient.get("/restaurants");
       setRestaurants(response.data);
-      //set current restaurant if selected
-      if (currentRestaurant.id) {
-        setCurrentRestaurant(response.data.find(restaurant => restaurant.id === currentRestaurant.id))
-      }
     } catch (error) {
       console.error(error);
     }
@@ -559,13 +560,13 @@ function App() {
     fetchCustomers();
   }, []);
 
-  const statusOrder = ["ordered", "in-progress", "awaiting pickup", "completed"];
 
   /**
    * Fetch Orders from the API/Database to populate the orders variable, which is later filtered
    * @returns {void} - The function does not return a value
-   */
-  const fetchOrders = async () => {
+  */
+ const fetchOrders = async () => {
+    const statusOrder = ["ordered", "in-progress", "awaiting pickup", "completed"];
     try {
       const response = await axiosClient.get("/orders");
       setOrders(response.data.sort((a, b) => {
@@ -729,8 +730,6 @@ function App() {
           if (response.status === 200) {
             // update list of all menu items
             fetchMenuItems();
-            // update currentRestaurant to the same restaurant but with the updated array of menuItems
-            setCurrentRestaurant(response.data);
           }
           else {
             window.alert("Failed to update restaurant's menu items while deleting the menu item, please try again.");
@@ -751,7 +750,7 @@ function App() {
     }
   };
 
-  
+
   const handleCancelDeleteMenuItem = () => {
     setShowDeleteConfirmation(false);
     if (deleteMenuItemId !== null) {
@@ -785,8 +784,6 @@ function App() {
           if (response.status === 200) {
             // update list of all menu items
             fetchMenuItems();
-            // update currentRestaurant to the same restaurant but with the updated array of menuItems
-            setCurrentRestaurant(response.data);
           }
           else {
             window.alert("Failed to update restaurant's menu items while creating menu item, please try again.");
@@ -833,8 +830,26 @@ function App() {
       </header>
       <section className="App-view-container">
         <div className="App-view-buttons">
-          <button onClick={() => onViewButtonClick("manager")}>Manager View</button>
-          <button onClick={() => onViewButtonClick("customer")}>Customer View</button>
+          <button
+            style={{
+              backgroundColor: view === "manager" ? "lightblue" : "white",
+              color: view === "manager" ? "white" : "black"
+            }}
+            onClick={() => onViewButtonClick("manager")}
+            disabled={view === "manager"}
+          >
+            Manager View
+          </button>
+          <button
+            style={{
+              backgroundColor: view === "customer" ? "lightblue" : "white",
+              color: view === "customer" ? "white" : "black"
+            }}
+            onClick={() => onViewButtonClick("customer")}
+            disabled={view === "customer"}
+          >
+            Customer View
+          </button>
         </div>
         <section className="App-view-dropdowns">
           {view === "manager" && (
@@ -957,10 +972,10 @@ function App() {
                 {showManagerMenuItemsTable && (
                   <section className="App-manager-menuItems-table">
                     <ManagerMenuItemsTable
-                      menuItems={currentRestaurantMenuItems}
+                      menuItems={filteredMenuItems}
                       onItemSelection={handleManagersMenuItemSelection}
                       onEditSelection={handleManagerEditSelection}
-                      onDeleteSelection={openDeleteConfirmation} 
+                      onDeleteSelection={openDeleteConfirmation}
                     />
                     <EditMenuItemWindow
                       showMenuItem={showEditItem}
