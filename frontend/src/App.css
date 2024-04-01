@@ -58,17 +58,17 @@ main {
 }
 
 .App-restaurant-list {
-  flex: 1;
-  margin-left: 40px;
+  width: 25vw;
+  padding-left: 40px;
 }
 
 .App-menu-items {
-  flex: 2;
+  width: 50vw;
 }
 
 .App-current-order {
-  flex: 1;
-  margin-right: 40px;
+  width: 25vw;
+  padding-right: 40px;
 }
 
 .App-view-buttons,
