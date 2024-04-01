@@ -730,6 +730,8 @@ function App() {
           if (response.status === 200) {
             // update list of all menu items
             fetchMenuItems();
+            // update currentRestaurant to the same restaurant but with the updated array of menuItems
+            setCurrentRestaurant(response.data);
           }
           else {
             window.alert("Failed to update restaurant's menu items while deleting the menu item, please try again.");
@@ -784,6 +786,8 @@ function App() {
           if (response.status === 200) {
             // update list of all menu items
             fetchMenuItems();
+            // update currentRestaurant to the same restaurant but with the updated array of menuItems
+            setCurrentRestaurant(response.data);
           }
           else {
             window.alert("Failed to update restaurant's menu items while creating menu item, please try again.");
@@ -828,7 +832,7 @@ function App() {
       <header>
         <h1 className="h1">Restaurant Order Pickup Management System</h1>
       </header>
-      <section className="App-view-container">
+      <section className="App-view-selection">
         <div className="App-view-buttons">
           <button
             style={{
@@ -875,31 +879,31 @@ function App() {
       <main>
         {view === "customer" && (
           <>
-            <section className="App-restaurant-list">
-              <h2 className="h2">Restaurants</h2>
-              <SearchBar
-                className="App-restaurant-search-bar"
-                placeholder="Search for restaurants"
-                handleInput={handleRestaurantSearchInput}
-              />
-              <div className="App-restaurant-cards">
-                {filteredRestaurants.map(restaurant => (
-                  <RestaurantCard
-                    key={restaurant._id}
-                    restaurant={restaurant}
-                    onClick={() => handleRestaurantClick(restaurant)}
-                  />
-                ))}
-              </div>
-            </section>
-            <section className="App-menu-items">
-              <h2 className="h2">{currentRestaurant.name}</h2>
-              <SearchBar
-                className="App-menu-item-search-bar"
-                placeholder="Search for menu items"
-                handleInput={handleMenuItemSearchInput}
-              />
-              <div className="App-menu-list">
+            <div className="App-customer-view">
+              <section className="App-restaurant-list">
+                <h2 className="h2">Restaurants</h2>
+                <SearchBar
+                  className="App-restaurant-search-bar"
+                  placeholder="Search for restaurants"
+                  handleInput={handleRestaurantSearchInput}
+                />
+                <div className="App-restaurant-cards">
+                  {filteredRestaurants.map(restaurant => (
+                    <RestaurantCard
+                      key={restaurant._id}
+                      restaurant={restaurant}
+                      onClick={() => handleRestaurantClick(restaurant)}
+                    />
+                  ))}
+                </div>
+              </section>
+              <section className="App-menu-items">
+                <h2 className="h2">{currentRestaurant.name}</h2>
+                <SearchBar
+                  className="App-menu-item-search-bar"
+                  placeholder="Search for menu items"
+                  handleInput={handleMenuItemSearchInput}
+                />
                 <MenuItemsTable
                   menuItems={filteredMenuItems}
                   className="App-menu-item-table"
@@ -907,40 +911,40 @@ function App() {
                   currentCustomer={currentCustomer}
                   onAddToCart={onAddToCart}
                 />
-              </div>
-            </section>
-            <section className="App-current-order">
-              <h2 className="h2">Your Order</h2>
-              <div className="current-order-table">
-                <CurrentOrderCartTable
-                  className="App-current-order-cart-table"
-                  menuItemsInCart={menuItemsInCart}
-                  onRemoveFromCart={onRemoveFromCart}
-                  onCancelCheckout={onCancelCheckout}
-                  onSubmitOrder={onSubmitOrder}
-                  showCheckout={showCheckout}
-                  toggleCheckout={toggleCheckout}
-                  showConfirmation={showConfirmation}
-                  toggleConfirmation={toggleConfirmation}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  selectedTime={selectedTime}
-                  setSelectedTime={setSelectedTime}
-                  getDateConstraints={getDateConstraints}
-                  getTimeConstraints={getTimeConstraints}
-                  asap={asap}
-                  setAsap={setAsap}
-                  orders={orders}
-                  currentCustomer={currentCustomer}
-                  completeOrder={completeOrder}
-                />
-              </div>
-            </section>
+              </section>
+              <section className="App-current-order">
+                <h2 className="h2">Your Order</h2>
+                <div className="current-order-table">
+                  <CurrentOrderCartTable
+                    className="App-current-order-cart-table"
+                    menuItemsInCart={menuItemsInCart}
+                    onRemoveFromCart={onRemoveFromCart}
+                    onCancelCheckout={onCancelCheckout}
+                    onSubmitOrder={onSubmitOrder}
+                    showCheckout={showCheckout}
+                    toggleCheckout={toggleCheckout}
+                    showConfirmation={showConfirmation}
+                    toggleConfirmation={toggleConfirmation}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    selectedTime={selectedTime}
+                    setSelectedTime={setSelectedTime}
+                    getDateConstraints={getDateConstraints}
+                    getTimeConstraints={getTimeConstraints}
+                    asap={asap}
+                    setAsap={setAsap}
+                    orders={orders}
+                    currentCustomer={currentCustomer}
+                    completeOrder={completeOrder}
+                  />
+                </div>
+              </section>
+            </div>
           </>
         )}
         {view === "manager" && (
           <>
-            <section className="mangerView">
+            <section className="App-manager-view">
               <div className="App-manager-restaurant-name">
                 {currentRestaurant.name === "Select a restaurant" ? null : (
                   <h3>{currentRestaurant.name}</h3>
