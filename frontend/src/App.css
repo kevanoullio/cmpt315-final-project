@@ -35,7 +35,7 @@ footer {
 main {
   display: flex;
   justify-content: center;
-  height: calc(100vh - 5vh - 5vh - 2.5vh); /* 100vh - header - view selection - footer */
+  height: var(--main-height);
 }
 
 .App-customer-view {
@@ -54,7 +54,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .App-restaurant-list {

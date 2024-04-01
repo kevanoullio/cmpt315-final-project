@@ -1,7 +1,7 @@
 .current-order-cart-table {
   height: 66vh;
   overflow-y: auto;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .subtotal-checkout-container {
