@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
+import BootstrapTable from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge'; // Import Badge for colored status labels
 import Modal from 'react-bootstrap/Modal';
 import './managerTable.style.css';
@@ -56,8 +56,8 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
   // Render the table
   return (
     <div className="table-responsive" >
-      <Table striped bordered hover >
-        <thead>
+      <BootstrapTable className="bootstrap-table" striped bordered hover>
+        <thead className="custom-header">
           <tr>
             <th>Order No.</th>
             <th>Items</th>
@@ -114,7 +114,7 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
             </tr>
           )}
         </tbody>
-      </Table>
+      </BootstrapTable>
       <Modal show={open} onHide={() => setOpen(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Complete Order?</Modal.Title>

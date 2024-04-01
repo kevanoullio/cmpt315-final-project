@@ -59,7 +59,7 @@ const ManagerMenuItemsTable = ({ menuItems, onItemSelection, onEditSelection, on
               </td>
               <td>
                 <Button
-                  variant="danger"
+                  variant="outline-danger"
                   onClick={() => handleDeleteButtonClick(item.id)}
                 >
                   Delete

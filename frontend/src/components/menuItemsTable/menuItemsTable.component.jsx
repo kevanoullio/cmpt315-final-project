@@ -1,7 +1,6 @@
 import React from "react";
 import BootstrapTable from "react-bootstrap/Table";
 import MenuItem from "../menuItem/menuItem.component";
-import "./menuItemsTable.styles.css";
 
 /**
  * Function to render the menuItem table component
