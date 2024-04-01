@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import BootstrapTable from "react-bootstrap/Table";
+import Table from "react-bootstrap/Table";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Button from "react-bootstrap/Button";
 
 import MenuItem from "../menuItem/menuItem.component";
 import CheckoutWindow from "../checkoutWindow/checkoutWindow.component";
+import OrderConfirmation from "../orderConfirmation/orderConfirmation.component";
 import PreviousOrder from "../previousOrder/previousOrder.component";
 
 import "./currentOrderCartTable.styles.css";
-import OrderConfirmation from "../orderConfirmation/orderConfirmation.component";
 
 /**
  * Function to render the menuItem table component
@@ -52,10 +52,9 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
 
   // Render the menuItem table
   return (
-    <div className="current-order-cart-table">
-      {/* <h2 className="h2">Your Order</h2> */}
-      <div className="cart-table">
-        <BootstrapTable className="bootstrap-table" striped bordered hover>
+    <div className="current-order-cart">
+      <div className="current-order-cart-table">
+        <Table className="bootstrap-table" striped bordered hover>
           <thead className="custom-header">
             <tr>
               <th>Menu Item</th>
@@ -74,11 +73,12 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
               />
             ))}
           </tbody>
-        </BootstrapTable>
+        </Table>
       </div>
       <div className="subtotal-checkout-container">
         <h3>Order Total: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
         <Button
+          className="checkout-button"
           variant="success"
           size="lg"
           onClick={toggleCheckout}
@@ -86,7 +86,12 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         >
           Checkout
         </Button>
-        <Button className="previous-orders-button" variant="secondary" size="md" onClick={handleShowPrevOrders}>
+        <Button
+          className="previous-orders-button"
+          variant="secondary"
+          size="md"
+          onClick={handleShowPrevOrders}
+        >
           Previous Orders
         </Button>
       </div>

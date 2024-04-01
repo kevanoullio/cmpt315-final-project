@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Button from 'react-bootstrap/Button';
-import BootstrapTable from 'react-bootstrap/Table';
+import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge'; // Import Badge for colored status labels
 import Modal from 'react-bootstrap/Modal';
-import './managerTable.style.css';
 import axiosClient from "../../axios";
+import './managerTable.style.css';
 
 function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
   const [open, setOpen] = useState(false);
@@ -55,8 +55,8 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
 
   // Render the table
   return (
-    <div className="table-responsive" >
-      <BootstrapTable className="bootstrap-table" striped bordered hover>
+    <div className="table-responsive">
+      <Table className="bootstrap-table" striped bordered hover>
         <thead className="custom-header">
           <tr>
             <th>Order No.</th>
@@ -114,7 +114,7 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
             </tr>
           )}
         </tbody>
-      </BootstrapTable>
+      </Table>
       <Modal show={open} onHide={() => setOpen(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Complete Order?</Modal.Title>

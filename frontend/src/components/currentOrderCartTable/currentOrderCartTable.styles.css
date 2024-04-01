@@ -1,23 +1,20 @@
+.current-order-cart-table {
+  height: 66vh;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
 .subtotal-checkout-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
 .previous-orders-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin-top: 20px;
 }
 
 .order-backdrop {
   background-color: lightgray;
-}
-
-.cart-table {
-  /* change this if we remove the top bar */
-  height: 60vh;
-  overflow-y: auto;
-  text-align: center;
 }

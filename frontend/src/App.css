@@ -1,3 +1,10 @@
+:root {
+  --header-height: 5vh;
+  --view-selection-height: 5vh;
+  --footer-height: 2.5vh;
+  --main-height: calc(100vh - var(--header-height) - var(--view-selection-height) - var(--footer-height));
+}
+
 .App-wrapper {
   display: flex;
   flex-direction: column;
@@ -5,11 +12,10 @@
   background-color: lightgray;
 }
 
-header,
-main,
-footer {
+header {
   display: flex;
   justify-content: center;
+  height: var(--header-height);
 }
 
 .App-view-selection {
@@ -17,14 +23,24 @@ footer {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-right: 50px;
+  height: var(--view-selection-height);
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  height: var(--footer-height);
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 5vh - 5vh - 2.5vh); /* 100vh - header - view selection - footer */
 }
 
 .App-customer-view {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .App-manager-view {
@@ -32,39 +48,33 @@ footer {
   flex-direction: column;
 }
 
-.App-restaurant-list {
+.App-restaurant-list,
+.App-menu-items,
+.App-current-order {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.App-restaurant-list,
-.App-current-order {
+.App-restaurant-list {
   flex: 1;
-  margin: 40px;
+  margin-left: 40px;
 }
 
 .App-menu-items {
   flex: 2;
 }
 
-.App-menu-item-table {
-  /* change this if we remove the top bar */
-  max-height: 75vh;
-  overflow-y: auto;
-}
-
 .App-current-order {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex: 1;
+  margin-right: 40px;
 }
 
 .App-view-buttons,
 .App-manager-table-buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
   margin: 10px;
 }
 
@@ -76,24 +86,27 @@ footer {
   justify-content: center;
 }
 
-.App-restaurant-cards {
-  display: flex;
-  flex-direction: column;
-  /* change this if we remove the top bar */
-  height: 70vh;
-  overflow-y: scroll;
-}
-
 .App-manager-restaurant-name {
   display: flex;
   justify-content: center;
 }
 
-button {
-  border-radius: 10px;
+.App-restaurant-cards {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.bootstrap-table {
+  max-height: 70vh;
+  overflow-y: scroll;
 }
 
 .bootstrap-table .custom-header th {
   background-color: rgb(108, 108, 108);
   color: white;
+}
+
+button {
+  border-radius: 10px;
 }

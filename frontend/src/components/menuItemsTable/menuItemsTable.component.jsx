@@ -1,5 +1,5 @@
 import React from "react";
-import BootstrapTable from "react-bootstrap/Table";
+import Table from "react-bootstrap/Table";
 import MenuItem from "../menuItem/menuItem.component";
 
 /**
@@ -14,7 +14,7 @@ const MenuItemsTable = ({ menuItems, currentRestaurant, currentCustomer, onAddTo
   // Render the menuItem table
   return (
     <div className="table-responsive" >
-      <BootstrapTable className="bootstrap-table" striped bordered hover>
+      <Table className="bootstrap-table" striped bordered hover>
         <thead className="custom-header">
           <tr>
             <th>Menu Item</th>
@@ -34,7 +34,7 @@ const MenuItemsTable = ({ menuItems, currentRestaurant, currentCustomer, onAddTo
             />
           ))}
         </tbody>
-      </BootstrapTable>
+      </Table>
     </div>
   );
 };
