@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import "./dropDown.styles.css";
 
 /**
  * Function to render the DropDown component
@@ -18,7 +17,7 @@ const DropDown = ({ options, currentOption, onManagerSelection, onCustomerSelect
     const onSelectManager = (manager) => {
         setSelected(manager.name);
         onManagerSelection(manager.id);
-    } 
+    }
 
     // set selected customer in this componenet, as well as outside the component
     const onSelectCustomer = (customer) => {
@@ -31,21 +30,21 @@ const DropDown = ({ options, currentOption, onManagerSelection, onCustomerSelect
         <Dropdown className="dropdown" >
 
             <Dropdown.Toggle className="dropdown-toggle" variant="success" id="dropdown-basic">
-                {selected !== "" ? selected : onManagerSelection ? "Select Manager" : "Select Customer"} 
+                {selected !== "" ? selected : onManagerSelection ? "Select Manager" : "Select Customer"}
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="dropdown-menu">
                 {options.map((option, index) => {
                     return onManagerSelection ?
-                        (<Dropdown.Item 
+                        (<Dropdown.Item
                             key={index} eventKey={option.id}
-                            onClick={() => onSelectManager(option)} 
+                            onClick={() => onSelectManager(option)}
                             active={option.name === selected}
                         >
                         {option.name || (option.first_name && option.last_name) || 'Unknown'}
                         </Dropdown.Item>
-                    ) : 
-                        <Dropdown.Item 
+                    ) :
+                        <Dropdown.Item
                             key={index} eventKey={option.id}
                             onClick={() => onSelectCustomer(option)}
                             active={option.name === selected}

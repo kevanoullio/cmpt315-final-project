@@ -3,8 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge'; // Import Badge for colored status labels
 import Modal from 'react-bootstrap/Modal';
-import './managerTable.style.css';
 import axiosClient from "../../axios";
+import './managerTable.style.css';
 
 function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
   const [open, setOpen] = useState(false);
@@ -55,9 +55,9 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
 
   // Render the table
   return (
-    <div className="table-responsive" >
-      <Table striped bordered hover >
-        <thead>
+    <div className="table-responsive">
+      <Table className="bootstrap-table" striped bordered hover>
+        <thead className="custom-header">
           <tr>
             <th>Order No.</th>
             <th>Items</th>

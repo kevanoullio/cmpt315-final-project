@@ -1,6 +1,6 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
-import BootstrapTable from "react-bootstrap/Table";
+import Table from "react-bootstrap/Table";
 import './managerTable.style.css';
 
 /**
@@ -23,8 +23,8 @@ const ManagerMenuItemsTable = ({ menuItems, onItemSelection, onEditSelection, on
 
   // Render the menuItem table
   return (
-    <div className="table-responsive" >
-      <BootstrapTable className="bootstrap-table" striped bordered hover>
+    <div className="table-responsive">
+      <Table className="bootstrap-table" striped bordered hover>
         <thead className="custom-header">
           <tr>
             <th>Menu Item</th>
@@ -59,7 +59,7 @@ const ManagerMenuItemsTable = ({ menuItems, onItemSelection, onEditSelection, on
               </td>
               <td>
                 <Button
-                  variant="danger"
+                  variant="outline-danger"
                   onClick={() => handleDeleteButtonClick(item.id)}
                 >
                   Delete
@@ -68,7 +68,7 @@ const ManagerMenuItemsTable = ({ menuItems, onItemSelection, onEditSelection, on
             </tr>
           ))}
         </tbody>
-      </BootstrapTable>
+      </Table>
     </div>
   );
 };

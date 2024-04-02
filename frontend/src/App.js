@@ -12,8 +12,10 @@ import ManagerMenuItemsTable
 import EditMenuItemWindow from "./components/menuItemWindow/edit.component";
 import AddMenuItemWindow from "./components/menuItemWindow/add.component";
 
+import OrderConfirmation from "./components/orderConfirmation/orderConfirmation.component";
 import ConfirmationWindow
   from "./components/confirmationWindow/confirmationWindow.component";
+
 import SearchBar from "./components/searchBar/searchBar.component";
 import DropDown from "./components/dropDown/dropDown.component";
 
@@ -52,6 +54,7 @@ function App() {
   const [showManagerAnalytics, setShowManagerAnalytics] = useState(false);
 
   const [menuItemsInCart, setMenuItemsInCart] = useState([]);
+  const [orderNumber, setOrderNumber] = useState(null);
 
   const [showCheckout, setShowCheckout] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -235,17 +238,23 @@ function App() {
    * Function to handle the checkout process
    * @returns {void} - The function does not return a value
    */
-  const onSubmitOrder = () => {
-    checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart).then((response) => {
-      toggleConfirmation();
-      setMenuItemsInCart([]);
-      toggleCheckout();
-      setAsap(false);
-      fetchOrders();
-    })
-      .catch((error) => {
+  const onSubmitOrder = async () => {
+    try {
+      const response = await checkoutItemsInCart(currentCustomer, currentRestaurant, menuItemsInCart);
+      if (response) {
+        setOrderNumber(response.id);
+        toggleCheckout();
+        toggleConfirmation();
+        setMenuItemsInCart([]);
+        setAsap(false);
+        fetchOrders();
+      }
+      } catch(error) {
         console.error("Error submitting order:", error);
-      });
+        setOrderNumber(null);
+        toggleCheckout();
+        toggleConfirmation();
+    }
   };
 
 
@@ -258,11 +267,14 @@ function App() {
    */
   const checkoutItemsInCart = async (currentCustomer, currentRestaurant, menuItemsInCart) => {
     try {
-      // Format the selectedTime to a Date object
-      const selectedTimeObject = new Date(selectedDate);
+      // Create a new Date object from selectedDate
+      const selectedPickupDateTime = new Date(selectedDate);
 
-      // Format the selected pickup date and time
-      const selectedPickupDateTime = new Date(selectedDate.setHours(selectedTimeObject.getHours(), selectedTimeObject.getMinutes(), 0, 0));
+      // Split the selectedTime into hours and minutes
+      const [selectedHours, selectedMinutes] = selectedTime.split(":").map(Number);
+
+      // Set the hours and minutes of selectedPickupDateTime
+      selectedPickupDateTime.setHours(selectedHours, selectedMinutes, 0, 0);
 
       // If any of the menuItems have quantity > 1, create a new array with each menuItem repeated by its quantity
       const menuItemsInCartFlattened = menuItemsInCart.flatMap(menuItem =>
@@ -285,7 +297,11 @@ function App() {
 
       // Send a POST request to create a new order
       const response = await axiosClient.post("/orders", requestBody);
-      return response.data;
+      if (response.status === 201) {
+        return response.data;
+      } else {
+        return null;
+      }
     } catch (error) {
       console.error(error);
     }
@@ -730,6 +746,8 @@ function App() {
           if (response.status === 200) {
             // update list of all menu items
             fetchMenuItems();
+            // update currentRestaurant to the same restaurant but with the updated array of menuItems
+            setCurrentRestaurant(response.data);
           }
           else {
             window.alert("Failed to update restaurant's menu items while deleting the menu item, please try again.");
@@ -784,6 +802,8 @@ function App() {
           if (response.status === 200) {
             // update list of all menu items
             fetchMenuItems();
+            // update currentRestaurant to the same restaurant but with the updated array of menuItems
+            setCurrentRestaurant(response.data);
           }
           else {
             window.alert("Failed to update restaurant's menu items while creating menu item, please try again.");
@@ -828,7 +848,7 @@ function App() {
       <header>
         <h1 className="h1">Restaurant Order Pickup Management System</h1>
       </header>
-      <section className="App-view-container">
+      <section className="App-view-selection">
         <div className="App-view-buttons">
           <button
             style={{
@@ -875,31 +895,31 @@ function App() {
       <main>
         {view === "customer" && (
           <>
-            <section className="App-restaurant-list">
-              <h2 className="h2">Restaurants</h2>
-              <SearchBar
-                className="App-restaurant-search-bar"
-                placeholder="Search for restaurants"
-                handleInput={handleRestaurantSearchInput}
-              />
-              <div className="App-restaurant-cards">
-                {filteredRestaurants.map(restaurant => (
-                  <RestaurantCard
-                    key={restaurant._id}
-                    restaurant={restaurant}
-                    onClick={() => handleRestaurantClick(restaurant)}
-                  />
-                ))}
-              </div>
-            </section>
-            <section className="App-menu-items">
-              <h2 className="h2">{currentRestaurant.name}</h2>
-              <SearchBar
-                className="App-menu-item-search-bar"
-                placeholder="Search for menu items"
-                handleInput={handleMenuItemSearchInput}
-              />
-              <div className="App-menu-list">
+            <div className="App-customer-view">
+              <section className="App-restaurant-list">
+                <h2 className="h2">Restaurants</h2>
+                <SearchBar
+                  className="App-restaurant-search-bar"
+                  placeholder="Search for restaurants"
+                  handleInput={handleRestaurantSearchInput}
+                />
+                <div className="App-restaurant-cards">
+                  {filteredRestaurants.map(restaurant => (
+                    <RestaurantCard
+                      key={restaurant._id}
+                      restaurant={restaurant}
+                      onClick={() => handleRestaurantClick(restaurant)}
+                    />
+                  ))}
+                </div>
+              </section>
+              <section className="App-menu-items">
+                <h2 className="h2">{currentRestaurant.name}</h2>
+                <SearchBar
+                  className="App-menu-item-search-bar"
+                  placeholder="Search for menu items"
+                  handleInput={handleMenuItemSearchInput}
+                />
                 <MenuItemsTable
                   menuItems={filteredMenuItems}
                   className="App-menu-item-table"
@@ -907,40 +927,40 @@ function App() {
                   currentCustomer={currentCustomer}
                   onAddToCart={onAddToCart}
                 />
-              </div>
-            </section>
-            <section className="App-current-order">
-              <h2 className="h2">Your Order</h2>
-              <div className="current-order-table">
-                <CurrentOrderCartTable
-                  className="App-current-order-cart-table"
-                  menuItemsInCart={menuItemsInCart}
-                  onRemoveFromCart={onRemoveFromCart}
-                  onCancelCheckout={onCancelCheckout}
-                  onSubmitOrder={onSubmitOrder}
-                  showCheckout={showCheckout}
-                  toggleCheckout={toggleCheckout}
-                  showConfirmation={showConfirmation}
-                  toggleConfirmation={toggleConfirmation}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  selectedTime={selectedTime}
-                  setSelectedTime={setSelectedTime}
-                  getDateConstraints={getDateConstraints}
-                  getTimeConstraints={getTimeConstraints}
-                  asap={asap}
-                  setAsap={setAsap}
-                  orders={orders}
-                  currentCustomer={currentCustomer}
-                  completeOrder={completeOrder}
-                />
-              </div>
-            </section>
+              </section>
+              <section className="App-current-order">
+                <h2 className="h2">Your Order</h2>
+                <div className="current-order-table">
+                  <CurrentOrderCartTable
+                    className="App-current-order-cart-table"
+                    menuItemsInCart={menuItemsInCart}
+                    onRemoveFromCart={onRemoveFromCart}
+                    onCancelCheckout={onCancelCheckout}
+                    onSubmitOrder={onSubmitOrder}
+                    showCheckout={showCheckout}
+                    toggleCheckout={toggleCheckout}
+                    showConfirmation={showConfirmation}
+                    toggleConfirmation={toggleConfirmation}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    selectedTime={selectedTime}
+                    setSelectedTime={setSelectedTime}
+                    getDateConstraints={getDateConstraints}
+                    getTimeConstraints={getTimeConstraints}
+                    asap={asap}
+                    setAsap={setAsap}
+                    orders={orders}
+                    currentCustomer={currentCustomer}
+                    completeOrder={completeOrder}
+                  />
+                </div>
+              </section>
+            </div>
           </>
         )}
         {view === "manager" && (
           <>
-            <section className="mangerView">
+            <section className="App-manager-view">
               <div className="App-manager-restaurant-name">
                 {currentRestaurant.name === "Select a restaurant" ? null : (
                   <h3>{currentRestaurant.name}</h3>
@@ -996,6 +1016,11 @@ function App() {
           </>
         )}
       </main>
+      <OrderConfirmation
+        showConfirmation={showConfirmation}
+        toggleConfirmation={toggleConfirmation}
+        orderNumber={orderNumber}
+      />
       <ChangeHoursWindow
         currentRestaurant={currentRestaurant}
         showHours={showHours}
