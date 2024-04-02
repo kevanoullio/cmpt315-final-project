@@ -8,7 +8,7 @@ import Button from "react-bootstrap/Button";
  * @param {Function} toggleConfirmation - The function to toggle the order confirmation
  * @returns {JSX.Element} - The order confirmation component
  */
-const OrderConfirmation = ({ showConfirmation, toggleConfirmation }) => {
+const OrderConfirmation = ({ showConfirmation, toggleConfirmation, orderNumber }) => {
   return (
     <Modal
       show={showConfirmation}
@@ -17,10 +17,24 @@ const OrderConfirmation = ({ showConfirmation, toggleConfirmation }) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Order Confirmation</Modal.Title>
+        {orderNumber ? (
+          <Modal.Title>Order Confirmation</Modal.Title>
+        ) : (
+          <Modal.Title>Order Failed</Modal.Title>
+        )}
       </Modal.Header>
       <Modal.Body>
-        <p>Thank you for your order! Your order has been successfully submitted.</p>
+        {orderNumber ? (
+          <p>Your order has been successfully submitted.
+            <br />
+            Your Order Number: {orderNumber}
+            <br />
+            <br />
+            Thank you for your business!
+          </p>
+        ) : (
+          <p>There was an error submitting your order. Please try again.</p>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button

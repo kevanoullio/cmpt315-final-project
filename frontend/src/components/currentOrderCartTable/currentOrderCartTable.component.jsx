@@ -5,7 +5,6 @@ import Button from "react-bootstrap/Button";
 
 import MenuItem from "../menuItem/menuItem.component";
 import CheckoutWindow from "../checkoutWindow/checkoutWindow.component";
-import OrderConfirmation from "../orderConfirmation/orderConfirmation.component";
 import PreviousOrder from "../previousOrder/previousOrder.component";
 
 import "./currentOrderCartTable.styles.css";
@@ -18,8 +17,6 @@ import "./currentOrderCartTable.styles.css";
  * @param {Function} onSubmitOrder - The function to submit an order
  * @param {Boolean} showCheckout - The boolean to show the checkout window
  * @param {Function} toggleCheckout - The function to toggle the checkout window
- * @param {Boolean} showConfirmation - The boolean to show the order confirmation
- * @param {Function} toggleConfirmation - The function to toggle the order confirmation
  * @param {Date} selectedDate - The selected date
  * @param {Function} setSelectedDate - The function to set the selected date
  * @param {Date} selectedTime - The selected time
@@ -33,9 +30,8 @@ import "./currentOrderCartTable.styles.css";
  * @returns {JSX.Element} - The menuItem table component
  */
 const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelCheckout, onSubmitOrder,
-  showCheckout, toggleCheckout, showConfirmation, toggleConfirmation, selectedDate, setSelectedDate,
-  selectedTime, setSelectedTime, getDateConstraints, getTimeConstraints, asap, setAsap,
-  orders, currentCustomer, completeOrder }) => {
+  showCheckout, toggleCheckout, selectedDate, setSelectedDate, selectedTime, setSelectedTime,
+  getDateConstraints, getTimeConstraints, asap, setAsap, orders, currentCustomer, completeOrder }) => {
 
   const dateConstraints = getDateConstraints();
   const timeConstraints = getTimeConstraints(selectedDate);
@@ -110,10 +106,6 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         timeConstraints={timeConstraints}
         asap={asap}
         setAsap={setAsap}
-      />
-      <OrderConfirmation
-        showConfirmation={showConfirmation}
-        toggleConfirmation={toggleConfirmation}
       />
       <Offcanvas className="prev-orders" show={showPrevOrders} onHide={handleClosePrevOrders} placement="end" >
         <Offcanvas.Header closeButton>
