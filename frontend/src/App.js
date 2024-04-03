@@ -271,7 +271,7 @@ function App() {
       const selectedPickupDateTime = new Date(selectedDate);
 
       // Split the selectedTime into hours and minutes
-      const [selectedHours, selectedMinutes] = selectedTime.split(":").map(Number);
+      const [selectedHours, selectedMinutes] = selectedTime?.split(":")?.map(Number);
 
       // Set the hours and minutes of selectedPickupDateTime
       selectedPickupDateTime.setHours(selectedHours, selectedMinutes, 0, 0);
