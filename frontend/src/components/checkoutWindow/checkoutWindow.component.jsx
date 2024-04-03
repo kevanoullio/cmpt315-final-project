@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import BootstrapTable from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -133,7 +133,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
           className="submit-order-button"
           variant="success"
           onClick={onSubmitOrder}
-          disabled={!menuItemsInCart || menuItemsInCart.length === 0}
+          disabled={!menuItemsInCart || menuItemsInCart.length === 0 || selectedTime < minTime}
         >
           Submit Order
         </Button>
