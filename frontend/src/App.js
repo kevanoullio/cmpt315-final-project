@@ -473,6 +473,10 @@ function App() {
     try {
       const response = await axiosClient.get("/restaurants");
       setRestaurants(response.data);
+      //set current restaurant if selected - for changing hours to update immediately
+      if (currentRestaurant.id) {
+        setCurrentRestaurant(response.data.find( restaurant => restaurant.id === currentRestaurant.id))
+      }
     } catch (error) {
       console.error(error);
     }
@@ -483,6 +487,9 @@ function App() {
    */
   useEffect(() => {
     fetchRestaurants();
+    // this complains that I dont have fetchRestaurants in dependencies, but that breaks stuff and it works
+    // fine like this so I'm just disabling the warning...
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
