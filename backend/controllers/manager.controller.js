@@ -188,11 +188,11 @@ export const getBusiestTimeForEachMonth = async (req, res) => {
 
     let busiestTime = {};
     for (let order of managerOrders) {
-      const month = order.pickupTime.toLocaleString('default', {month: 'long'});
+      const month = order.pickupTime.toLocaleString('default', {timeZone: 'America/Denver', month: 'long'});
       if (!busiestTime[month]) {
         busiestTime[month] = {};
       }
-      const hour = order.pickupTime.getUTCHours();
+      const hour = order.pickupTime.toLocaleString('default', {timeZone: 'America/Denver', hour: 'numeric', hour12: false});
       if (!busiestTime[month][hour]) {
         busiestTime[month][hour] = 0;
       }
