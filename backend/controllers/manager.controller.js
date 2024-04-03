@@ -85,7 +85,7 @@ export const getGrossSales = async (req, res) => {
     let grossSales = {};
     for (let order of managerOrders) {
       // get month E.g. August
-      const month = order.pickupTime.toLocaleString('default', {month: 'long'});
+      const month = order.pickupTime.toLocaleString('default', {timeZone: 'America/Denver', month: 'long'});
       if (!grossSales[month]) { // add month to grossSales if it does not exist
         grossSales[month] = 0;
       }
@@ -116,7 +116,7 @@ export const getMostSoldItem = async (req, res) => {
     // Find most sold item in each month
     let mostSoldItems = {};
     for (let order of managerOrders) {
-      const month = order.pickupTime.toLocaleString('default', {month: 'long'});
+      const month = order.pickupTime.toLocaleString('default', {timeZone: 'America/Denver', month: 'long'});
       if (!mostSoldItems[month]) {
         // object to store each item and its count
         // an object of object
