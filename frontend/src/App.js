@@ -271,7 +271,7 @@ function App() {
       const selectedPickupDateTime = new Date(selectedDate);
 
       // Split the selectedTime into hours and minutes
-      const [selectedHours, selectedMinutes] = selectedTime.split(":").map(Number);
+      const [selectedHours, selectedMinutes] = selectedTime?.split(":")?.map(Number);
 
       // Set the hours and minutes of selectedPickupDateTime
       selectedPickupDateTime.setHours(selectedHours, selectedMinutes, 0, 0);
@@ -376,7 +376,7 @@ function App() {
       const newMinutes = (currentDate.getMinutes() + cookTime) % 60;
       const addHours = Math.floor((currentDate.getMinutes() + cookTime) / 60);
       const newHours = (currentDate.getHours() + addHours) % 24;
-      minTime = newHours + ":" + newMinutes;
+      minTime = newMinutes < 10 ? newHours + ":0" + newMinutes : newHours + ":" + newMinutes;
     }
     return {minTime, maxTime};
   };
@@ -473,6 +473,10 @@ function App() {
     try {
       const response = await axiosClient.get("/restaurants");
       setRestaurants(response.data);
+      //set current restaurant if selected - for changing hours to update immediately
+      if (currentRestaurant.id) {
+        setCurrentRestaurant(response.data.find( restaurant => restaurant.id === currentRestaurant.id))
+      }
     } catch (error) {
       console.error(error);
     }
@@ -483,6 +487,9 @@ function App() {
    */
   useEffect(() => {
     fetchRestaurants();
+    // this complains that I dont have fetchRestaurants in dependencies, but that breaks stuff and it works
+    // fine like this so I'm just disabling the warning...
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
