@@ -376,7 +376,7 @@ function App() {
       const newMinutes = (currentDate.getMinutes() + cookTime) % 60;
       const addHours = Math.floor((currentDate.getMinutes() + cookTime) / 60);
       const newHours = (currentDate.getHours() + addHours) % 24;
-      minTime = newHours + ":" + newMinutes;
+      minTime = newMinutes < 10 ? newHours + ":0" + newMinutes : newHours + ":" + newMinutes;
     }
     return {minTime, maxTime};
   };
