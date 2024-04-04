@@ -143,6 +143,29 @@ function App() {
     }
   };
 
+  /**
+   * Updates the pickup time of an order.
+   *
+   * @param {string|number} orderId The unique identifier of the order to update.
+   * @param {string} newPickupTime The new pickup time to be assigned to the order.
+   */
+  const updateOrderPickupTime = async (orderId, newPickupTime) => {
+    try {
+      const response = await axiosClient.post(`/orders/${orderId}/schedule-pickup`, { pickupTime: newPickupTime });
+      if (response.status === 200) {
+        // Update local orders state with new pickup time
+        const updatedOrders = orders.map((order) =>
+          order.id === orderId ? { ...order, pickupTime: newPickupTime } : order
+        );
+        setOrders(updatedOrders);
+      } else {
+        console.error("Failed to assign pickup time to order.");
+      }
+    } catch (error) {
+      console.error("Error updating order pickup time:", error);
+    }
+  };
+
 
   /**
    * Changes the status of a menu item to sold-out or in-stock when the button is clicked in the table
@@ -992,6 +1015,7 @@ function App() {
                     <ManagerOrderTable
                       orders={currentRestaurantOrders}
                       onUpdateOrderStatus={managerUpdateOrderStatus}
+                      onUpdateOrderPickupTime={updateOrderPickupTime}
                       getOrders={fetchOrders}
                     />
                   </section>

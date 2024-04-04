@@ -6,9 +6,40 @@ import Modal from 'react-bootstrap/Modal';
 import axiosClient from "../../axios";
 import './managerTable.style.css';
 
-function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
+function TableOfOrders({ orders, onUpdateOrderStatus, onUpdateOrderPickupTime, getOrders }) {
   const [open, setOpen] = useState(false);
   const [order, setOrder] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
+  const [timeAssignOrder, setTimeAssignOrder] = useState(null);
+  const [showTimePicker, setShowTimePicker] = useState(false); // state to control the display of the time input
+
+  const handleOpenTimePicker = (order) => {
+    // Set the order for which the time is being set
+    setTimeAssignOrder(order);
+    setShowTimePicker(true); // Show the time input
+    // Reset the previously selected time or set a default value
+    setSelectedTime("");
+  };
+  
+  const handleTimeChange = (event) => {
+    setSelectedTime(event.target.value);
+  };
+
+  const handleSaveTime = async () => {
+    // Update the order with the new time (local time)
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0'); // Ensure two digits
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed, add 1
+    const year = today.getFullYear();
+
+    const formattedTime = `${year}-${month}-${day}T${selectedTime}:00`;
+    await onUpdateOrderPickupTime(timeAssignOrder.id, formattedTime);
+  
+    // Reset the UI state
+    setShowTimePicker(false);
+    setSelectedTime("");
+    setTimeAssignOrder(null);
+  };
 
   const onDelete = (order) => {
     setOrder(order);
@@ -65,6 +96,7 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
             <th>Status</th>
             <th>Update Status</th>
             <th>Delete</th>
+            <th>Select Time</th>
           </tr>
         </thead>
         <tbody>
@@ -80,9 +112,14 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
               </td>
               <td>
                 <div className="orderTime">
-                  {new Date(order.pickupTime).toLocaleString().split(",")[0]}
-                  <br/>
-                  {new Date(order.pickupTime).toLocaleString().split(",")[1]}
+                  {order.pickupTime === "1970-01-01T00:00:00.000Z"
+                    ? "ASAP - Assign Time"
+                    : <>
+                      {new Date(order.pickupTime).toLocaleString().split(",")[0]}
+                      <br />
+                      {new Date(order.pickupTime).toLocaleString().split(",")[1]}
+                    </>
+                  }
                 </div>
               </td>
               <td>
@@ -106,6 +143,25 @@ function TableOfOrders({ orders, onUpdateOrderStatus, getOrders }) {
                 >
                   Delete
                 </Button>
+              </td>
+              <td>
+                {order.pickupTime === "1970-01-01T00:00:00.000Z" && (
+                  <>
+                    {showTimePicker && order === timeAssignOrder ? (
+                      <>
+                        <input
+                          type="time"
+                          value={selectedTime}
+                          onChange={handleTimeChange}
+                          required
+                        />
+                        <Button variant="success" onClick={handleSaveTime}>Save</Button>
+                      </>
+                    ) : (
+                      <Button variant="secondary" onClick={() => handleOpenTimePicker(order)}>Assign Time</Button>
+                    )}
+                  </>
+                )}
               </td>
             </tr>
           )) : (
