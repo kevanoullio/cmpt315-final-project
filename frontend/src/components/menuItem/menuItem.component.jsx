@@ -17,12 +17,17 @@ import "./menuItem.styles.css";
 const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, onRemoveFromCart}) => {
 	return (
 		onAddToCart !== undefined && onRemoveFromCart === undefined ?
-			<tr>
-				<td>{menuItem.name}</td>
-				<td>{menuItem.description}</td>
-				<td>{"$" + menuItem.price}</td>
-				<td className="button-cell">
-          { !currentRestaurant.storeHours || (currentRestaurant.storeHours && isOpen(currentRestaurant?.storeHours?.open, currentRestaurant?.storeHours?.close)) ? (
+      <tr>
+        <td>{menuItem.name}</td>
+        <td className="w-25">
+          <img loading="lazy"
+               src={menuItem.image ? menuItem.image : "https://via.placeholder.com/150"}
+               alt={menuItem.name} width="150" height="150"/>
+        </td>
+        <td className="w-25">{menuItem.description}</td>
+        <td>{"$" + menuItem.price}</td>
+        <td className="button-cell">
+          {!currentRestaurant.storeHours || (currentRestaurant.storeHours && isOpen(currentRestaurant?.storeHours?.open, currentRestaurant?.storeHours?.close)) ? (
             <AddToCartButton
               menuItem={menuItem}
               currentRestaurant={currentRestaurant}
@@ -30,18 +35,18 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
               onAddToCart={onAddToCart}
             />
           ) : (
-            <Button disabled >
+            <Button disabled>
               Closed
             </Button>
           )}
-				</td>
-			</tr>
-		: onAddToCart === undefined && onRemoveFromCart !== undefined ?
-			<tr>
-				<td>{menuItem.name}</td>
-				<td>{"$" + menuItem.price}</td>
-				<td>{menuItem.quantity}</td>
-        <td>{"$" + menuItem.price * menuItem.quantity}</td>
+        </td>
+      </tr>
+      : onAddToCart === undefined && onRemoveFromCart !== undefined ?
+        <tr>
+          <td>{menuItem.name}</td>
+          <td>{"$" + menuItem.price}</td>
+          <td>{menuItem.quantity}</td>
+          <td>{"$" + menuItem.price * menuItem.quantity}</td>
 				<td className="button-cell">
 					<RemoveFromCartButton
 						menuItem={menuItem}
