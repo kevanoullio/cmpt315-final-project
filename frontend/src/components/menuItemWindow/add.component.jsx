@@ -108,7 +108,6 @@ const AddMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit}) => {
                 />
               </Form.Group>
 
-              {/*  image url*/}
               <Form.Group controlId="form-image">
                 <Form.Label>Image URL (should link directly to an image)</Form.Label>
                 <Form.Control

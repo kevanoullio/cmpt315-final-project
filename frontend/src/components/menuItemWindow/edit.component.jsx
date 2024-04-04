@@ -18,6 +18,7 @@ const EditMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToE
   const [description, setDescription] = useState(menuItemToEdit ? menuItemToEdit.description : "");
   const [price, setPrice] = useState(menuItemToEdit ? menuItemToEdit.price : "");
   const [available, setAvailable] = useState(menuItemToEdit ? menuItemToEdit.status === "in stock" : true);
+  const [imageURL, setImageURL] = useState(menuItemToEdit ? menuItemToEdit.image : "https://via.placeholder.com/150");
 
   useEffect(() => {
     if (menuItemToEdit) {
@@ -26,6 +27,7 @@ const EditMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToE
       setDescription(menuItemToEdit.description);
       setPrice(menuItemToEdit.price);
       setAvailable(menuItemToEdit.status === "in stock");
+      setImageURL(menuItemToEdit.image);
     }
   }
   , [menuItemToEdit]);
@@ -38,7 +40,8 @@ const EditMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToE
       name: name,
       status: itemStatus,
       description: description,
-      price: price
+      price: price,
+      image: imageURL
     };
     onSubmit(menuItemAttributes);
     // Close the window
@@ -47,12 +50,13 @@ const EditMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToE
 
   // Function to cancel editing menu item
   const onCancel = () => {
-    // Revert any changes made while in the window so that if the window is opened again immediately it won't show the unsaved changes 
+    // Revert any changes made while in the window so that if the window is opened again immediately it won't show the unsaved changes
     setId(menuItemToEdit.id);
     setName(menuItemToEdit.name);
     setDescription(menuItemToEdit.description);
     setPrice(menuItemToEdit.price);
     setAvailable(menuItemToEdit.status === "in stock");
+    setImageURL(menuItemToEdit.image);
     // Close the window
     toggleMenuItem();
   };
@@ -104,6 +108,16 @@ const EditMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToE
                     }
                   }}
                   pattern="^\d*\.?\d*$" // Only allow numbers (decimal point optional)
+                />
+              </Form.Group>
+
+              <Form.Group controlId="form-image">
+                <Form.Label>Image URL (should link directly to an image)</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={imageURL}
+                  placeholder="Enter image URL"
+                  onChange={(e) => setImageURL(e.target.value)}
                 />
               </Form.Group>
 
