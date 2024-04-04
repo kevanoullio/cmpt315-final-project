@@ -6,9 +6,10 @@ import Form from "react-bootstrap/Form";
 
 /**
  * Function to render the menu item window component
- * @param {Boolean} showMenuItem - The boolean to show the menu item window
- * @param {Function} toggleMenuItem - The function to toggle the menu item window
+ * @param {Boolean} showMenuItem - The boolean to show this menu item window
+ * @param {Function} toggleMenuItem - The function to toggle this menu item window
  * @param {Function} onSubmit - The function to submit the update of a menu item
+ * @param {Object} menuItemToEdit - The menu item that the user would like to edit 
  * @returns {JSX.Element} - The menu item window component
  */
 const EditMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit, menuItemToEdit}) => {
