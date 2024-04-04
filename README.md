@@ -117,6 +117,23 @@ Manager View: Select a manager, view all orders placed at the restaurant, update
 <img src="restaurant_app-manager_preview.png" alt="Screenshot Preview of a Manager managing their restaurant's orders."/>
 <br/>
 
+# Test Case
+
+The repo has a supplied test data set in the /jsonData directory. The data is stored in several JSON files, each representing a different collection in the database. The data can be imported into the database using the following steps:
+
+1. Start the MongoDB server
+```
+mongod
+```
+
+2. Start the backend server
+```
+cd backend
+npm start
+```
+
+3. Open your browser and navigate to http://localhost:8080/preload (alternatively, you can use a program like postman to run the request). >>> NOTE: THIS WILL DELETE ALL EXISTING DATA IN THE DATABASE PRIOR TO IMPORTING THE TEST DATA <<<
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -64,6 +64,8 @@ main {
 
 .App-menu-items {
   width: 50vw;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .App-current-order {
