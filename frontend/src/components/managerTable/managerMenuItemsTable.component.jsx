@@ -41,9 +41,12 @@ const ManagerMenuItemsTable = ({ menuItems, onItemSelection, onEditSelection, on
           <tr key={item.id}>
             <td>{item.name}</td>
             <td className="w-25">
-              <img loading="lazy"
-                   src={item.image ? item.image : "https://via.placeholder.com/150"}
-                   alt={item.name} width="150" height="150"/>
+            <img
+              loading="lazy"
+              src={item.image ? item.image : "https://via.placeholder.com/150"}
+              alt={item.name}
+              style={{ maxWidth: "150px", height: "auto" }} // Set max-width and let height adjust automatically
+            />
             </td>
             <td className="w-25">{item.description}</td>
             <td>{"$" + item.price}</td>

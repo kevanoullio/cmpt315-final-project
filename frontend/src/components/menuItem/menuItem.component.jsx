@@ -20,9 +20,12 @@ const menuItem = ({menuItem, currentRestaurant, currentCustomer, onAddToCart, on
       <tr>
         <td>{menuItem.name}</td>
         <td className="w-25">
-          <img loading="lazy"
-               src={menuItem.image ? menuItem.image : "https://via.placeholder.com/150"}
-               alt={menuItem.name} width="150" height="150"/>
+        <img
+          loading="lazy"
+          src={menuItem.image ? menuItem.image : "https://via.placeholder.com/150"}
+          alt={menuItem.name}
+          style={{ maxWidth: "150px", height: "auto" }} // Set max-width and let height adjust automatically
+        />
         </td>
         <td className="w-25">{menuItem.description}</td>
         <td>{"$" + menuItem.price}</td>
