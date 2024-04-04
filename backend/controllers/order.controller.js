@@ -109,7 +109,8 @@ export const fetchOrdersByRestaurant = async (req, res) => {
 
 
 export const schedulePickupTime = async (req, res) => {
-  const { orderId, pickupTime } = req.body;
+  const orderId = req.params.orderId;
+  const { pickupTime } = req.body;
 
   try {
     const updatedOrder = await schedulePickupTimeRepo(orderId, pickupTime);
