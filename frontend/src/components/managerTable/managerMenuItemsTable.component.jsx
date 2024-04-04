@@ -25,7 +25,6 @@ const ManagerMenuItemsTable = ({
   const handleDeleteButtonClick = (itemId) => {
     onDeleteSelection(itemId);
   }
-  console.log(menuItems)
 
   // Render the menuItem table
   return (
