@@ -398,7 +398,8 @@ function App() {
           name: menuItem.name,
           status: menuItem.status,
           description: menuItem.description,
-          price: menuItem.price
+          price: menuItem.price,
+          image: menuItem.image
         };
       })
       setMenuItems(extractedMenuItems);
