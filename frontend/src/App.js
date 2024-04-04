@@ -106,7 +106,7 @@ function App() {
     fetchMenuItems();
     fetchRestaurants();
   }, [view]);
-  
+
 
   /**
    * Function to handle the selected manager from the dropdown
@@ -957,8 +957,8 @@ function App() {
                   handleInput={handleMenuItemSearchInput}
                 />
                 <MenuItemsTable
-                  menuItems={filteredMenuItems}
                   className="App-menu-item-table"
+                  menuItems={filteredMenuItems}
                   currentRestaurant={currentRestaurant}
                   currentCustomer={currentCustomer}
                   onAddToCart={onAddToCart}
@@ -1019,6 +1019,7 @@ function App() {
                 {showManagerOrderTable && (
                   <section className="App-manager-order-table">
                     <ManagerOrderTable
+                      className="App-manager-order-table"
                       orders={currentRestaurantOrders}
                       onUpdateOrderStatus={managerUpdateOrderStatus}
                       onUpdateOrderPickupTime={updateOrderPickupTime}
@@ -1029,12 +1030,14 @@ function App() {
                 {showManagerMenuItemsTable && (
                   <section className="App-manager-menuItems-table">
                     <ManagerMenuItemsTable
+                      className="App-manager-menu-items-table"
                       menuItems={filteredMenuItems}
                       onItemSelection={handleManagersMenuItemSelection}
                       onEditSelection={handleManagerEditSelection}
                       onDeleteSelection={openDeleteConfirmation}
                     />
                     <EditMenuItemWindow
+                      className="App-manager-edit-menu-item-table"
                       showMenuItem={showEditItem}
                       toggleMenuItem={toggleEditMenuItem}
                       onSubmit={handleEditMenuItem}

@@ -1,11 +1,13 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
 import Table from "react-bootstrap/Table";
-import './managerTable.style.css';
 
 /**
  * Function to render the menuItem table component
  * @param {Array<Object>} menuItems - The list of menuItems
+ * @param {Function} onItemSelection - The function to handle item selection
+ * @param {Function} onEditSelection - The function to handle edit selection
+ * @param {Function} onDeleteSelection - The function to handle delete selection
  * @returns {JSX.Element} - The menuItem table component
  */
 const ManagerMenuItemsTable = ({ menuItems, onItemSelection, onEditSelection, onDeleteSelection }) => {
