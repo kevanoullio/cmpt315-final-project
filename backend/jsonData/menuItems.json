@@ -1,170 +1,175 @@
 [
-    {
-        "id": 1,
-        "name": "Pepperoni Pizza",
-        "status": "in stock",
-        "description": "Pepperoni slices and cheese",
-        "price": 10
-    },
-    {
-        "id": 2,
-        "name": "Margherita Pizza",
-        "status": "in stock",
-        "description": "Fresh tomatoes, mozzarella, and basil",
-        "price": 12
-    },
-    {
-        "id": 3,
-        "name": "Vegetarian Pizza",
-        "status": "in stock",
-        "description": "Assorted vegetables and cheese on a whole wheat crust",
-        "price": 11
-    },
-    {
-        "id": 4,
-        "name": "Meat Lovers Pizza",
-        "status": "in stock",
-        "description": "Pepperoni, sausage, bacon, and ham",
-        "price": 14
-    },
-    {
-        "id": 5,
-        "name": "Hawaiian Pizza",
-        "status": "in stock",
-        "description": "Ham, pineapple, and cheese",
-        "price": 13
-    },
-    {
-        "id": 6,
-        "name": "BBQ Chicken Pizza",
-        "status": "in stock",
-        "description": "Grilled chicken, BBQ sauce, and red onions",
-        "price": 15
-    },
-    {
-        "id": 7,
-        "name": "Cheeseburger",
-        "status": "in stock",
-        "description": "Beef patty, cheese, lettuce, and tomato",
-        "price": 8
-    },
-    {
-        "id": 8,
-        "name": "French Fries",
-        "status": "in stock",
-        "description": "Side order of fries",
-        "price": 10
-    },
-    {
-        "id": 9,
-        "name": "Veggie Burger",
-        "status": "in stock",
-        "description": "Vegetarian patty, Swiss cheese, avocado, and sprouts",
-        "price": 9
-    },
-    {
-        "id": 10,
-        "name": "Spicy Chicken Sandwich",
-        "status": "in stock",
-        "description": "Spicy chicken breast, lettuce, and mayo",
-        "price": 11
-    },
-    {
-        "id": 11,
-        "name": "Mushroom Swiss Burger",
-        "status": "in stock",
-        "description": "Beef patty, sautéed mushrooms, and swiss cheese",
-        "price": 12
-    },
-    {
-        "id": 12,
-        "name": "Poutine",
-        "status": "in stock",
-        "description": "Fries topped with cheese curds and gravy",
-        "price": 9
-    },
-    {
-        "id": 13,
-        "name": "Rainbow Roll",
-        "status": "in stock",
-        "description": "Assorted fish and avocado",
-        "price": 16
-    },
-    {
-        "id": 14,
-        "name": "Tempura Udon",
-        "status": "in stock",
-        "description": "Udon noodles in a savory broth with vegetables",
-        "price": 14
-    },
-    {
-        "id": 15,
-        "name": "Dragon Roll",
-        "status": "in stock",
-        "description": "Deep fried salmon and onion sushi",
-        "price": 9
-    },
-    {
-        "id": 16,
-        "name": "Spicy Tuna Roll",
-        "status": "in stock",
-        "description": "Spicy tuna and cucumber",
-        "price": 12
-    },
-    {
-        "id": 17,
-        "name": "Edamame",
-        "status": "in stock",
-        "description": "Steamed soybeans sprinkled with sea salt",
-        "price": 5
-    },
-    {
-        "id": 18,
-        "name": "Sashimi Platter",
-        "status": "in stock",
-        "description": "Assorted sashimi slices served with ginger and wasabi",
-        "price": 22
-    },
-    {
-        "id": 19,
-        "name": "Pesto Penne",
-        "status": "in stock",
-        "description": "Penne pasta in a basil pesto sauce",
-        "price": 11
-    },
-    {
-        "id": 20,
-        "name": "Chicken Alfredo",
-        "status": "in stock",
-        "description": "Fettuccine pasta in a creamy Alfredo sauce with grilled chicken",
-        "price": 16
-    },
-    {
-        "id": 21,
-        "name": "Spaghetti and Meatballs",
-        "status": "in stock",
-        "description": "Classic spaghetti with marinara sauce and meatballs",
-        "price": 15
-    },
-    {
-        "id": 22,
-        "name": "Spaghetti Carbonara",
-        "status": "in stock",
-        "description": "Spaghetti, bacon, parmesan cheese, eggs, and garlic",
-        "price": 12
-    },
-    {
-        "id": 23,
-        "name": "Bolognese Lasagna",
-        "status": "in stock",
-        "description": "Layered lasagna with bolognese meat sauce and cheese",
-        "price": 14
-    },
-    {
-        "id": 24,
-        "name": "Macaroni and Cheese",
-        "status": "in stock",
-        "description": "Macaroni and cheddar cheese sauce",
-        "price": 16
-    }
+  {
+    "id": 1,
+    "name": "Pepperoni Pizza",
+    "status": "in stock",
+    "description": "Pepperoni slices and cheese",
+    "price": 10,
+    "image": "https://images.unsplash.com/photo-1590133728822-cc311f9c280f?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": 2,
+    "name": "Margherita Pizza",
+    "status": "in stock",
+    "description": "Fresh tomatoes, mozzarella, and basil",
+    "price": 12,
+    "image": "https://images.unsplash.com/photo-1600028068383-ea11a7a101f3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": 3,
+    "name": "Vegetarian Pizza",
+    "status": "in stock",
+    "description": "Assorted vegetables and cheese on a whole wheat crust",
+    "price": 11,
+    "image": "https://images.unsplash.com/photo-1532246420286-127bcd803104?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": 4,
+    "name": "Meat Lovers Pizza",
+    "status": "in stock",
+    "description": "Pepperoni, sausage, bacon, and ham",
+    "price": 14,
+    "image": "https://images.unsplash.com/photo-1705286324371-d6a6d9519dc2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": 5,
+    "name": "Hawaiian Pizza",
+    "status": "in stock",
+    "description": "Ham, pineapple, and cheese",
+    "price": 13,
+    "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1981&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": 6,
+    "name": "BBQ Chicken Pizza",
+    "status": "in stock",
+    "description": "Grilled chicken, BBQ sauce, and red onions",
+    "price": 15
+  },
+  {
+    "id": 7,
+    "name": "Cheeseburger",
+    "status": "in stock",
+    "description": "Beef patty, cheese, lettuce, and tomato",
+    "price": 8
+  },
+  {
+    "id": 8,
+    "name": "French Fries",
+    "status": "in stock",
+    "description": "Side order of fries",
+    "price": 10
+  },
+  {
+    "id": 9,
+    "name": "Veggie Burger",
+    "status": "in stock",
+    "description": "Vegetarian patty, Swiss cheese, avocado, and sprouts",
+    "price": 9
+  },
+  {
+    "id": 10,
+    "name": "Spicy Chicken Sandwich",
+    "status": "in stock",
+    "description": "Spicy chicken breast, lettuce, and mayo",
+    "price": 11
+  },
+  {
+    "id": 11,
+    "name": "Mushroom Swiss Burger",
+    "status": "in stock",
+    "description": "Beef patty, sautéed mushrooms, and swiss cheese",
+    "price": 12
+  },
+  {
+    "id": 12,
+    "name": "Poutine",
+    "status": "in stock",
+    "description": "Fries topped with cheese curds and gravy",
+    "price": 9
+  },
+  {
+    "id": 13,
+    "name": "Rainbow Roll",
+    "status": "in stock",
+    "description": "Assorted fish and avocado",
+    "price": 16
+  },
+  {
+    "id": 14,
+    "name": "Tempura Udon",
+    "status": "in stock",
+    "description": "Udon noodles in a savory broth with vegetables",
+    "price": 14
+  },
+  {
+    "id": 15,
+    "name": "Dragon Roll",
+    "status": "in stock",
+    "description": "Deep fried salmon and onion sushi",
+    "price": 9
+  },
+  {
+    "id": 16,
+    "name": "Spicy Tuna Roll",
+    "status": "in stock",
+    "description": "Spicy tuna and cucumber",
+    "price": 12
+  },
+  {
+    "id": 17,
+    "name": "Edamame",
+    "status": "in stock",
+    "description": "Steamed soybeans sprinkled with sea salt",
+    "price": 5
+  },
+  {
+    "id": 18,
+    "name": "Sashimi Platter",
+    "status": "in stock",
+    "description": "Assorted sashimi slices served with ginger and wasabi",
+    "price": 22
+  },
+  {
+    "id": 19,
+    "name": "Pesto Penne",
+    "status": "in stock",
+    "description": "Penne pasta in a basil pesto sauce",
+    "price": 11
+  },
+  {
+    "id": 20,
+    "name": "Chicken Alfredo",
+    "status": "in stock",
+    "description": "Fettuccine pasta in a creamy Alfredo sauce with grilled chicken",
+    "price": 16
+  },
+  {
+    "id": 21,
+    "name": "Spaghetti and Meatballs",
+    "status": "in stock",
+    "description": "Classic spaghetti with marinara sauce and meatballs",
+    "price": 15
+  },
+  {
+    "id": 22,
+    "name": "Spaghetti Carbonara",
+    "status": "in stock",
+    "description": "Spaghetti, bacon, parmesan cheese, eggs, and garlic",
+    "price": 12
+  },
+  {
+    "id": 23,
+    "name": "Bolognese Lasagna",
+    "status": "in stock",
+    "description": "Layered lasagna with bolognese meat sauce and cheese",
+    "price": 14
+  },
+  {
+    "id": 24,
+    "name": "Macaroni and Cheese",
+    "status": "in stock",
+    "description": "Macaroni and cheddar cheese sauce",
+    "price": 16
+  }
 ]

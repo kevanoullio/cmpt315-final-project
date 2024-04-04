@@ -17,6 +17,7 @@ const AddMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit}) => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [available, setAvailable] = useState(true);
+  const [imageURL, setImageURL] = useState("https://via.placeholder.com/150");
 
   // Function to add new menu item
   const onSubmitButtonClick = () => {
@@ -25,7 +26,8 @@ const AddMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit}) => {
       "name": name,
       "status": itemStatus,
       "description": description,
-      "price": price
+      "price": price,
+      "image": imageURL
     };
     onSubmit(menuItemAttributes);
 
@@ -34,18 +36,20 @@ const AddMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit}) => {
     setDescription("");
     setPrice("");
     setAvailable(true);
+    setImageURL("https://via.placeholder.com/150")
 
     // Close the window
     toggleMenuItem();
   };
 
-  // Function to cancel adding menu item 
+  // Function to cancel adding menu item
   const onCancel = () => {
     // Reset the variables
     setName("");
     setDescription("");
     setPrice("");
     setAvailable(true);
+    setImageURL("https://via.placeholder.com/150")
 
     // Close the window
     toggleMenuItem();
@@ -61,12 +65,12 @@ const AddMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit}) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Add Menu Item</Modal.Title> 
+        <Modal.Title>Add Menu Item</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="menu-item-container">
           <section className="menu-item-left-section">
-              <Form>
+            <Form>
               <Form.Group controlId="form-name">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -104,15 +108,24 @@ const AddMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit}) => {
                 />
               </Form.Group>
 
+              <Form.Group controlId="form-image">
+                <Form.Label>Image URL (should link directly to an image)</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter image URL"
+                  onChange={(e) => setImageURL(e.target.value)}
+                />
+              </Form.Group>
+
               <Form.Group controlId="form-status">
                 <Form.Check
-                  type="checkbox" // should not be a string because we want consistent wording in backend 
+                  type="checkbox" // should not be a string because we want consistent wording in backend
                   label="In Stock"
                   checked={available}
                   onChange={(e) => setAvailable(e.target.checked)}
                 />
               </Form.Group>
-              </Form>
+            </Form>
           </section>
         </div>
       </Modal.Body>
@@ -128,7 +141,7 @@ const AddMenuItemWindow = ({showMenuItem, toggleMenuItem, onSubmit}) => {
           className="submit-button"
           variant="success"
           onClick={onSubmitButtonClick}
-          // disable if not all fields filled out 
+          // disable if not all fields filled out
           disabled={!name || !description || !price}
         >
           Submit
