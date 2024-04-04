@@ -16,6 +16,7 @@ import {
 
 const preloadRouter = Express.Router();
 
+// http://localhost:8080/preload
 preloadRouter.get("/", async (req, res) => {
     try {
         await loadCustomers()

@@ -102,6 +102,11 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    fetchMenuItems();
+    fetchRestaurants();
+  }, [view]);
+  
 
   /**
    * Function to handle the selected manager from the dropdown
