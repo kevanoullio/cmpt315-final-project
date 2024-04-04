@@ -1,7 +1,6 @@
 .search-bar {
-    width: 100%;
+    width: 80%;
     min-width: 200px;
-    height: 45px;
     padding: 10px;
 
     /* make the search bar with rounded edges */

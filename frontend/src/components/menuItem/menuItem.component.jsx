@@ -1,9 +1,9 @@
 import React from "react";
-import AddToCartButton from "../addToCartButton/addToCartButton.component";
-import RemoveFromCartButton from "../removeFromCartButton/removeFromCartButton.component";
-import "./menuItem.styles.css";
+import AddToCartButton from "../orderCartButtons/addToCartButton.component";
+import RemoveFromCartButton from "../orderCartButtons/removeFromCartButton.component";
 import { isOpen } from "../utils";
 import { Button } from "react-bootstrap";
+import "./menuItem.styles.css";
 
 /**
  * Function to render the MenuItem component

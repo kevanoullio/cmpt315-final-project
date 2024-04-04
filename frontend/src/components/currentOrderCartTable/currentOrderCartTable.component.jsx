@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import BootstrapTable from "react-bootstrap/Table";
+import Table from "react-bootstrap/Table";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Button from "react-bootstrap/Button";
 
@@ -8,7 +8,6 @@ import CheckoutWindow from "../checkoutWindow/checkoutWindow.component";
 import PreviousOrder from "../previousOrder/previousOrder.component";
 
 import "./currentOrderCartTable.styles.css";
-import OrderConfirmation from "../orderConfirmation/orderConfirmation.component";
 
 /**
  * Function to render the menuItem table component
@@ -18,8 +17,6 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
  * @param {Function} onSubmitOrder - The function to submit an order
  * @param {Boolean} showCheckout - The boolean to show the checkout window
  * @param {Function} toggleCheckout - The function to toggle the checkout window
- * @param {Boolean} showConfirmation - The boolean to show the order confirmation
- * @param {Function} toggleConfirmation - The function to toggle the order confirmation
  * @param {Date} selectedDate - The selected date
  * @param {Function} setSelectedDate - The function to set the selected date
  * @param {Date} selectedTime - The selected time
@@ -33,9 +30,8 @@ import OrderConfirmation from "../orderConfirmation/orderConfirmation.component"
  * @returns {JSX.Element} - The menuItem table component
  */
 const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelCheckout, onSubmitOrder,
-  showCheckout, toggleCheckout, showConfirmation, toggleConfirmation, selectedDate, setSelectedDate,
-  selectedTime, setSelectedTime, getDateConstraints, getTimeConstraints, asap, setAsap,
-  orders, currentCustomer, completeOrder }) => {
+  showCheckout, toggleCheckout, selectedDate, setSelectedDate, selectedTime, setSelectedTime,
+  getDateConstraints, getTimeConstraints, asap, setAsap, orders, currentCustomer, completeOrder }) => {
 
   const dateConstraints = getDateConstraints();
   const timeConstraints = getTimeConstraints(selectedDate);
@@ -52,10 +48,9 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
 
   // Render the menuItem table
   return (
-    <div className="current-order-cart-table">
-      {/* <h2 className="h2">Your Order</h2> */}
-      <div className="cart-table">
-        <BootstrapTable className="bootstrap-table" striped bordered hover>
+    <div className="current-order-cart">
+      <div className="current-order-cart-table">
+        <Table className="bootstrap-table" striped bordered hover>
           <thead className="custom-header">
             <tr>
               <th>Menu Item</th>
@@ -74,11 +69,12 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
               />
             ))}
           </tbody>
-        </BootstrapTable>
+        </Table>
       </div>
       <div className="subtotal-checkout-container">
         <h3>Order Total: ${menuItemsInCart.reduce((total, menuItem) => total + (menuItem.price * menuItem.quantity), 0).toFixed(2)}</h3>
         <Button
+          className="checkout-button"
           variant="success"
           size="lg"
           onClick={toggleCheckout}
@@ -86,7 +82,12 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         >
           Checkout
         </Button>
-        <Button className="previous-orders-button" variant="secondary" size="md" onClick={handleShowPrevOrders}>
+        <Button
+          className="previous-orders-button"
+          variant="secondary"
+          size="md"
+          onClick={handleShowPrevOrders}
+        >
           Previous Orders
         </Button>
       </div>
@@ -105,10 +106,6 @@ const CurrentOrderCartTable = ({ menuItemsInCart, onRemoveFromCart, onCancelChec
         timeConstraints={timeConstraints}
         asap={asap}
         setAsap={setAsap}
-      />
-      <OrderConfirmation
-        showConfirmation={showConfirmation}
-        toggleConfirmation={toggleConfirmation}
       />
       <Offcanvas className="prev-orders" show={showPrevOrders} onHide={handleClosePrevOrders} placement="end" >
         <Offcanvas.Header closeButton>

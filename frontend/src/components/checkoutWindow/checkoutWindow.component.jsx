@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import BootstrapTable from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -79,7 +79,7 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                 onChange={setSelectedTime}
                 minTime={minTime}
                 maxTime={maxTime}
-                format="HH:mm a"
+                format="HH:mm"
                 hourPlaceholder="HH"
                 minutePlaceholder="mm"
                 disabled={asap}
@@ -133,7 +133,12 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
           className="submit-order-button"
           variant="success"
           onClick={onSubmitOrder}
-          disabled={!menuItemsInCart || menuItemsInCart.length === 0}
+          disabled={!menuItemsInCart ||
+                    menuItemsInCart.length === 0 ||
+                    !selectedTime ||
+                    //this is complicated cause when a valid time is selected it swaps to a string from a Date so we check both just in case
+                    (typeof selectedTime != "string" ? selectedTime?.toLocaleTimeString('en-US',{hour12: false}) < minTime : selectedTime < minTime)
+                  }
         >
           Submit Order
         </Button>

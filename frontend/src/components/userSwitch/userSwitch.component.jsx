@@ -1,5 +1,4 @@
 import Form from 'react-bootstrap/Form';
-import "./userSwitch.styles.css";
 
 function UserSwitch() {
   return (
