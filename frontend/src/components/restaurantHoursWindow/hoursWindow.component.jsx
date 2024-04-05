@@ -89,27 +89,29 @@ const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit 
             ) : (
               <p>Hours currently not set, this means open 24/7</p>
             )}
-            <Form>
-              <Form.Group controlId="form-name">
-                <Form.Label>Open time</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="hh:mm in 24 hour time"
-                  value={open}
-                  onChange={(e) => setOpen(e.target.value)}
-                />
-              </Form.Group>
 
-              <Form.Group controlId="form-description">
-                <Form.Label>Close time</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="hh:mm in 24 hour time"
-                  value={close}
-                  onChange={(e) => setClose(e.target.value)}
-                />
-              </Form.Group>
-            </Form>
+              <Form>
+                <Form.Group controlId="form-name">
+                <div className="timeHolder">
+                  <Form.Label className="timeText">Open time</Form.Label>
+                  <Form.Control
+                    className="timeChoice"
+                    type="time"
+                    placeholder="hh:mm in 24 hour time"
+                    value={open}
+                    onChange={(e) => setOpen(e.target.value)}
+                  />
+                  <Form.Label className="timeText">Close time</Form.Label>
+                  <Form.Control
+                    className="timeChoice"
+                    type="time"
+                    placeholder="hh:mm in 24 hour time"
+                    value={close}
+                    onChange={(e) => setClose(e.target.value)}
+                  />
+            </div>
+                </Form.Group>
+              </Form>
           </section>
         </div>
       </Modal.Body>
