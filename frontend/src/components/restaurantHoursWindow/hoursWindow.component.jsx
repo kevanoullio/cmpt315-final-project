@@ -12,7 +12,7 @@ import "./hoursWindow.styles.css";
 
  * @returns {JSX.Element} - The checkout window component
  */
-const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit }) => {
+const ChangeHoursWindow = ({ currentRestaurant, showHours, toggleHours, onSubmit }) => {
   // variables to hold the menu item attributes
   const [open, setOpen] = useState("");
   const [close, setClose] = useState("");
@@ -36,6 +36,33 @@ const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit 
 
     return false;
   }
+
+  /**
+ * Converts my time string from 24h (as it is in the database) to 12h
+ * @param {String} time - in 24h in format "hh:mm"
+ * @returns time string in 21h format "hh:mm a/p"
+ */
+const tConvert = (time) => {
+  // split into hours/mins
+  time = time.toString();
+  let times = time.split(":")
+  // set default ampm as AM
+  let ampm = " AM";
+
+  // if > 12, set PM and subtract 12
+  if (times[0] > 12) {
+    ampm = " PM"
+    times[0] -= 12;
+  } else if (times[0] == 12) {
+    // if equal to 12 set pm, dont remove 12 (noon)
+    ampm = " PM"
+  } else if (times[0] == 0) {
+    // if midnight, we have to add 12 manually
+    times[0] = 12;
+  }
+
+  return times[0] + ":" + times[1] + ampm; // return adjusted time or original string
+}
 
   const removeLeadingZeroes = (time) => {
     // First, split the time string by the colon to separate hours and minutes
@@ -85,13 +112,13 @@ const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit 
         <div className="menu-item-container">
           <section className="menu-item-left-section">
             {currentRestaurant.storeHours ? (
-              <p>{`Current Hours: ${currentRestaurant?.storeHours?.open} to ${currentRestaurant?.storeHours?.close}`}</p>
+              <p>{`Current Hours: ${tConvert(currentRestaurant?.storeHours?.open)} to ${tConvert(currentRestaurant?.storeHours?.close)}`}</p>
             ) : (
               <p>Hours currently not set, this means open 24/7</p>
             )}
 
-              <Form>
-                <Form.Group controlId="form-name">
+            <Form>
+              <Form.Group controlId="form-name">
                 <div className="timeHolder">
                   <Form.Label className="timeText">Open time</Form.Label>
                   <Form.Control
@@ -109,9 +136,9 @@ const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit 
                     value={close}
                     onChange={(e) => setClose(e.target.value)}
                   />
-            </div>
-                </Form.Group>
-              </Form>
+                </div>
+              </Form.Group>
+            </Form>
           </section>
         </div>
       </Modal.Body>
