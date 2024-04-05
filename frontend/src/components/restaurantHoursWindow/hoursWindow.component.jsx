@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { tConvert } from "../utils";
 
 import "./hoursWindow.styles.css";
 
@@ -37,32 +38,6 @@ const ChangeHoursWindow = ({ currentRestaurant, showHours, toggleHours, onSubmit
     return false;
   }
 
-  /**
- * Converts my time string from 24h (as it is in the database) to 12h
- * @param {String} time - in 24h in format "hh:mm"
- * @returns time string in 21h format "hh:mm a/p"
- */
-const tConvert = (time) => {
-  // split into hours/mins
-  time = time.toString();
-  let times = time.split(":")
-  // set default ampm as AM
-  let ampm = " AM";
-
-  // if > 12, set PM and subtract 12
-  if (times[0] > 12) {
-    ampm = " PM"
-    times[0] -= 12;
-  } else if (times[0] == 12) {
-    // if equal to 12 set pm, dont remove 12 (noon)
-    ampm = " PM"
-  } else if (times[0] == 0) {
-    // if midnight, we have to add 12 manually
-    times[0] = 12;
-  }
-
-  return times[0] + ":" + times[1] + ampm; // return adjusted time or original string
-}
 
   const removeLeadingZeroes = (time) => {
     // First, split the time string by the colon to separate hours and minutes

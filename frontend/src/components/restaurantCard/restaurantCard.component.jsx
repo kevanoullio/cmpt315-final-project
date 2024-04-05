@@ -1,7 +1,7 @@
 import React from "react";
 import Card from 'react-bootstrap/Card';
 import './restaurantCard.styles.css';
-import { isOpen } from "../utils";
+import { isOpen, tConvert } from "../utils";
 
 /**
  * Function to render the Restaurant component
@@ -26,7 +26,7 @@ const RestaurantCard = ({ restaurant, onClick }) => (
         <p className="closedText">Restaurant is closed</p>
       )}
       {restaurant.storeHours && (
-        <p>{`Restaurant hours: ${restaurant?.storeHours?.open} to ${restaurant?.storeHours?.close}`}</p>
+        <p>{`Restaurant hours: ${tConvert(restaurant?.storeHours?.open)} to ${tConvert(restaurant?.storeHours?.close)}`}</p>
       )}
       {!restaurant.storeHours && (
         <p>Restaurant hours: Open 24/7</p>
