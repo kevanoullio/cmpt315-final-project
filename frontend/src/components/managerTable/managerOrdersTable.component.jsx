@@ -4,7 +4,6 @@ import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge'; // Import Badge for colored status labels
 import Modal from 'react-bootstrap/Modal';
 import axiosClient from "../../axios";
-import './managerTable.style.css';
 
 function TableOfOrders({ orders, onUpdateOrderStatus, onUpdateOrderPickupTime, getOrders }) {
   const [open, setOpen] = useState(false);
@@ -20,7 +19,7 @@ function TableOfOrders({ orders, onUpdateOrderStatus, onUpdateOrderPickupTime, g
     // Reset the previously selected time or set a default value
     setSelectedTime("");
   };
-  
+
   const handleTimeChange = (event) => {
     setSelectedTime(event.target.value);
   };
@@ -34,7 +33,7 @@ function TableOfOrders({ orders, onUpdateOrderStatus, onUpdateOrderPickupTime, g
 
     const formattedTime = `${year}-${month}-${day}T${selectedTime}:00`;
     await onUpdateOrderPickupTime(timeAssignOrder.id, formattedTime);
-  
+
     // Reset the UI state
     setShowTimePicker(false);
     setSelectedTime("");
@@ -166,7 +165,7 @@ function TableOfOrders({ orders, onUpdateOrderStatus, onUpdateOrderPickupTime, g
             </tr>
           )) : (
             <tr>
-              <td colSpan="6" className="text-center">No orders found</td>
+              <td colSpan="7" className="text-center">No orders found</td>
             </tr>
           )}
         </tbody>

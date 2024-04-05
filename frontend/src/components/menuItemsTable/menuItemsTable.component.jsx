@@ -14,7 +14,7 @@ const MenuItemsTable = ({menuItems, currentRestaurant, currentCustomer, onAddToC
   // Render the menuItem table
   return (
     <div className="table-responsive">
-      <Table className="bootstrap-table mt-3" striped bordered hover>
+      <Table className="bootstrap-table" striped bordered hover>
         <thead className="custom-header">
         <tr>
           <th>Menu Item</th>

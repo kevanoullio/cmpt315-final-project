@@ -1,4 +1,4 @@
-import BootstrapTable from "react-bootstrap/Table";
+import Table from "react-bootstrap/Table";
 import React from "react";
 
 
@@ -10,7 +10,7 @@ import React from "react";
  * @constructor
  */
 const AppTable = ({tableHeaders, tableRow}) => {
-  return <BootstrapTable className="bootstrap-table" striped bordered hover>
+  return <Table className="bootstrap-table" striped bordered hover>
     <thead className="custom-header">
     <tr>
       {
@@ -33,7 +33,7 @@ const AppTable = ({tableHeaders, tableRow}) => {
       ))
     }
     </tbody>
-  </BootstrapTable>
+  </Table>
 };
 
 export default AppTable;

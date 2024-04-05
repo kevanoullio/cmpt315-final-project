@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import BootstrapTable from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
-import TimePicker from "react-time-picker";
 import Form from "react-bootstrap/Form";
 
 import MenuItem from "../menuItem/menuItem.component";
@@ -36,6 +35,18 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
 
   const { minDate, maxDate } = dateConstraints;
   const { minTime, maxTime } = timeConstraints;
+
+  const [inputStyle, setInputStyle] = useState({});
+
+  const validateTime = (event) => {
+    const time = event.target.value;
+
+    if (time >= minTime && time <= maxTime) {
+      setInputStyle({ backgroundColor: "white" });
+    } else {
+      setInputStyle({ backgroundColor: "salmon" });
+    }
+  };
 
   return (
     <Modal
@@ -74,14 +85,17 @@ const CheckoutWindow = ({ showCheckout, toggleCheckout, onCancelCheckout, onSubm
                 disabled={asap}
               />
               <br />
-              <TimePicker
+              <input
+                type="time"
                 value={selectedTime}
-                onChange={setSelectedTime}
-                minTime={minTime}
-                maxTime={maxTime}
-                format="HH:mm a"
-                hourPlaceholder="HH"
-                minutePlaceholder="mm"
+                min={minTime}
+                max={maxTime}
+                required
+                onChange={(event) => {
+                  setSelectedTime(event.target.value);
+                  validateTime(event);
+                }}
+                style={inputStyle}
                 disabled={asap}
               />
               <Form>

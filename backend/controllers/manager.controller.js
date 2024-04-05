@@ -171,7 +171,6 @@ export const getMostSoldItem = async (req, res) => {
       return {month: key, item: mostSoldItem, amount: amount};
     });
 
-    console.log(result);
     res.status(200).send(sortByMonth(result));
   } catch (e) {
     console.log("Error occurred while calculating gross sales: ", e);

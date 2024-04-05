@@ -14,7 +14,10 @@ const PreviousOrder = ({ order, completeOrder }) => {
 
   const getTime = () => {
     const date = new Date(order.pickupTime);
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+    return (
+      date.toISOString() === "1970-01-01T00:00:00.000Z" ? "ASAP":
+      `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+    );
   }
 
   const setOrderComplete = () => {
