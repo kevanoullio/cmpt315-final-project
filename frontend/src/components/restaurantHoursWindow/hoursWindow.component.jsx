@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { tConvert } from "../utils";
 
 import "./hoursWindow.styles.css";
 
@@ -12,7 +13,7 @@ import "./hoursWindow.styles.css";
 
  * @returns {JSX.Element} - The checkout window component
  */
-const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit }) => {
+const ChangeHoursWindow = ({ currentRestaurant, showHours, toggleHours, onSubmit }) => {
   // variables to hold the menu item attributes
   const [open, setOpen] = useState("");
   const [close, setClose] = useState("");
@@ -36,6 +37,7 @@ const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit 
 
     return false;
   }
+
 
   const removeLeadingZeroes = (time) => {
     // First, split the time string by the colon to separate hours and minutes
@@ -85,29 +87,31 @@ const ChangeHoursWindow = ({currentRestaurant, showHours, toggleHours, onSubmit 
         <div className="menu-item-container">
           <section className="menu-item-left-section">
             {currentRestaurant.storeHours ? (
-              <p>{`Current Hours: ${currentRestaurant?.storeHours?.open} to ${currentRestaurant?.storeHours?.close}`}</p>
+              <p>{`Current Hours: ${tConvert(currentRestaurant?.storeHours?.open)} to ${tConvert(currentRestaurant?.storeHours?.close)}`}</p>
             ) : (
               <p>Hours currently not set, this means open 24/7</p>
             )}
+
             <Form>
               <Form.Group controlId="form-name">
-                <Form.Label>Open time</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="hh:mm in 24 hour time"
-                  value={open}
-                  onChange={(e) => setOpen(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group controlId="form-description">
-                <Form.Label>Close time</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="hh:mm in 24 hour time"
-                  value={close}
-                  onChange={(e) => setClose(e.target.value)}
-                />
+                <div className="timeHolder">
+                  <Form.Label className="timeText">Open time</Form.Label>
+                  <Form.Control
+                    className="timeChoice"
+                    type="time"
+                    placeholder="hh:mm in 24 hour time"
+                    value={open}
+                    onChange={(e) => setOpen(e.target.value)}
+                  />
+                  <Form.Label className="timeText">Close time</Form.Label>
+                  <Form.Control
+                    className="timeChoice"
+                    type="time"
+                    placeholder="hh:mm in 24 hour time"
+                    value={close}
+                    onChange={(e) => setClose(e.target.value)}
+                  />
+                </div>
               </Form.Group>
             </Form>
           </section>
